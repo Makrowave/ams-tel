@@ -10,6 +10,7 @@ const ButtonLabel = (props: LabelProps) => {
     <View style={styles.label}>
       <Image style={styles.icon} source={props.source}/>
       <Text style={styles.buttonDesc}>{props.text}</Text>
+      <Image style={styles.icon} source={require('@/assets/images/chevron.png')}/>
     </View>
   )
 }
