@@ -15,26 +15,36 @@ export default function HomeScreen() {
             text="Przenieś rower"
             source={require('@/assets/images/move.png')}
             onPress={() => Alert.alert('Przenieś rower')}
+            hasIcon='true'
+            hasChevron='true'
           />
           <ButtonLabel
             text="Złóż rower"
             source={require('@/assets/images/unpack.png')}
             onPress={() => Alert.alert('Złóż rower')}
+            hasIcon='true'
+            hasChevron='true'
           />
           <ButtonLabel
             text="Sprzedaj rower"
             source={require('@/assets/images/sell.png')}
             onPress={() => Alert.alert('Sprzedaj rower')}
+            hasIcon='true'
+            hasChevron='true'
           />
           <ButtonLabel
             text="Dodaj rower"
             source={require('@/assets/images/plus.png')}
             onPress={() => Alert.alert('Dodaj rower')}
+            hasIcon='true'
+            hasChevron='true'
           />
           <ButtonLabel
             text="Dostawa"
             source={require('@/assets/images/delivery.png')}
             onPress={() => Alert.alert('Dostawa')}
+            hasIcon='true'
+            hasChevron='true'
             type='footer'
           />
       </SafeAreaView>

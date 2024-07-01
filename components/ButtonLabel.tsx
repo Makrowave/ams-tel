@@ -1,13 +1,23 @@
+import { useState } from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native'
 import { TouchableOpacityProps , TouchableOpacity } from 'react-native-gesture-handler';
 
 
+
+
 type LabelProps = TouchableOpacityProps & {
-  text: string;
-  source: any;
+  text?: string;
+  content?: string;
+  source?: any;
   type?: 'header' | 'body' | 'footer';
+  hasIcon?: 'true' | 'false';
+  hasContent?: 'true' | 'false';
+  hasChevron?: 'true' | 'false';
+  textColor?: string;
 }
 const ButtonLabel = (props: LabelProps) => {
+  const [content, setContent] = useState(props.content);
+
   return (
     <TouchableOpacity style={[
       styles.button,
@@ -17,9 +27,39 @@ const ButtonLabel = (props: LabelProps) => {
     onPress={props.onPress}
     >
       <View style={styles.label}>
-        <Image style={styles.icon} source={props.source}/>
-        <Text style={styles.buttonDesc}>{props.text}</Text>
-        <Image style={styles.iconSmall} source={require('@/assets/images/chevron.png')}/>
+        {
+          props.hasIcon === 'true' 
+          ? <Image style={styles.icon} source={props.source}/> 
+          : undefined
+        }
+        {/*Label - centering*/}
+        <Text style={[
+          styles.buttonDesc,
+        props.hasIcon !== 'true' 
+        && props.hasChevron !== 'true' 
+        && props.hasContent !== 'true'
+          ? styles.centeredText 
+          : undefined,
+        props.textColor !== undefined
+          ? {color: props.textColor}
+          : undefined,
+        ]}>
+          {props.text}
+        </Text>
+        {/*Content*/}
+        {
+          props.hasContent === 'true'
+          ? <Text style={styles.buttonDesc}>{content}</Text>
+          : undefined
+        
+        }
+        {/*Chevron*/}
+        {
+          props.hasChevron === 'true' 
+          ? <Image style={styles.iconSmall} source={require('@/assets/images/chevron.png')}/> 
+          : undefined
+        }
+        
       </View>
     </TouchableOpacity>
   )
@@ -30,8 +70,9 @@ const ButtonLabel = (props: LabelProps) => {
 const styles = StyleSheet.create({
   buttonDesc: {
     fontSize: 30,
-    flex:4,
-    color: '#FFFFFF'
+    flex:1,
+    color: '#FFFFFF',
+    paddingLeft: 20,
   },
   icon: {
     resizeMode: 'contain',
@@ -41,7 +82,7 @@ const styles = StyleSheet.create({
   iconSmall: {
     resizeMode: 'contain',
     height: 25,
-    flex:1,
+    flex: 1,
   },
   label: {
     textAlignVertical: "center",
@@ -53,7 +94,7 @@ const styles = StyleSheet.create({
     height:100,
     marginHorizontal:'2%',
     backgroundColor: '#78E0FF',
-    textAlignVertical: "center",
+    textAlignVertical: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -63,7 +104,6 @@ const styles = StyleSheet.create({
   header: {
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    paddingTop: 30,
     borderBottomWidth: 1,
     borderColor: '#000000'
   },
@@ -72,6 +112,10 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomWidth: 0,
   },
+  centeredText: {
+    textAlign: 'center',
+    paddingLeft: 0,
+  }
 })
 
 export default ButtonLabel;
