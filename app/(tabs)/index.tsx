@@ -11,51 +11,32 @@ export default function HomeScreen() {
           <Text style={styles.text}>Zalogowano: Maks</Text>
           <Text style={styles.text}>Sklep: Wojciechowska</Text>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => Alert.alert('Przenieś rower')}
-        >
           <ButtonLabel
             text="Przenieś rower"
             source={require('@/assets/images/move.png')}
+            onPress={() => Alert.alert('Przenieś rower')}
           />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => Alert.alert('Złóż rower')}
-        >
           <ButtonLabel
             text="Złóż rower"
             source={require('@/assets/images/unpack.png')}
+            onPress={() => Alert.alert('Złóż rower')}
           />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => Alert.alert('Sprzedaj rower')}
-        >
           <ButtonLabel
             text="Sprzedaj rower"
             source={require('@/assets/images/sell.png')}
+            onPress={() => Alert.alert('Sprzedaj rower')}
           />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => Alert.alert('Dodaj rower')}
-        >
           <ButtonLabel
             text="Dodaj rower"
             source={require('@/assets/images/plus.png')}
+            onPress={() => Alert.alert('Dodaj rower')}
           />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => Alert.alert('Dostawa')}
-        >
           <ButtonLabel
             text="Dostawa"
             source={require('@/assets/images/delivery.png')}
+            onPress={() => Alert.alert('Dostawa')}
+            type='footer'
           />
-        </TouchableOpacity>
       </SafeAreaView>
     </GestureHandlerRootView>
 
