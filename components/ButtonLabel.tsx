@@ -26,7 +26,7 @@ const ButtonLabel = (props: LabelProps) => {
     ]}
     onPress={props.onPress}
     >
-      <View style={styles.label}>
+      <View style={styles.labelContainer}>
         {
           props.hasIcon === 'true' 
           ? <Image style={styles.icon} source={props.source}/> 
@@ -34,7 +34,7 @@ const ButtonLabel = (props: LabelProps) => {
         }
         {/*Label - centering*/}
         <Text style={[
-          styles.buttonDesc,
+          styles.label,
         props.hasIcon !== 'true' 
         && props.hasChevron !== 'true' 
         && props.hasContent !== 'true'
@@ -49,7 +49,7 @@ const ButtonLabel = (props: LabelProps) => {
         {/*Content*/}
         {
           props.hasContent === 'true'
-          ? <Text style={styles.buttonDesc}>{content}</Text>
+          ? <Text style={styles.content}>{content}</Text>
           : undefined
         
         }
@@ -68,23 +68,33 @@ const ButtonLabel = (props: LabelProps) => {
 
 
 const styles = StyleSheet.create({
-  buttonDesc: {
-    fontSize: 30,
-    flex:1,
+  label: {
+    fontSize: 25 ,
+    flex: 1,
+    flexGrow: 3,
     color: '#FFFFFF',
     paddingLeft: 20,
+    flexBasis: 10,
+  },
+  content: {
+    fontSize: 25,
+    flex: 1,
+    flexGrow: 6,
+    color: '#FFFFFF',
   },
   icon: {
     resizeMode: 'contain',
     height: 50,
     flex:1,
+    flexBasis: 50,
   },
   iconSmall: {
     resizeMode: 'contain',
     height: 25,
     flex: 1,
+    flexBasis: 1,
   },
-  label: {
+  labelContainer: {
     textAlignVertical: "center",
     flexDirection: 'row',
     justifyContent: 'center',
