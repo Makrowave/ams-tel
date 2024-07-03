@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, View, Image, Text } from 'react-native'
+import { StyleSheet, View, Image, Text, Pressable } from 'react-native'
 import { TouchableOpacityProps , TouchableOpacity } from 'react-native-gesture-handler';
 
 
@@ -19,49 +19,51 @@ const ButtonLabel = (props: LabelProps) => {
   const [content, setContent] = useState(props.content);
 
   return (
-    <TouchableOpacity style={[
-      styles.button,
-      props.type === 'header' ? styles.header : undefined,
-      props.type === 'footer' ? styles.footer : undefined,
-    ]}
-    onPress={props.onPress}
-    >
-      <View style={styles.labelContainer}>
-        {
-          props.hasIcon === 'true' 
-          ? <Image style={styles.icon} source={props.source}/> 
-          : undefined
-        }
-        {/*Label - centering*/}
-        <Text style={[
-          styles.label,
-        props.hasIcon !== 'true' 
-        && props.hasChevron !== 'true' 
-        && props.hasContent !== 'true'
-          ? styles.centeredText 
-          : undefined,
-        props.textColor !== undefined
-          ? {color: props.textColor}
-          : undefined,
-        ]}>
-          {props.text}
-        </Text>
-        {/*Content*/}
-        {
-          props.hasContent === 'true'
-          ? <Text style={styles.content}>{content}</Text>
-          : undefined
-        
-        }
-        {/*Chevron*/}
-        {
-          props.hasChevron === 'true' 
-          ? <Image style={styles.iconSmall} source={require('@/assets/images/chevron.png')}/> 
-          : undefined
-        }
-        
-      </View>
-    </TouchableOpacity>
+    <Pressable>
+      <TouchableOpacity style={[
+        styles.button,
+        props.type === 'header' ? styles.header : undefined,
+        props.type === 'footer' ? styles.footer : undefined,
+      ]}
+      onPress={props.onPress}
+      >
+        <View style={styles.labelContainer}>
+          {
+            props.hasIcon === 'true'
+            ? <Image style={styles.icon} source={props.source}/>
+            : undefined
+          }
+          {/*Label - centering*/}
+          <Text style={[
+            styles.label,
+          props.hasIcon !== 'true'
+          && props.hasChevron !== 'true'
+          && props.hasContent !== 'true'
+            ? styles.centeredText
+            : undefined,
+          props.textColor !== undefined
+            ? {color: props.textColor}
+            : undefined,
+          ]}>
+            {props.text}
+          </Text>
+          {/*Content*/}
+          {
+            props.hasContent === 'true'
+            ? <Text style={styles.content}>{content}</Text>
+            : undefined
+      
+          }
+          {/*Chevron*/}
+          {
+            props.hasChevron === 'true'
+            ? <Image style={styles.iconSmall} source={require('@/assets/images/chevron.png')}/>
+            : undefined
+          }
+      
+        </View>
+      </TouchableOpacity>
+    </Pressable>
   )
 }
 
