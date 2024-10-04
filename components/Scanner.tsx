@@ -1,5 +1,5 @@
 import { CameraView, CameraNativeProps, useCameraPermissions } from "expo-camera";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View, Image, Button } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ThemedImage } from "./ThemedImage";
@@ -14,21 +14,25 @@ export default function Scanner(props: ScannerProps) {
     const [useFlashlight, setUseFlashlight] = useState(false);
     const [permission, requestPermission] = useCameraPermissions();
 
+
+    function handlePress() {
+        setUseFlashlight(!useFlashlight);
+    }
+
     if (!permission) {
-        return <GestureHandlerRootView />
+        return <View />
     }
 
     if (!permission.granted) {
         return (
-            <GestureHandlerRootView>
-                <Button onPress={requestPermission} title="Grant permission" />
-            </GestureHandlerRootView>
+            <Button onPress={requestPermission} title="Grant permission" />
         )
     }
 
     return (
         <View style={styles.wrapper}>
             <CameraView
+                pointerEvents="box-none"
                 style={styles.camera}
                 facing="back"
                 barcodeScannerSettings={{
@@ -40,12 +44,13 @@ export default function Scanner(props: ScannerProps) {
                 autofocus="off"
                 enableTorch={useFlashlight}
             >
-                <ThemedView style={styles.flashlightButton}>
-                    <TouchableOpacity onPress={() => setUseFlashlight(!useFlashlight)}>
-                        <ThemedImage source={require('@/assets/images/flashlight.png')} style={styles.icon} />
-                    </TouchableOpacity>
-                </ThemedView>
             </CameraView>
+            {/* The button shouldn't be in camera - somehow it isn't pressable */}
+            <ThemedView style={styles.flashlightButton}>
+                <TouchableOpacity onPress={handlePress}>
+                    <ThemedImage source={require('@/assets/images/flashlight.png')} style={styles.icon} />
+                </TouchableOpacity>
+            </ThemedView>
         </View>
     )
 }

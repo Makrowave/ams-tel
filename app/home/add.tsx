@@ -1,8 +1,9 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { StyleSheet, Text } from "react-native";
+import { Button, StyleSheet, Text } from "react-native";
 import { useState } from "react";
 import Scanner from "@/components/Scanner";
 import { ThemedView } from "@/components/ThemedView";
+import { Stack } from "expo-router";
 
 
 export default function Add() {
@@ -16,6 +17,11 @@ export default function Add() {
 
   return (
     <GestureHandlerRootView>
+      <Stack.Screen
+          options={{ title: "Dodaj rower", headerBackTitle: "Wróć", 
+            headerRight: () => <Button title="Wpisz kod"/>
+          }} 
+        />
       <Scanner onBarcodeScanned={handleScan} />
       <ThemedView style={styles.wrapper}>
         <Text>{code}</Text>
