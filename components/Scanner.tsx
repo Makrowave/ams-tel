@@ -2,6 +2,8 @@ import { CameraView, CameraNativeProps, useCameraPermissions } from "expo-camera
 import { useState } from "react";
 import { StyleSheet, TouchableOpacity, View, Image, Button } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ThemedImage } from "./ThemedImage";
+import { ThemedView } from "./ThemedView";
 
 
 type ScannerProps = {
@@ -38,11 +40,11 @@ export default function Scanner(props: ScannerProps) {
                 autofocus="off"
                 enableTorch={useFlashlight}
             >
-                <TouchableOpacity style={styles.flashlightButton}
-                    onPress={() => setUseFlashlight(!useFlashlight)}
-                >
-                    <Image source={require('@/assets/images/flashlight.png')} style={styles.icon} />
-                </TouchableOpacity>
+                <ThemedView style={styles.flashlightButton}>
+                    <TouchableOpacity onPress={() => setUseFlashlight(!useFlashlight)}>
+                        <ThemedImage source={require('@/assets/images/flashlight.png')} style={styles.icon} />
+                    </TouchableOpacity>
+                </ThemedView>
             </CameraView>
         </View>
     )
@@ -57,11 +59,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff'
     },
     flashlightButton: {
-        backgroundColor: '#ffffff',
         borderRadius: 20,
         position: 'absolute',
         bottom: 10,
         right: 10,
+        opacity: 0.7
     },
     icon: {
         resizeMode: 'contain',

@@ -1,9 +1,8 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
-import { Button, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { useState } from "react";
 import Scanner from "@/components/Scanner";
-import ButtonLabel from "@/components/ButtonLabel";
+import { ThemedView } from "@/components/ThemedView";
 
 
 export default function Add() {
@@ -18,16 +17,15 @@ export default function Add() {
   return (
     <GestureHandlerRootView>
       <Scanner onBarcodeScanned={handleScan} />
-      <View style={styles.wrapper}>
+      <ThemedView style={styles.wrapper}>
         <Text>{code}</Text>
         <Text>{bike}</Text>
-      </View>
+      </ThemedView>
     </GestureHandlerRootView>
   )
 }
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#ffffff'
   },
 })

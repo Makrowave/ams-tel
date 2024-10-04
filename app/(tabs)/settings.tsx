@@ -9,13 +9,13 @@ export default function Settings() {
   return (
     <GestureHandlerRootView>
       <SafeAreaView>
-        <Link push href="/shop-select">
+        <Link push href="/shop-select" asChild>
           <ButtonLabel
               text="Sklep:"
-              hasContent='true'
+              hasContent={true}
               content='Wojciechowska'
               source={require('@/assets/images/move.png')}
-              hasChevron='true'
+              hasChevron={true}
               type='header'
           />
         </Link>

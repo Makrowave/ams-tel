@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { StyleSheet, View, Image, Text, Pressable } from 'react-native'
-import { TouchableOpacityProps , TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacityProps, TouchableOpacity } from 'react-native-gesture-handler';
+import { ThemedView } from './ThemedView';
+import { ThemedText } from './ThemedText';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { ThemedImage } from './ThemedImage';
 
 
 
@@ -10,59 +14,66 @@ type LabelProps = TouchableOpacityProps & {
   content?: string;
   source?: any;
   type?: 'header' | 'body' | 'footer';
-  hasIcon?: 'true' | 'false';
-  hasContent?: 'true' | 'false';
-  hasChevron?: 'true' | 'false';
+  hasIcon?: true | false;
+  hasContent?: true | false;
+  hasChevron?: true | false;
   textColor?: string;
+  lightColor?: string;
+  darkColor?: string;
 }
 const ButtonLabel = (props: LabelProps) => {
   const [content, setContent] = useState(props.content);
+ 
 
   return (
     <Pressable>
-      <TouchableOpacity style={[
-        styles.button,
-        props.type === 'header' ? styles.header : undefined,
-        props.type === 'footer' ? styles.footer : undefined,
-      ]}
-      onPress={props.onPress}
-      >
-        <View style={styles.labelContainer}>
-          {
-            props.hasIcon === 'true'
-            ? <Image style={styles.icon} source={props.source}/>
-            : undefined
-          }
-          {/*Label - centering*/}
-          <Text style={[
-            styles.label,
-          props.hasIcon !== 'true'
-          && props.hasChevron !== 'true'
-          && props.hasContent !== 'true'
-            ? styles.centeredText
-            : undefined,
-          props.textColor !== undefined
-            ? {color: props.textColor}
-            : undefined,
-          ]}>
-            {props.text}
-          </Text>
-          {/*Content*/}
-          {
-            props.hasContent === 'true'
-            ? <Text style={styles.content}>{content}</Text>
-            : undefined
-      
-          }
-          {/*Chevron*/}
-          {
-            props.hasChevron === 'true'
-            ? <Image style={styles.iconSmall} source={require('@/assets/images/chevron.png')}/>
-            : undefined
-          }
-      
-        </View>
-      </TouchableOpacity>
+      <ThemedView>
+        <TouchableOpacity style={[
+          styles.button,
+          props.type === 'header' ? styles.header : undefined,
+          props.type === 'footer' ? styles.footer : undefined,
+        ]}
+          onPress={props.onPress}
+        >
+          <View style={styles.labelContainer}>
+            {
+              props.hasIcon === true
+                ? <ThemedImage style={styles.icon} source={props.source} />
+                : undefined
+            }
+            {/*Label - centering*/}
+            <ThemedText
+              type='subtitle'
+              style={[
+                styles.label,
+                props.hasIcon !== true
+                  && props.hasChevron !== true
+                  && props.hasContent !== true
+                  ? styles.centeredText
+                  : undefined,
+                props.textColor !== undefined
+                  ? { color: props.textColor }
+                  : undefined,
+              ]}>
+              {props.text}
+            </ThemedText>
+            {/*Content*/}
+            {
+              props.hasContent === true
+                ? <ThemedText type='subtitle'>{content}</ThemedText>
+                : undefined
+
+            }
+            {/*Chevron*/}
+            {
+              props.hasChevron === true
+                ? <ThemedImage style={styles.iconSmall} source={require('@/assets/images/chevron.png')} />
+                : undefined
+            }
+
+          </View>
+        </TouchableOpacity>
+      </ThemedView>
     </Pressable>
   )
 }
@@ -71,10 +82,8 @@ const ButtonLabel = (props: LabelProps) => {
 
 const styles = StyleSheet.create({
   label: {
-    fontSize: 25 ,
     flex: 1,
     flexGrow: 3,
-    color: '#FFFFFF',
     paddingLeft: 20,
     flexBasis: 10,
   },
@@ -82,12 +91,11 @@ const styles = StyleSheet.create({
     fontSize: 25,
     flex: 1,
     flexGrow: 6,
-    color: '#FFFFFF',
   },
   icon: {
     resizeMode: 'contain',
     height: 50,
-    flex:1,
+    flex: 1,
     flexBasis: 50,
   },
   iconSmall: {
@@ -103,9 +111,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    height:100,
-    marginHorizontal:'2%',
-    backgroundColor: '#78E0FF',
+    height: 80,
     textAlignVertical: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
