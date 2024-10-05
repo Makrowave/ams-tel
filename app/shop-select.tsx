@@ -12,7 +12,7 @@ export default function ShopSelect() {
   return (
     <GestureHandlerRootView>
       <SafeAreaView>
-        <SelectableButtonLabel data={data}/>
+        {/*<SelectableButtonLabel data={data}/>*/}
       </SafeAreaView>
     </GestureHandlerRootView>
   )

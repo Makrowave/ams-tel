@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     paddingTop: 30,
     borderBottomWidth: 1,
-    borderColor: '#000000',
     flexDirection: 'column',
   },
   text: {

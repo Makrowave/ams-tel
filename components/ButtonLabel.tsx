@@ -21,60 +21,74 @@ type LabelProps = TouchableOpacityProps & {
   lightColor?: string;
   darkColor?: string;
 }
-const ButtonLabel = (props: LabelProps) => {
-  const [content, setContent] = useState(props.content);
- 
+const ButtonLabel = ({
+  text,
+  content,
+  source,
+  type,
+  hasIcon,
+  hasContent,
+  hasChevron,
+  textColor,
+  lightColor,
+  darkColor,
+  onPress,
+  style,
+  ...rest
+}: LabelProps) => {
+  const [label, setContent] = useState(content);
+
 
   return (
-    <Pressable>
-      <ThemedView>
-        <TouchableOpacity style={[
-          styles.button,
-          props.type === 'header' ? styles.header : undefined,
-          props.type === 'footer' ? styles.footer : undefined,
-        ]}
-          onPress={props.onPress}
-        >
-          <View style={styles.labelContainer}>
-            {
-              props.hasIcon === true
-                ? <ThemedImage style={styles.icon} source={props.source} />
-                : undefined
-            }
-            {/*Label - centering*/}
-            <ThemedText
-              type='subtitle'
-              style={[
-                styles.label,
-                props.hasIcon !== true
-                  && props.hasChevron !== true
-                  && props.hasContent !== true
-                  ? styles.centeredText
-                  : undefined,
-                props.textColor !== undefined
-                  ? { color: props.textColor }
-                  : undefined,
-              ]}>
-              {props.text}
-            </ThemedText>
-            {/*Content*/}
-            {
-              props.hasContent === true
-                ? <ThemedText type='subtitle'>{content}</ThemedText>
-                : undefined
+    <TouchableOpacity
+      onPress={onPress}
+    >
+      <ThemedView style={[
+        styles.button,
+        type === 'header' ? styles.header : undefined,
+        type === 'footer' ? styles.footer : undefined,
+        style,
+      ]}>
 
-            }
-            {/*Chevron*/}
-            {
-              props.hasChevron === true
-                ? <ThemedImage style={styles.iconSmall} source={require('@/assets/images/chevron.png')} />
-                : undefined
-            }
+        <View style={styles.labelContainer}>
+          {
+            hasIcon === true
+              ? <ThemedImage style={styles.icon} source={source} />
+              : undefined
+          }
+          {/*Label - centering*/}
+          <ThemedText
+            type='subtitle'
+            style={[
+              styles.label,
+              hasIcon !== true
+                && hasChevron !== true
+                && hasContent !== true
+                ? styles.centeredText
+                : undefined,
+              textColor !== undefined
+                ? { color: textColor }
+                : undefined,
+            ]}>
+            {text}
+          </ThemedText>
+          {/*Content*/}
+          {
+            hasContent === true
+              ? <ThemedText type='subtitle'>{label}</ThemedText>
+              : undefined
 
-          </View>
-        </TouchableOpacity>
+          }
+          {/*Chevron*/}
+          {
+            hasChevron === true
+              ? <ThemedImage style={styles.iconSmall} source={require('@/assets/images/chevron.png')} />
+              : undefined
+          }
+
+        </View>
       </ThemedView>
-    </Pressable>
+    </TouchableOpacity>
   )
 }
 
@@ -86,11 +100,6 @@ const styles = StyleSheet.create({
     flexGrow: 3,
     paddingLeft: 20,
     flexBasis: 10,
-  },
-  content: {
-    fontSize: 25,
-    flex: 1,
-    flexGrow: 6,
   },
   icon: {
     resizeMode: 'contain',
@@ -117,13 +126,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderColor: '#000000'
   },
   header: {
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     borderBottomWidth: 1,
-    borderColor: '#000000'
   },
   footer: {
     borderBottomRightRadius: 20,
