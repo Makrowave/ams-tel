@@ -29,6 +29,7 @@ export default function HomeScreen() {
               text="Przenieś rower"
               source={require('@/assets/images/move.png')}
               hasIcon={true}
+              iconColor={colors.get('move')}
               hasChevron={true}
             />
           </Link>
@@ -37,6 +38,7 @@ export default function HomeScreen() {
               text="Złóż rower"
               source={require('@/assets/images/unpack.png')}
               hasIcon={true}
+              iconColor={colors.get('assemble')}
               hasChevron={true}
             />
           </Link>
@@ -45,6 +47,7 @@ export default function HomeScreen() {
               text="Sprzedaj rower"
               source={require('@/assets/images/sell.png')}
               hasIcon={true}
+              iconColor={colors.get('sell')}
               hasChevron={true}
             />
           </Link>
@@ -53,6 +56,7 @@ export default function HomeScreen() {
               text="Dodaj rower"
               source={require('@/assets/images/plus.png')}
               hasIcon={true}
+              iconColor={colors.get('add')}
               hasChevron={true}
             />
           </Link>
@@ -61,6 +65,7 @@ export default function HomeScreen() {
               text="Dostawa"
               source={require('@/assets/images/delivery.png')}
               hasIcon={true}
+              iconColor={colors.get('delivery')}
               hasChevron={true}
               type='footer'
             />
@@ -94,3 +99,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   }
 });
+
+
+const colors = new Map<string, string>([
+  ['add', '#00d2ff'],
+  ['delivery', '#0062cc'],
+  ['assemble', '#ffdc00'],
+  ['sell', '#32cd32'],
+  ['move', '#ff5c00'],
+]) 

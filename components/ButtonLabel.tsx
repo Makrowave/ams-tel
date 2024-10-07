@@ -20,6 +20,7 @@ type LabelProps = TouchableOpacityProps & {
   textColor?: string;
   lightColor?: string;
   darkColor?: string;
+  iconColor?: string;
 }
 const ButtonLabel = ({
   text,
@@ -34,6 +35,7 @@ const ButtonLabel = ({
   darkColor,
   onPress,
   style,
+  iconColor,
   ...rest
 }: LabelProps) => {
   const [label, setContent] = useState(content);
@@ -53,7 +55,13 @@ const ButtonLabel = ({
         <View style={styles.labelContainer}>
           {
             hasIcon === true
-              ? <ThemedImage style={styles.icon} source={source} />
+              ? (
+                <View style={{flex: 1, flexBasis: 50, alignItems: 'center'}}>
+                  <View style={[styles.iconWrapper, {backgroundColor: iconColor}]}>
+              <Image style={styles.icon} source={source} />
+              </View>
+              </View>
+            )
               : undefined
           }
           {/*Label - centering*/}
@@ -82,7 +90,7 @@ const ButtonLabel = ({
           {/*Chevron*/}
           {
             hasChevron === true
-              ? <ThemedImage style={styles.iconSmall} source={require('@/assets/images/chevron.png')} />
+              ? <ThemedImage style={[styles.iconSmall]} source={require('@/assets/images/chevron.png')} />
               : undefined
           }
 
@@ -103,9 +111,14 @@ const styles = StyleSheet.create({
   },
   icon: {
     resizeMode: 'contain',
+    height: 40,
+  },
+  iconWrapper: {
     height: 50,
-    flex: 1,
-    flexBasis: 50,
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10
   },
   iconSmall: {
     resizeMode: 'contain',
