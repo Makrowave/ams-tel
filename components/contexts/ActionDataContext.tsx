@@ -22,8 +22,8 @@ type ActionDataProviderProps = {
 export function ActionDataProvider({children} : ActionDataProviderProps) {
     const [userLocationKey, setUserLocationKey] = useState<Number>(1);
     const [actionLocationKey, setActionLocationKey] = useState<Number>(4);
-    const [price, setPrice] = useState<Number>();
-    const [statusKey, setStatusKey] = useState<Number>();
+    const [price, setPrice] = useState<Number>(3000);
+    const [statusKey, setStatusKey] = useState<Number>(2);
     const placeList = [
         {key: 1, value: 'Wojciechowska'},
         {key: 2, value: 'Gala'},
@@ -36,8 +36,8 @@ export function ActionDataProvider({children} : ActionDataProviderProps) {
     function resetActionData() {
         setUserLocationKey(1);
         setActionLocationKey(4);
-        setPrice(undefined);
-        setStatusKey(undefined);
+        setPrice(3000);
+        setStatusKey(2);
     }
 
     return (
