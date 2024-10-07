@@ -63,7 +63,7 @@ export default function Sell() {
         </Link>
         <ButtonLabel style={styles.button} text="Cena:" hasContent
           content={price?.toString()} />
-        <ButtonLabel style={styles.button} type="footer" text="Dodaj" />
+        <ButtonLabel style={styles.button} type="footer" text="Sprzedaj" />
       </View>
     </GestureHandlerRootView>
   )

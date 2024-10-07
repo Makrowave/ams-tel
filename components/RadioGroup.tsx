@@ -30,6 +30,7 @@ const SelectableButtonLabel = ({selection, data, onSelect, lightColor, darkColor
       data.map((item) => {
         return (
           <TouchableOpacity
+            key={item.key.toString()}
             onPress={() => { setSelectedOption(item.key) }}
           >
             <ThemedView style={[
