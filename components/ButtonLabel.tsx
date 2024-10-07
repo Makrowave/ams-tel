@@ -56,12 +56,12 @@ const ButtonLabel = ({
           {
             hasIcon === true
               ? (
-                <View style={{flex: 1, flexBasis: 50, alignItems: 'center'}}>
-                  <View style={[styles.iconWrapper, {backgroundColor: iconColor}]}>
-              <Image style={styles.icon} source={source} />
-              </View>
-              </View>
-            )
+                <View style={{ flex: 1, flexBasis: 50, alignItems: 'center' }}>
+                  <View style={[styles.iconWrapper, { backgroundColor: iconColor }]}>
+                    <Image style={styles.icon} source={source} />
+                  </View>
+                </View>
+              )
               : undefined
           }
           {/*Label - centering*/}
