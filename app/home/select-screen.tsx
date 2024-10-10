@@ -13,10 +13,12 @@ export default function SelectScreen() {
         actionLocationKey,
         price,
         statusKey,
+        defaultUserLocation,
         setUserLocationKey,
         setActionLocationKey,
         setPrice,
         setStatusKey,
+        setDefaultUserLocation,
     } = useActionData();
 
     const onSelect = () => {
@@ -25,6 +27,8 @@ export default function SelectScreen() {
             case 'actionLocation': return setActionLocationKey;
             case 'price': return setPrice;
             case 'status': return setStatusKey;
+            case 'defaultUserLocation': return setDefaultUserLocation;
+
             default: return () => {}
         }
     }
@@ -35,6 +39,7 @@ export default function SelectScreen() {
             case 'actionLocation': return actionLocationKey;
             case 'price': return price;
             case 'status': return statusKey;
+            case 'defaultUserLocation': return defaultUserLocation;
             default: return undefined;
         }
     }

@@ -1,6 +1,7 @@
 import ButtonLabel from '@/components/ButtonLabel';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useActionData } from '@/hooks/useActionData';
 import { Link } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, View, Alert, Text } from 'react-native';
@@ -9,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const [user, setUser] = useState('Maks')
-  const [place, setPlace] = useState('Wojciechowska')
+  const {defaultUserLocation, placeList} = useActionData();
   return (
     <GestureHandlerRootView>
       <SafeAreaView style={{ flex: 1 }}>
@@ -21,7 +22,7 @@ export default function HomeScreen() {
             </View>
             <View style={styles.textContainer}>
               <ThemedText type='subtitle' style={styles.text}>Sklep</ThemedText>
-              <ThemedText type='subtitle'>{place}</ThemedText>
+              <ThemedText type='subtitle'>{placeList.find(item => item.key === defaultUserLocation)?.value}</ThemedText>
             </View>
           </ThemedView>
           <Link push href='/home/move' asChild>

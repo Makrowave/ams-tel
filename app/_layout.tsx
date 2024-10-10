@@ -34,9 +34,6 @@ export default function RootLayout() {
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
-          <Stack.Screen name="shop-select"
-            options={{ title: "Sklep", headerBackTitle: "Wróć", }}
-          />
           <Stack.Screen name="home/move"
             options={{
               title: "Przenieś rower", headerBackTitle: "Wróć",
