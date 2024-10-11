@@ -1,6 +1,7 @@
 import { ForwardedButton } from "@/components/LabeledButton";
 import Scanner from "@/components/Scanner";
 import { useActionData } from "@/hooks/useActionData";
+import { useConstantsContext } from "@/hooks/useConstants";
 import { Link, Stack, useRouter } from "expo-router";
 import { useState } from "react";
 import { Button, View, StyleSheet } from "react-native";
@@ -16,9 +17,9 @@ export default function Assemble() {
   const {
     userLocationKey,
     statusKey,
-    placeList,
     resetActionData,
   } = useActionData();
+  const { placeList } = useConstantsContext();
 
   const statuses = [
     { key: 1, value: "Niezłozony" },

@@ -2,6 +2,7 @@ import { ForwardedButton } from '@/components/LabeledButton';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useActionData } from '@/hooks/useActionData';
+import { useConstantsContext } from '@/hooks/useConstants';
 import { Link } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, View, Alert, Text } from 'react-native';
@@ -10,7 +11,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const [user, setUser] = useState('Maks')
-  const {defaultUserLocation, placeList} = useActionData();
+  const {defaultUserLocation} = useActionData();
+  const {placeList} = useConstantsContext();
   return (
     <GestureHandlerRootView>
       <SafeAreaView style={{ flex: 1 }}>

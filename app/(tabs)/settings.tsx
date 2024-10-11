@@ -1,14 +1,15 @@
 import { ForwardedButton } from '@/components/LabeledButton'
 import { useActionData } from '@/hooks/useActionData'
+import { useConstantsContext } from '@/hooks/useConstants'
 import { Link, Stack } from 'expo-router'
-import { useEffect } from 'react'
 import { Alert, Button, StyleSheet } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 
 export default function Settings() {
-  const { defaultUserLocation, placeList } = useActionData();
+  const { defaultUserLocation } = useActionData();
+  const { placeList } = useConstantsContext();
   return (
     <GestureHandlerRootView>
       <SafeAreaView>

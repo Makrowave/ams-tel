@@ -9,6 +9,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { Button } from 'react-native';
 import { ActionDataProvider } from '@/components/contexts/ActionDataContext';
 import { useActionData } from '@/hooks/useActionData';
+import { ConstantsContextProvider } from '@/components/contexts/ConstantsContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -31,6 +32,7 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <ActionDataProvider>
+        <ConstantsContextProvider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
@@ -65,6 +67,7 @@ export default function RootLayout() {
             }}
           />
         </Stack>
+        </ConstantsContextProvider>
       </ActionDataProvider>
     </ThemeProvider>
   );
