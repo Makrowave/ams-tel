@@ -18,7 +18,7 @@ type RadioProps = {
   lightColor?: string,
   darkColor?: string,
 }
-const SelectableButtonLabel = ({selection, data, onSelect, lightColor, darkColor, ...rest }: RadioProps) => {
+const SelectableForwardedButton = ({selection, data, onSelect, lightColor, darkColor, ...rest }: RadioProps) => {
   const [selectedOption, setSelectedOption] = useState(selection ? selection : data[0].key);
   const selectedColor = useThemeColor({ light: lightColor, dark: darkColor }, 'selectedColor')
 
@@ -54,7 +54,7 @@ const SelectableButtonLabel = ({selection, data, onSelect, lightColor, darkColor
 }
 
 
-export default SelectableButtonLabel;
+export default SelectableForwardedButton;
 
 const styles = StyleSheet.create({
   iconSmall: {

@@ -1,4 +1,4 @@
-import ButtonLabel from "@/components/ButtonLabel";
+import { ForwardedButton } from "@/components/LabeledButton";
 import Scanner from "@/components/Scanner";
 import { useActionData } from "@/hooks/useActionData";
 import { Link, Stack, useRouter } from "expo-router";
@@ -45,14 +45,14 @@ export default function Move() {
       <View style={styles.wrapper}>
         {/*<Label title="Rower:" hasContent content={bike} type="header"/>
         <Label title="Kod:" hasContent content={code} />*/}
-        <ButtonLabel style={styles.button} type="header" text="Rower:" hasContent content={bike} />
-        <ButtonLabel style={styles.button} text="Kod:" hasContent content={code} key={code} />
+        <ForwardedButton style={styles.button} type="header" text="Rower:" hasContent content={bike} />
+        <ForwardedButton style={styles.button} text="Kod:" hasContent content={code} key={code} />
         <Link href={{
           pathname: '/home/select-screen',
           params: { datastring: JSON.stringify(placeList), selection: 'actionLocation' }
         }}
           asChild>
-          <ButtonLabel style={styles.button} text="Z:" hasContent
+          <ForwardedButton style={styles.button} text="Z:" hasContent
             content={placeList.find(item => item.key === actionLocationKey)?.value} key={actionLocationKey?.toString()} />
         </Link>
         <Link href={{
@@ -60,17 +60,17 @@ export default function Move() {
           params: { datastring: JSON.stringify(placeList), selection: 'userLocation' }
         }}
           asChild>
-          <ButtonLabel style={styles.button} text="Do:" hasContent
+          <ForwardedButton style={styles.button} text="Do:" hasContent
             content={placeList.find(item => item.key === userLocationKey)?.value} key={userLocationKey?.toString()} />
         </Link>
         <Link href={{
           pathname: '/home/select-screen',
           params: { datastring: JSON.stringify(statuses), selection: 'status' }
         }} asChild>
-          <ButtonLabel style={styles.button} text="Status:" hasContent
+          <ForwardedButton style={styles.button} text="Status:" hasContent
             content={statuses.find(item => item.key === statusKey)?.value} key={statusKey?.toString()} />
         </Link>
-        <ButtonLabel style={styles.button} type="footer" text="Przenieś" />
+        <ForwardedButton style={styles.button} type="footer" text="Przenieś" />
       </View>
     </GestureHandlerRootView>
   )

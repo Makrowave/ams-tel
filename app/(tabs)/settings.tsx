@@ -1,4 +1,4 @@
-import ButtonLabel from '@/components/ButtonLabel'
+import { ForwardedButton } from '@/components/LabeledButton'
 import { useActionData } from '@/hooks/useActionData'
 import { Link, Stack } from 'expo-router'
 import { useEffect } from 'react'
@@ -22,7 +22,7 @@ export default function Settings() {
           pathname: "/home/select-screen",
           params: { datastring: JSON.stringify(placeList), selection: 'defaultUserLocation' }
         }}>
-          <ButtonLabel
+          <ForwardedButton
             text="Sklep:"
             hasContent={true}
             content={placeList.find(item => item.key === defaultUserLocation)?.value.toString()}
@@ -32,7 +32,7 @@ export default function Settings() {
             type='header'
           />
         </Link>
-        <ButtonLabel
+        <ForwardedButton
           text="Wyloguj"
           textColor="#FF0000"
           source={require('@/assets/images/move.png')}

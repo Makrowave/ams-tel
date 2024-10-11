@@ -1,4 +1,4 @@
-import SelectableButtonLabel from "@/components/RadioGroup";
+import SelectableForwardedButton from "@/components/RadioGroup";
 import { useActionData } from "@/hooks/useActionData";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -49,7 +49,7 @@ export default function SelectScreen() {
     return (
         <GestureHandlerRootView>
             <SafeAreaView>
-                <SelectableButtonLabel data={optionsList} 
+                <SelectableForwardedButton data={optionsList} 
                 onSelect={onSelect()}
                 selection={defaultSelection()}
                 />

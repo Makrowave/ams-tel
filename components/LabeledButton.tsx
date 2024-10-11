@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { StyleSheet, View, Image, Text, Pressable } from 'react-native'
 import { TouchableOpacityProps, TouchableOpacity } from 'react-native-gesture-handler';
 import { ThemedView } from './ThemedView';
@@ -22,7 +22,7 @@ type LabelProps = TouchableOpacityProps & {
   darkColor?: string;
   iconColor?: string;
 }
-const ButtonLabel = ({
+const LabeledButton = ({
   text,
   content,
   source,
@@ -156,4 +156,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ButtonLabel;
+//Don't even use refs, this one strictly to not get console error
+export const ForwardedButton = forwardRef<HTMLButtonElement, LabelProps>((props, ref) => (
+  <LabeledButton {...props}>{props.children}</LabeledButton>
+))

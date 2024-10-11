@@ -1,4 +1,4 @@
-import ButtonLabel from '@/components/ButtonLabel';
+import { ForwardedButton } from '@/components/LabeledButton';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useActionData } from '@/hooks/useActionData';
@@ -26,7 +26,7 @@ export default function HomeScreen() {
             </View>
           </ThemedView>
           <Link push href='/home/move' asChild>
-            <ButtonLabel
+            <ForwardedButton
               text="Przenieś rower"
               source={require('@/assets/images/move.png')}
               hasIcon={true}
@@ -35,7 +35,7 @@ export default function HomeScreen() {
             />
           </Link>
           <Link push href='/home/assemble' asChild>
-            <ButtonLabel
+            <ForwardedButton
               text="Złóż rower"
               source={require('@/assets/images/unpack.png')}
               hasIcon={true}
@@ -44,7 +44,7 @@ export default function HomeScreen() {
             />
           </Link>
           <Link push href='/home/sell' asChild>
-            <ButtonLabel
+            <ForwardedButton
               text="Sprzedaj rower"
               source={require('@/assets/images/sell.png')}
               hasIcon={true}
@@ -53,7 +53,7 @@ export default function HomeScreen() {
             />
           </Link>
           <Link push href='/home/add' asChild>
-            <ButtonLabel
+            <ForwardedButton
               text="Dodaj rower"
               source={require('@/assets/images/plus.png')}
               hasIcon={true}
@@ -62,7 +62,7 @@ export default function HomeScreen() {
             />
           </Link>
           <Link push href='/home/delivery' asChild>
-            <ButtonLabel
+            <ForwardedButton
               text="Dostawa"
               source={require('@/assets/images/delivery.png')}
               hasIcon={true}
