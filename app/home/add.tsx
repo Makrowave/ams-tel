@@ -5,15 +5,18 @@ import Scanner from "@/components/Scanner";
 import { Link, Stack, useRouter } from "expo-router";
 import { ForwardedButton } from "@/components/LabeledButton";
 import { useActionData } from "@/hooks/useActionData";
+import { useConstantsContext } from "@/hooks/useConstants";
 
 
 export default function Add() {
   const {
     userLocationKey,
     statusKey,
-    placeList,
     resetActionData,
   } = useActionData();
+
+  const { placeList } = useConstantsContext();
+
 
   const router = useRouter();
   const [code, setCode] = useState('');
