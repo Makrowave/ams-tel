@@ -34,7 +34,7 @@ export default function Move() {
   }
   return (
     <GestureHandlerRootView>
-      <Stack.Screen name=""
+      <Stack.Screen
         options={{
           title: "Przenieś rower", headerBackTitle: "Wróć",
           headerRight: () => <Button title="Wpisz kod" />,

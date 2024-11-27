@@ -34,7 +34,7 @@ export default function Assemble() {
 
   return (
     <GestureHandlerRootView>
-      <Stack.Screen name=""
+      <Stack.Screen
         options={{
           title: "Złóz rower", headerBackTitle: "Wróć",
           headerRight: () => <Button title="Wpisz kod" />,

@@ -33,7 +33,7 @@ export default function Add() {
   }
   return (
     <GestureHandlerRootView>
-      <Stack.Screen name=""
+      <Stack.Screen
         options={{
           title: "Dodaj rower", headerBackTitle: "Wróć",
           headerRight: () => <Button title="Wpisz kod" />,

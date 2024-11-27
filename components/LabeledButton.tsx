@@ -13,7 +13,7 @@ type LabelProps = TouchableOpacityProps & {
   text?: string;
   content?: string;
   source?: any;
-  type?: 'header' | 'body' | 'footer';
+  type?: 'header' | 'body' | 'footer' | 'single';
   hasIcon?: true | false;
   hasContent?: true | false;
   hasChevron?: true | false;
@@ -47,8 +47,8 @@ const LabeledButton = ({
     >
       <ThemedView style={[
         styles.button,
-        type === 'header' ? styles.header : undefined,
-        type === 'footer' ? styles.footer : undefined,
+        type === 'header' || type === 'single' ? styles.header : undefined,
+        type === 'footer' || type === 'single' ? styles.footer : undefined,
         style,
       ]}>
 

@@ -32,7 +32,7 @@ export default function Sell() {
   }
   return (
     <GestureHandlerRootView>
-      <Stack.Screen name=""
+      <Stack.Screen
         options={{
           title: "Sprzedaj rower", headerBackTitle: "Wróć",
           headerRight: () => <Button title="Wpisz kod" />,
