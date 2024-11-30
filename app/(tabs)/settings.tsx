@@ -2,7 +2,7 @@ import { ForwardedButton } from "@/components/LabeledButton";
 import { useActionData } from "@/hooks/useActionData";
 import useAuth from "@/hooks/useAuth";
 import { useConstantsContext } from "@/hooks/useConstants";
-import { Link, Stack } from "expo-router";
+import { Link, Stack, useRouter } from "expo-router";
 import { Alert, Button, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,6 +11,7 @@ export default function Settings() {
   const { defaultUserLocation } = useActionData();
   const { logout } = useAuth();
   const { placeList } = useConstantsContext();
+  const router = useRouter();
   return (
     <GestureHandlerRootView>
       <SafeAreaView>
@@ -39,19 +40,14 @@ export default function Settings() {
             type='header'
           />
         </Link>
-        <Link
-          asChild
-          href={{
-            pathname: "/login/login",
-          }}
-        >
-          <ForwardedButton text='Zaloguj' type='footer' />
-        </Link>
         <ForwardedButton
           text='Wyloguj'
           textColor='#FF0000'
           source={require("@/assets/images/move.png")}
-          onPress={() => logout()}
+          onPress={() => {
+            logout();
+            router.replace("/login/login");
+          }}
           type='footer'
         />
       </SafeAreaView>

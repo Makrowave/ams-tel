@@ -13,6 +13,7 @@ export default function HomeScreen() {
   const { user } = useAuth();
   const { defaultUserLocation } = useActionData();
   const { placeList } = useConstantsContext();
+
   return (
     <GestureHandlerRootView>
       <SafeAreaView style={{ flex: 1 }}>

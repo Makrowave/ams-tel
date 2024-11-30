@@ -1,24 +1,29 @@
 import axios from "@/api/axios";
 import { ForwardedButton } from "@/components/LabeledButton";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedTextInput } from "@/components/ThemedTextInput";
 import { ThemedView } from "@/components/ThemedView";
 import useAuth from "@/hooks/useAuth";
-import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import useRefreshUser from "@/hooks/useRefreshUser";
 import { AxiosError, isAxiosError } from "axios";
+import { Redirect } from "expo-router";
 import { useState } from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView, TextInput } from "react-native-gesture-handler";
 
 export default function Login() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [isTokenValid, setIsTokenValid] = useState<boolean>(false);
   const refreshUser = useRefreshUser();
-  const { saveRefreshToken } = useAuth();
+  const { saveRefreshToken, user } = useAuth();
   const _loginUrl = "/MobileAuth/Login";
+
   const handleLogin = () => {
     login();
   };
+
   const login = () => {
     setError("");
     //I guess this is my now preferred error handling
@@ -29,7 +34,9 @@ export default function Login() {
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       )
       .then((response) => {
-        saveRefreshToken(response.data).then(() => refreshUser());
+        saveRefreshToken(response.data)
+          .then(() => refreshUser())
+          .then((value) => setIsTokenValid(value));
       })
       .catch((error) => {
         if (isAxiosError(error)) {
@@ -48,26 +55,68 @@ export default function Login() {
       });
   };
 
+  if (isTokenValid === true) {
+    return <Redirect href='/(tabs)/menu' />;
+  }
+
   return (
     <GestureHandlerRootView>
-      <ThemedView>
+      <View style={{ marginTop: "20%", marginHorizontal: "auto", paddingHorizontal: 20 }}>
         {!(error === "") && (
-          <View style={{ backgroundColor: "#ff0000" }}>
-            <Text>{error}</Text>
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{error}</Text>
           </View>
         )}
-        <TextInput
-          style={{ backgroundColor: "#ffffff", height: 30 }}
-          value={username}
-          onChangeText={(text) => setUsername(text)}
+        <ThemedView style={styles.inputWrapper}>
+          <ThemedText>Login</ThemedText>
+          <ThemedTextInput
+            style={styles.input}
+            value={username}
+            onChangeText={(text) => setUsername(text)}
+            textContentType='username'
+          />
+        </ThemedView>
+        <ThemedView style={styles.inputWrapper}>
+          <ThemedText>Hasło</ThemedText>
+          <ThemedTextInput
+            secureTextEntry={true}
+            style={styles.input}
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            textContentType='password'
+          />
+        </ThemedView>
+        <ForwardedButton
+          style={{ borderWidth: 0.2, borderBottomWidth: 0.2 }}
+          type='single'
+          text={"Zaloguj się"}
+          onPress={() => handleLogin()}
         />
-        <TextInput
-          style={{ backgroundColor: "#ffffff", height: 30 }}
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-        <ForwardedButton text={"Zaloguj się"} onPress={() => handleLogin()} />
-      </ThemedView>
+      </View>
     </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  inputWrapper: {
+    //backgroundColor: "#404040",
+    marginBottom: 15,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    borderWidth: 0.2,
+  },
+  errorContainer: {
+    backgroundColor: "#ff0000",
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  errorText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  input: {
+    height: 40,
+    borderTopWidth: 0.2,
+  },
+});

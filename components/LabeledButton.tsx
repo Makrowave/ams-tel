@@ -1,19 +1,15 @@
-import { forwardRef, useState } from 'react';
-import { StyleSheet, View, Image, Text, Pressable } from 'react-native'
-import { TouchableOpacityProps, TouchableOpacity } from 'react-native-gesture-handler';
-import { ThemedView } from './ThemedView';
-import { ThemedText } from './ThemedText';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { ThemedImage } from './ThemedImage';
-
-
-
+import { forwardRef, useState } from "react";
+import { StyleSheet, View, Image } from "react-native";
+import { TouchableOpacityProps, TouchableOpacity } from "react-native-gesture-handler";
+import { ThemedView } from "./ThemedView";
+import { ThemedText } from "./ThemedText";
+import { ThemedImage } from "./ThemedImage";
 
 type LabelProps = TouchableOpacityProps & {
   text?: string;
   content?: string;
   source?: any;
-  type?: 'header' | 'body' | 'footer' | 'single';
+  type?: "header" | "body" | "footer" | "single";
   hasIcon?: true | false;
   hasContent?: true | false;
   hasChevron?: true | false;
@@ -21,7 +17,7 @@ type LabelProps = TouchableOpacityProps & {
   lightColor?: string;
   darkColor?: string;
   iconColor?: string;
-}
+};
 const LabeledButton = ({
   text,
   content,
@@ -40,67 +36,46 @@ const LabeledButton = ({
 }: LabelProps) => {
   const [label, setContent] = useState(content);
 
-
   return (
-    <TouchableOpacity
-      onPress={onPress}
-    >
-      <ThemedView style={[
-        styles.button,
-        type === 'header' || type === 'single' ? styles.header : undefined,
-        type === 'footer' || type === 'single' ? styles.footer : undefined,
-        style,
-      ]}>
-
+    <TouchableOpacity onPress={onPress}>
+      <ThemedView
+        style={[
+          styles.button,
+          type === "header" || type === "single" ? styles.header : undefined,
+          type === "footer" || type === "single" ? styles.footer : undefined,
+          style,
+        ]}
+      >
         <View style={styles.labelContainer}>
-          {
-            hasIcon === true
-              ? (
-                <View style={{ flex: 1, flexBasis: 50, alignItems: 'center' }}>
-                  <View style={[styles.iconWrapper, { backgroundColor: iconColor }]}>
-                    <Image style={styles.icon} source={source} />
-                  </View>
-                </View>
-              )
-              : undefined
-          }
+          {hasIcon === true ? (
+            <View style={{ flex: 1, flexBasis: 50, alignItems: "center" }}>
+              <View style={[styles.iconWrapper, { backgroundColor: iconColor }]}>
+                <Image style={styles.icon} source={source} />
+              </View>
+            </View>
+          ) : undefined}
           {/*Label - centering*/}
           <ThemedText
             type='subtitle'
             style={[
               styles.label,
-              hasIcon !== true
-                && hasChevron !== true
-                && hasContent !== true
-                ? styles.centeredText
-                : undefined,
-              textColor !== undefined
-                ? { color: textColor }
-                : undefined,
-            ]}>
+              hasIcon !== true && hasChevron !== true && hasContent !== true ? styles.centeredText : undefined,
+              textColor !== undefined ? { color: textColor } : undefined,
+            ]}
+          >
             {text}
           </ThemedText>
           {/*Content*/}
-          {
-            hasContent === true
-              ? <ThemedText type='subtitle'>{label}</ThemedText>
-              : undefined
-
-          }
+          {hasContent === true ? <ThemedText type='subtitle'>{label}</ThemedText> : undefined}
           {/*Chevron*/}
-          {
-            hasChevron === true
-              ? <ThemedImage style={[styles.iconSmall]} source={require('@/assets/images/chevron.png')} />
-              : undefined
-          }
-
+          {hasChevron === true ? (
+            <ThemedImage style={[styles.iconSmall]} source={require("@/assets/images/chevron.png")} />
+          ) : undefined}
         </View>
       </ThemedView>
     </TouchableOpacity>
-  )
-}
-
-
+  );
+};
 
 const styles = StyleSheet.create({
   label: {
@@ -110,34 +85,34 @@ const styles = StyleSheet.create({
     flexBasis: 10,
   },
   icon: {
-    resizeMode: 'contain',
+    resizeMode: "contain",
     height: 40,
   },
   iconWrapper: {
     height: 50,
     width: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 10
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
   },
   iconSmall: {
-    resizeMode: 'contain',
+    resizeMode: "contain",
     height: 25,
     flex: 1,
     flexBasis: 1,
   },
   labelContainer: {
     textAlignVertical: "center",
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   button: {
     height: 80,
-    textAlignVertical: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    textAlignVertical: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     borderBottomWidth: 1,
   },
   header: {
@@ -151,12 +126,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   centeredText: {
-    textAlign: 'center',
+    textAlign: "center",
     paddingLeft: 0,
-  }
-})
+  },
+});
 
 //Don't even use refs, this one strictly to not get console error
 export const ForwardedButton = forwardRef<HTMLButtonElement, LabelProps>((props, ref) => (
   <LabeledButton {...props}>{props.children}</LabeledButton>
-))
+));

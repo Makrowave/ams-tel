@@ -21,7 +21,7 @@ export default function useRefreshUser() {
         withCredentials: true,
       });
       setUser({ username: decodeToken<Token>(response.data)?.name ?? "", token: response.data });
-      return response.data;
+      return true
     } catch (e) {
         if(isAxiosError(e)) {
             const error = e as AxiosError
@@ -35,7 +35,7 @@ export default function useRefreshUser() {
         
       
       setUser({ username: "", token: "" });
-      return "";
+      return false;
     }
   }
   return refreshUser;
