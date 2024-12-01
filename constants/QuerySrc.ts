@@ -1,3 +1,4 @@
 export const QuerySrc = {
-    Places: "Places/"
-}
+  Places: "Places/",
+  StatusesNotSold: "Status/NotSold",
+};

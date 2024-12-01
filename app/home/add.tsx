@@ -6,6 +6,7 @@ import { Link, Stack, useRouter } from "expo-router";
 import { ForwardedButton } from "@/components/LabeledButton";
 import { useActionData } from "@/hooks/useActionData";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
+import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
 
 export default function Add() {
   const { userLocationKey, statusKey, resetActionData } = useActionData();
@@ -13,13 +14,7 @@ export default function Add() {
   const router = useRouter();
   const [code, setCode] = useState("");
   const [bike, setBike] = useState("Esker 8.0 L pom_zie_czer"); //debug value
-  const statuses = [
-    { key: 1, value: "Niezłozony" },
-    { key: 2, value: "Złozony" },
-    { key: 4, value: "Zadatek" },
-    { key: 5, value: "Reklamacja" },
-    { key: 6, value: "Do wysyłki" },
-  ]; //Fetched
+  const { statusData, statusFindByKey } = useStatusesData();
   function handleScan(data: string) {
     setCode(data);
   }
@@ -65,7 +60,7 @@ export default function Add() {
         <Link
           href={{
             pathname: "/home/select-screen",
-            params: { datastring: JSON.stringify(statuses), selection: "status" },
+            params: { datastring: JSON.stringify(statusData), selection: "status" },
           }}
           asChild
         >
@@ -73,7 +68,7 @@ export default function Add() {
             style={styles.button}
             text='Status:'
             hasContent
-            content={statuses.find((item) => item.key === statusKey)?.value}
+            content={statusFindByKey(statusKey)}
             key={statusKey?.toString()}
           />
         </Link>
