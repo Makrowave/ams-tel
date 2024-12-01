@@ -14,14 +14,15 @@ export default function useRefreshUser() {
   const _refreshUrl = "/MobileAuth/Refresh";
   async function refreshUser() {
     try {
-      const response = await axiosPrivate.get(_refreshUrl, {
+      const response = await axios.get(_refreshUrl, {
         headers: {
             Authorization: `Bearer ${await getRefreshToken()}`
         },
         withCredentials: true,
       });
+      const token = response.data;
       setUser({ username: decodeToken<Token>(response.data)?.name ?? "", token: response.data });
-      return true
+      return token;
     } catch (e) {
         if(isAxiosError(e)) {
             const error = e as AxiosError
@@ -35,7 +36,7 @@ export default function useRefreshUser() {
         
       
       setUser({ username: "", token: "" });
-      return false;
+      return "";
     }
   }
   return refreshUser;

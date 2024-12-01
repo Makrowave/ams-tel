@@ -1,7 +1,7 @@
 import { ForwardedButton } from "@/components/LabeledButton";
+import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { useActionData } from "@/hooks/useActionData";
 import useAuth from "@/hooks/useAuth";
-import { useConstantsContext } from "@/hooks/useConstants";
 import { Link, Stack, useRouter } from "expo-router";
 import { Alert, Button, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -10,7 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function Settings() {
   const { defaultUserLocation } = useActionData();
   const { logout } = useAuth();
-  const { placeList } = useConstantsContext();
+  const { placeData } = usePlacesData();
   const router = useRouter();
   return (
     <GestureHandlerRootView>
@@ -27,13 +27,13 @@ export default function Settings() {
           asChild
           href={{
             pathname: "/home/select-screen",
-            params: { datastring: JSON.stringify(placeList), selection: "defaultUserLocation" },
+            params: { datastring: JSON.stringify(placeData), selection: "defaultUserLocation" },
           }}
         >
           <ForwardedButton
             text='Sklep:'
             hasContent={true}
-            content={placeList.find((item) => item.key === defaultUserLocation)?.value.toString()}
+            content={placeData ? placeData.find((item) => item.key === defaultUserLocation)?.value.toString() : ""}
             key={defaultUserLocation?.toString()}
             source={require("@/assets/images/move.png")}
             hasChevron={true}

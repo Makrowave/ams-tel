@@ -1,9 +1,9 @@
 import { ForwardedButton } from "@/components/LabeledButton";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { useActionData } from "@/hooks/useActionData";
 import useAuth from "@/hooks/useAuth";
-import { useConstantsContext } from "@/hooks/useConstants";
 import { Link } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function HomeScreen() {
   const { user } = useAuth();
   const { defaultUserLocation } = useActionData();
-  const { placeList } = useConstantsContext();
+  const { placeFindByKey } = usePlacesData();
 
   return (
     <GestureHandlerRootView>
@@ -29,9 +29,7 @@ export default function HomeScreen() {
               <ThemedText type='subtitle' style={styles.text}>
                 Sklep
               </ThemedText>
-              <ThemedText type='subtitle'>
-                {placeList.find((item) => item.key === defaultUserLocation)?.value}
-              </ThemedText>
+              <ThemedText type='subtitle'>{placeFindByKey(defaultUserLocation)}</ThemedText>
             </View>
           </ThemedView>
           <Link push href='/home/move' asChild>

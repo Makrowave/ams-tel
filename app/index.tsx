@@ -1,5 +1,6 @@
 import { ThemedImage } from "@/components/ThemedImage";
 import { ThemedView } from "@/components/ThemedView";
+import { useEnableQueries } from "@/hooks/queryHooks/useEnableQueries";
 import useRefreshUser from "@/hooks/useRefreshUser";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Redirect, useRouter } from "expo-router";
@@ -15,16 +16,17 @@ interface LoadingScreenProps {
 export default function LoadingScreen({ lightColor, darkColor }: LoadingScreenProps) {
   const refreshUser = useRefreshUser();
   const router = useRouter();
+  const enableQueries = useEnableQueries();
   const shadowColor = useThemeColor({ light: lightColor, dark: darkColor }, "text");
   useEffect(() => {
     const refresh = async () => {
       const startTime = Date.now();
       const response = await refreshUser();
-
       const elapsedTime = Date.now() - startTime;
       const remainingTime = Math.max(0, 1000 - elapsedTime);
       await new Promise((resolve) => setTimeout(resolve, remainingTime));
-      if (response === true) {
+      if (response) {
+        enableQueries();
         router.replace("/(tabs)/menu");
       } else {
         router.replace("/login/login");

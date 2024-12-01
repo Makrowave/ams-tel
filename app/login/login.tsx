@@ -3,6 +3,7 @@ import { ForwardedButton } from "@/components/LabeledButton";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedTextInput } from "@/components/ThemedTextInput";
 import { ThemedView } from "@/components/ThemedView";
+import { useEnableQueries } from "@/hooks/queryHooks/useEnableQueries";
 import useAuth from "@/hooks/useAuth";
 import useRefreshUser from "@/hooks/useRefreshUser";
 import { AxiosError, isAxiosError } from "axios";
@@ -19,6 +20,7 @@ export default function Login() {
   const refreshUser = useRefreshUser();
   const { saveRefreshToken, user } = useAuth();
   const _loginUrl = "/MobileAuth/Login";
+  const enableQueries = useEnableQueries();
 
   const handleLogin = () => {
     login();
@@ -36,7 +38,8 @@ export default function Login() {
       .then((response) => {
         saveRefreshToken(response.data)
           .then(() => refreshUser())
-          .then((value) => setIsTokenValid(value));
+          .then((response) => setIsTokenValid(!(response.data === "")))
+          .then(() => enableQueries());
       })
       .catch((error) => {
         if (isAxiosError(error)) {

@@ -5,10 +5,10 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { ActionDataProvider } from "@/components/contexts/ActionDataContext";
-import { ConstantsContextProvider } from "@/components/contexts/ConstantsContext";
 import { FilterContextProvider } from "@/components/contexts/FilterContext";
 import { AuthProvider } from "@/components/contexts/AuthContext";
 import NormalStack from "@/components/NormalStack";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -26,18 +26,18 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-
+  const queryClient = new QueryClient();
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <AuthProvider>
-        <ActionDataProvider>
-          <ConstantsContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <ActionDataProvider>
             <FilterContextProvider>
               <NormalStack />
             </FilterContextProvider>
-          </ConstantsContextProvider>
-        </ActionDataProvider>
-      </AuthProvider>
+          </ActionDataProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }
