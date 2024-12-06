@@ -18,9 +18,7 @@ export default function Settings() {
         <Stack.Screen
           name=''
           options={{
-            title: "Przenieś rower",
-            headerBackTitle: "Wróć",
-            headerRight: () => <Button title='Wpisz kod' />,
+            title: "Ustawienia",
           }}
         />
         <Link

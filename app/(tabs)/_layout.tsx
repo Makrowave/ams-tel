@@ -26,9 +26,7 @@ export default function TabLayout() {
         name='search'
         options={{
           title: "Rowery",
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? "code-slash" : "code-slash-outline"} color={color} />
-          ),
+          tabBarIcon: ({ color, focused }) => <TabBarIcon name={focused ? "search" : "search-outline"} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -36,7 +34,7 @@ export default function TabLayout() {
         options={{
           title: "Ustawienia",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? "code-slash" : "code-slash-outline"} color={color} />
+            <TabBarIcon name={focused ? "settings" : "settings-outline"} color={color} />
           ),
         }}
       />

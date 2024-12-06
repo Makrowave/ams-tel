@@ -2,42 +2,45 @@ import { QueryKeys } from "@/constants/QueryKeys";
 import { QueryObserverResult, RefetchOptions, useQuery } from "@tanstack/react-query";
 import useAxiosPrivate from "../useAxiosPrivate";
 import { QuerySrc } from "@/constants/QuerySrc";
-import { Data, Record } from "@/constants/Types";
 import useAuth from "../useAuth";
 
-interface PlaceRecord {
-  placeId: Number;
-  placeName: string;
+export interface Bike {
+  id: Number;
+  place: string;
+  statusId: Number;
+  status: string;
+  assembledBy: string;
 }
 
+export type BikeData = Array<Bike> | undefined;
+
 export type FetchHookReturn = {
-  placeData: Data;
+  placeData: BikeData;
   placeIsPending: boolean;
   placeIsError: boolean;
   placeError: Error | null;
-  placeFindByKey: (value: Number | undefined) => string;
+  selectFirstMatch: (placeId: Number, statusId: Number) => Number | undefined;
   placeRefetch: (options?: RefetchOptions) => Promise<QueryObserverResult<any, Error>>;
 };
 
-export function usePlacesData(): FetchHookReturn {
+export function usePlacesData(id: Number): FetchHookReturn {
   const axiosPrivate = useAxiosPrivate();
   const { user } = useAuth();
   const { data, isPending, isError, error, refetch } = useQuery({
-    queryKey: [QueryKeys.Places],
+    queryKey: [QueryKeys.Bikes, id],
     queryFn: async () => {
       console.log("placesQueryTest");
-      const response = await axiosPrivate.get(QuerySrc.Places);
-      return response.data.map((item: PlaceRecord) => ({ key: item.placeId, value: item.placeName }));
+      const response = await axiosPrivate.get(`${QuerySrc.BikesByModel}/${id}`);
+      return response.data as BikeData;
     },
-    refetchInterval: 60 * 60 * 1000,
     enabled: !(user.token === ""),
   });
 
-  const placeFindByKey = (key: Number | undefined) => {
-    if (key === undefined) return "";
-    if (isPending) return "Ładowanie...";
-    if (isError) return "Błąd";
-    return data?.find((item: Record) => item.key === key)?.value;
+  const selectFirstMatch = (placeId: "" | Number, statusId: "" | Number) => {
+    //Remember to change placeId comparison when API gets changed
+    return data?.find((bike) => {
+      bike.statusId === statusId && bike.place == placeId;
+    })?.id;
   };
 
   return {
@@ -46,6 +49,6 @@ export function usePlacesData(): FetchHookReturn {
     placeIsError: isError,
     placeError: error,
     placeRefetch: refetch,
-    placeFindByKey,
+    selectFirstMatch,
   };
 }

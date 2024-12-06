@@ -7,8 +7,8 @@ export function useEnableQueries() {
   const { placeRefetch } = usePlacesData();
   const { statusRefetch } = useStatusesData();
   const enableQueries = () => {
-    placeRefetch();
-    statusRefetch();
+    // placeRefetch();
+    // statusRefetch();
   };
 
   return enableQueries;

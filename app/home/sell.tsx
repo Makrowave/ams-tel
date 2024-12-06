@@ -1,23 +1,45 @@
 import { ForwardedButton } from "@/components/LabeledButton";
 import Scanner from "@/components/Scanner";
+import { ModelsQuery } from "@/constants/QuerySrc";
+import { useModelsData } from "@/hooks/queryHooks/useModelsData";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
 import { useActionData } from "@/hooks/useActionData";
 import { Link, Stack, useRouter } from "expo-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button, View, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Sell() {
   const router = useRouter();
   const [code, setCode] = useState("");
-  const [bike, setBike] = useState("Esker 8.0 L pom_zie_czer"); //debug value
-  const { userLocationKey, statusKey, price, resetActionData } = useActionData();
+  const [bike, setBike] = useState<string>("");
+  const [price, setPrice] = useState<string>("");
+  //Without this - either bike label duplicates itself or it doesn't refresh
+  const [bikeKey, setBikeKey] = useState<string>("bikeKey");
+  const { userLocationKey, statusKey, resetActionData } = useActionData();
   const { placeData, placeFindByKey } = usePlacesData();
   const { statusData, statusFindByKey } = useStatusesData(); //Fetched
-  function handleScan(data: string) {
-    setCode(data);
-  }
+  const { modelFindByEan } = useModelsData(ModelsQuery.all);
+  const updateable = useRef<boolean>(true);
+
+  //Blocks next scan for some time and sets values
+  const handleScan = (data: string) => {
+    if (updateable.current) {
+      updateable.current = false;
+      setTimeout(() => {
+        updateable.current = true;
+      }, 800);
+      //Set scan barcode
+      setCode(data);
+      //Find model - if it exists update bike name and key
+      const model = modelFindByEan(data);
+      if (model !== undefined) {
+        setBike(model.modelName);
+        setBikeKey(model.modelId.toString());
+      }
+    }
+  };
   return (
     <GestureHandlerRootView>
       <Stack.Screen
@@ -38,10 +60,16 @@ export default function Sell() {
       />
       <Scanner onBarcodeScanned={handleScan} />
       <View style={styles.wrapper}>
-        {/*<Label title="Rower:" hasContent content={bike} type="header"/>
-        <Label title="Kod:" hasContent content={code} />*/}
-        <ForwardedButton style={styles.button} type='header' text='Rower:' hasContent content={bike} />
-        <ForwardedButton style={styles.button} text='Kod:' hasContent content={code} key={code} />
+        <ForwardedButton
+          style={styles.button}
+          type='header'
+          text='Rower:'
+          hasContent
+          content={bike}
+          key={bikeKey}
+          disabled
+        />
+        <ForwardedButton style={styles.button} text='Kod:' hasContent content={code} key={code} disabled />
         <Link
           href={{
             pathname: "/home/select-screen",
@@ -72,7 +100,14 @@ export default function Sell() {
             key={statusKey?.toString()}
           />
         </Link>
-        <ForwardedButton style={styles.button} text='Cena:' hasContent content={price?.toString()} />
+        <ForwardedButton
+          style={styles.button}
+          text='Cena:'
+          hasContent
+          content={price}
+          key={"price" + price}
+          hasChevron
+        />
         <ForwardedButton style={styles.button} type='footer' text='Sprzedaj' />
       </View>
     </GestureHandlerRootView>

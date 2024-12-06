@@ -17,12 +17,13 @@ type LabelProps = TouchableOpacityProps & {
   lightColor?: string;
   darkColor?: string;
   iconColor?: string;
+  size?: "small" | "big";
 };
 const LabeledButton = ({
   text,
   content,
   source,
-  type,
+  type = "body",
   hasIcon,
   hasContent,
   hasChevron,
@@ -32,17 +33,21 @@ const LabeledButton = ({
   onPress,
   style,
   iconColor,
+  size = "big",
+  disabled,
   ...rest
 }: LabelProps) => {
   const [label, setContent] = useState(content);
 
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} disabled={disabled}>
       <ThemedView
         style={[
           styles.button,
+          size === "big" ? styles.big : styles.small,
           type === "header" || type === "single" ? styles.header : undefined,
           type === "footer" || type === "single" ? styles.footer : undefined,
+          type === "body" ? styles.body : {},
           style,
         ]}
       >
@@ -66,7 +71,11 @@ const LabeledButton = ({
             {text}
           </ThemedText>
           {/*Content*/}
-          {hasContent === true ? <ThemedText type='subtitle'>{label}</ThemedText> : undefined}
+          {hasContent === true ? (
+            <ThemedText ellipsizeMode='tail' numberOfLines={1} type='default' style={styles.contentText}>
+              {label}
+            </ThemedText>
+          ) : undefined}
           {/*Chevron*/}
           {hasChevron === true ? (
             <ThemedImage style={[styles.iconSmall]} source={require("@/assets/images/chevron.png")} />
@@ -83,6 +92,12 @@ const styles = StyleSheet.create({
     flexGrow: 3,
     paddingLeft: 20,
     flexBasis: 10,
+  },
+  contentText: {
+    width: "60%",
+    textAlign: "right",
+    paddingRight: 20,
+    fontSize: 20,
   },
   icon: {
     resizeMode: "contain",
@@ -108,12 +123,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    height: 80,
     textAlignVertical: "center",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    borderBottomWidth: 1,
   },
   header: {
     borderTopRightRadius: 20,
@@ -123,11 +136,19 @@ const styles = StyleSheet.create({
   footer: {
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
-    borderBottomWidth: 0,
+  },
+  body: {
+    borderBottomWidth: 1,
   },
   centeredText: {
     textAlign: "center",
     paddingLeft: 0,
+  },
+  small: {
+    height: 60,
+  },
+  big: {
+    height: 80,
   },
 });
 

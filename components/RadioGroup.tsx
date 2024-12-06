@@ -18,6 +18,7 @@ type RadioProps = {
   colored?: boolean;
   lightColor?: string;
   darkColor?: string;
+  size?: "small" | "large";
 };
 const SelectableForwardedButton = ({
   selection = "",
@@ -26,6 +27,7 @@ const SelectableForwardedButton = ({
   lightColor,
   darkColor,
   colored,
+  size = "large",
   ...rest
 }: RadioProps) => {
   const [selectedOption, setSelectedOption] = useState(selection ? selection : data[0].key);
@@ -39,7 +41,13 @@ const SelectableForwardedButton = ({
     return data.map((item) => {
       return (
         <TouchableOpacity key={item.key.toString()} onPress={() => onPress(item.key)}>
-          <ThemedView style={[style, item.key === selectedOption ? { backgroundColor: selectedColor } : {}]}>
+          <ThemedView
+            style={[
+              style,
+              size === "large" ? styles.large : styles.small,
+              item.key === selectedOption ? { backgroundColor: selectedColor } : {},
+            ]}
+          >
             {colored && (
               <View
                 style={{ backgroundColor: item.color, height: 40, width: 40, borderRadius: 6, marginRight: 4 }}
@@ -78,7 +86,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    height: 80,
     marginHorizontal: "2%",
     textAlignVertical: "center",
     flexDirection: "row",
@@ -102,5 +109,11 @@ const styles = StyleSheet.create({
   centeredText: {
     textAlign: "center",
     paddingLeft: 0,
+  },
+  small: {
+    height: 60,
+  },
+  large: {
+    height: 80,
   },
 });

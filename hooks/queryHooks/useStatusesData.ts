@@ -3,6 +3,8 @@ import { QueryObserverResult, RefetchOptions, useQuery } from "@tanstack/react-q
 import useAxiosPrivate from "../useAxiosPrivate";
 import { QuerySrc } from "@/constants/QuerySrc";
 import { Data, Record } from "@/constants/Types";
+import useAuth from "../useAuth";
+import { Statuses } from "@/constants/UtilEnums";
 
 interface PlaceRecord {
   statusId: Number;
@@ -18,16 +20,28 @@ export type FetchHookReturn = {
   statusRefetch: (options?: RefetchOptions) => Promise<QueryObserverResult<any, Error>>;
 };
 
-export function useStatusesData(): FetchHookReturn {
+export function useStatusesData(excluded: Array<Number> = [Statuses.sold]): FetchHookReturn {
   const axiosPrivate = useAxiosPrivate();
+  const { user } = useAuth();
+  const createQuery = () => {
+    if (excluded.length === 0) return "";
+    else {
+      let result = "?";
+      excluded.forEach((status) => (result = `${result}exclude=${status}&`));
+      return result.slice(0, -1);
+    }
+  };
   const { data, isPending, isError, error, refetch } = useQuery({
-    queryKey: [QueryKeys.Statuses],
+    queryKey: [QueryKeys.Statuses, excluded],
     queryFn: async () => {
-      const response = await axiosPrivate.get(QuerySrc.StatusesNotSold);
+      console.log("statusQueryTest");
+      console.log(QuerySrc.Excluded + createQuery());
+      const response = await axiosPrivate.get(QuerySrc.Excluded + createQuery());
+      console.log(response.data);
       return response.data.map((item: PlaceRecord) => ({ key: item.statusId, value: item.statusName }));
     },
-    staleTime: 24 * 60 * 60 * 1000,
-    enabled: false,
+    refetchInterval: 60 * 60 * 1000,
+    enabled: !(user.token === ""),
   });
 
   const statusFindByKey = (key: Number | undefined) => {

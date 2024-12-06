@@ -3,6 +3,8 @@ import FetchSelectFilter from "@/components/filters/FetchSelectFilter";
 import NumberFilter from "@/components/filters/NumberFilter";
 import RangeFilter from "@/components/filters/RangeFilter";
 import TextFilter from "@/components/filters/TextFilter";
+import { QueryKeys } from "@/constants/QueryKeys";
+import { QuerySrc } from "@/constants/QuerySrc";
 import { useFilter } from "@/hooks/useFilter";
 import { Link, useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect } from "react";
@@ -62,15 +64,17 @@ export default function FilterPage() {
       case "name":
         return <TextFilter title='Nazwa' updateKey='name' defaultValue={filters.name} />;
       case "manufacturer":
-        return <FetchSelectFilter queryKey='/Manufacturers/' updateKey='manufacturer' />;
+        return (
+          <FetchSelectFilter url={QuerySrc.Manufacturers} queryKey={QueryKeys.Manufacturers} updateKey='manufacturer' />
+        );
       case "size":
         return <NumberFilter title='Rama' defaultValue={filters.size} updateKey='size' />;
       case "wheelSize":
-        return <FetchSelectFilter queryKey='/Wheels/' updateKey='wheelSize' />;
+        return <FetchSelectFilter url={QuerySrc.Wheels} queryKey={QueryKeys.WheelSizes} updateKey='wheelSize' />;
       case "category":
-        return <FetchSelectFilter queryKey='/Categories/' updateKey='category' />;
+        return <FetchSelectFilter url={QuerySrc.Categories} queryKey={QueryKeys.Categories} updateKey='category' />;
       case "color":
-        return <FetchSelectFilter queryKey='/Colors/' updateKey='color' colored={true} />;
+        return <FetchSelectFilter url={QuerySrc.Colors} queryKey={QueryKeys.Colors} updateKey='color' colored={true} />;
       case "price":
         return (
           <RangeFilter
