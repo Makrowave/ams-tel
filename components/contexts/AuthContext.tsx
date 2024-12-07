@@ -12,6 +12,7 @@ interface AuthContext {
 interface User {
   username: string;
   token: string;
+  employeeKey: string;
 }
 
 type AuthProviderProps = {
@@ -21,11 +22,10 @@ type AuthProviderProps = {
 const AuthContext = createContext<AuthContext | undefined>(undefined);
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState({ username: "", token: "" });
-  const _logoutUrl = "/Auth/Logout";
+  const [user, setUser] = useState({ username: "", employeeKey: "", token: "" });
   function logout() {
     Keychain.resetGenericPassword();
-    setUser({ username: "", token: "" });
+    setUser({ username: "", employeeKey: "", token: "" });
   }
 
   const getRefreshToken = async () => {

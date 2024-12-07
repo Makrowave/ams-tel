@@ -1,11 +1,9 @@
-import { FilterContextProvider } from "@/components/contexts/FilterContext";
 import { ForwardedButton } from "@/components/LabeledButton";
 import ModelTable from "@/components/model-table/ModelTable";
 import { ThemedImage } from "@/components/ThemedImage";
 import ThemedIonicons from "@/components/ThemedIonicons";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";

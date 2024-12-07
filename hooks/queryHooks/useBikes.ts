@@ -15,40 +15,42 @@ export interface Bike {
 export type BikeData = Array<Bike> | undefined;
 
 export type FetchHookReturn = {
-  placeData: BikeData;
-  placeIsPending: boolean;
-  placeIsError: boolean;
-  placeError: Error | null;
+  bikeData: BikeData;
+  bikeIsPending: boolean;
+  bikeIsError: boolean;
+  bikeError: Error | null;
   selectFirstMatch: (placeId: Number, statusId: Number) => Number | undefined;
-  placeRefetch: (options?: RefetchOptions) => Promise<QueryObserverResult<any, Error>>;
+  bikeRefetch: (options?: RefetchOptions) => Promise<QueryObserverResult<any, Error>>;
 };
 
-export function usePlacesData(id: Number): FetchHookReturn {
+export function useBikes(id: Number): FetchHookReturn {
   const axiosPrivate = useAxiosPrivate();
   const { user } = useAuth();
   const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: [QueryKeys.Bikes, id],
     queryFn: async () => {
-      console.log("placesQueryTest");
+      console.log("bikeQueryTest");
+      console.log(`${QuerySrc.BikesByModel}/${id}`);
       const response = await axiosPrivate.get(`${QuerySrc.BikesByModel}/${id}`);
+      console.log(response.data);
       return response.data as BikeData;
     },
-    enabled: !(user.token === ""),
+    enabled: !(user.token === "" || id === 0),
   });
 
   const selectFirstMatch = (placeId: "" | Number, statusId: "" | Number) => {
     //Remember to change placeId comparison when API gets changed
     return data?.find((bike) => {
-      bike.statusId === statusId && bike.place == placeId;
+      return bike.statusId === statusId && bike.place == placeId;
     })?.id;
   };
 
   return {
-    placeData: data,
-    placeIsPending: isPending,
-    placeIsError: isError,
-    placeError: error,
-    placeRefetch: refetch,
+    bikeData: data,
+    bikeIsPending: isPending,
+    bikeIsError: isError,
+    bikeError: error,
+    bikeRefetch: refetch,
     selectFirstMatch,
   };
 }

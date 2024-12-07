@@ -12,7 +12,7 @@ interface ActionDataContextProps {
   setActionLocationKey: (value: Number) => void;
   setPrice: (value: Number) => void;
   setStatusKey: (value: Number) => void;
-  resetActionData: () => void;
+  initializeValues: (statusKey: Number, actionLocationKey?: Number, price?: Number) => void;
   setDefaultUserLocation: (value: Number | undefined) => void;
 }
 
@@ -58,11 +58,11 @@ export function ActionDataProvider({ children }: ActionDataProviderProps) {
     } catch (e) {}
   }
 
-  function resetActionData() {
+  function initializeValues(statusKey: Number, actionLocationKey?: Number, price?: Number) {
     setUserLocationKey(defaultUserLocation);
-    setActionLocationKey(4);
-    setPrice(3000);
-    setStatusKey(2);
+    if (actionLocationKey) setActionLocationKey(actionLocationKey);
+    setStatusKey(statusKey);
+    if (price) setPrice(price);
   }
 
   return (
@@ -76,9 +76,9 @@ export function ActionDataProvider({ children }: ActionDataProviderProps) {
         setActionLocationKey,
         setPrice,
         setStatusKey,
-        resetActionData,
         setDefaultUserLocation,
         defaultUserLocation,
+        initializeValues,
       }}
     >
       {children}

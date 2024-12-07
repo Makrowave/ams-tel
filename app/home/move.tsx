@@ -1,26 +1,34 @@
 import { ForwardedButton } from "@/components/LabeledButton";
 import Scanner from "@/components/Scanner";
-import { ModelsQuery } from "@/constants/QuerySrc";
+import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
+import { ModelRecordData } from "@/constants/Types";
+import { Places, Statuses } from "@/constants/UtilEnums";
+import { useBikes } from "@/hooks/queryHooks/useBikes";
 import { useModelsData } from "@/hooks/queryHooks/useModelsData";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
 import { useActionData } from "@/hooks/useActionData";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { Link, Stack, useRouter } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, View, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Move() {
   const router = useRouter();
+  const axiosPrivate = useAxiosPrivate();
   const [code, setCode] = useState("");
-  const [bike, setBike] = useState<string>("");
-  //Without this - either bike label duplicates itself or it doesn't refresh
-  const [bikeKey, setBikeKey] = useState<string>("bikeKey");
-  const { userLocationKey, actionLocationKey, statusKey, resetActionData } = useActionData();
-  const { placeData, placeFindByKey } = usePlacesData();
-  const { statusData, statusFindByKey } = useStatusesData(); //Fetched
+  const [model, setModel] = useState<ModelRecordData | undefined>(undefined);
+  const { userLocationKey, actionLocationKey, statusKey, initializeValues } = useActionData();
+  const { placeData, placeIsPending, placeIsError, placeFindByKey } = usePlacesData();
+  const { statusData, statusIsPending, statusIsError, statusFindByKey } = useStatusesData();
   const { modelFindByEan } = useModelsData(ModelsQuery.all);
+  const { selectFirstMatch, bikeRefetch } = useBikes(model?.modelId ?? 0);
   const updateable = useRef<boolean>(true);
+
+  useEffect(() => {
+    initializeValues(Statuses.unAssembled, Places.storage1);
+  }, []);
 
   //Blocks next scan for some time and sets values
   const handleScan = (data: string) => {
@@ -29,14 +37,31 @@ export default function Move() {
       setTimeout(() => {
         updateable.current = true;
       }, 800);
-      //Set scan barcode
+
       setCode(data);
-      //Find model - if it exists update bike name and key
-      const model = modelFindByEan(data);
-      if (model !== undefined) {
-        setBike(model.modelName);
-        setBikeKey(model.modelId.toString());
-      }
+      setModel(modelFindByEan(data));
+    }
+  };
+
+  const handleMove = async () => {
+    await bikeRefetch();
+    if (userLocationKey === undefined || actionLocationKey === undefined || statusKey === undefined) {
+      console.log("No locations and status chosen");
+      return;
+    }
+    const bikeId = selectFirstMatch(actionLocationKey, statusKey);
+    if (bikeId === undefined) {
+      console.log("No bike found - implement error handling");
+      return;
+    }
+    const result = await axiosPrivate.put(
+      `${QuerySrc.Bikes}/${bikeId}`,
+      JSON.stringify({
+        placeId: userLocationKey,
+      })
+    );
+    if (result.status === 200) {
+      router.back();
     }
   };
   return (
@@ -50,7 +75,6 @@ export default function Move() {
             <Button
               title='Wróć'
               onPress={() => {
-                resetActionData();
                 router.back();
               }}
             />
@@ -64,8 +88,8 @@ export default function Move() {
           type='header'
           text='Rower:'
           hasContent
-          content={bike}
-          key={bikeKey}
+          content={model?.modelName}
+          key={"Model-" + model?.modelId}
           disabled
         />
         <ForwardedButton style={styles.button} text='Kod:' hasContent content={code} key={code} disabled />
@@ -81,7 +105,7 @@ export default function Move() {
             text='Z:'
             hasContent
             content={placeFindByKey(actionLocationKey)}
-            key={actionLocationKey?.toString()}
+            key={`Place-${actionLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
           />
         </Link>
         <Link
@@ -96,7 +120,7 @@ export default function Move() {
             text='Do:'
             hasContent
             content={placeFindByKey(userLocationKey)}
-            key={userLocationKey?.toString()}
+            key={`Place-${userLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
           />
         </Link>
         <Link
@@ -111,10 +135,10 @@ export default function Move() {
             text='Status:'
             hasContent
             content={statusFindByKey(statusKey)}
-            key={statusKey?.toString()}
+            key={`Status-${statusKey?.toString()}-${statusIsPending}-${statusIsError}`}
           />
         </Link>
-        <ForwardedButton style={styles.button} type='footer' text='Przenieś' />
+        <ForwardedButton style={styles.button} type='footer' text='Przenieś' onPress={() => handleMove()} />
       </View>
     </GestureHandlerRootView>
   );

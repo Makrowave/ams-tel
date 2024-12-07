@@ -1,6 +1,6 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Button, StyleSheet, View } from "react-native";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Scanner from "@/components/Scanner";
 import { Link, Stack, useRouter } from "expo-router";
 import { ForwardedButton } from "@/components/LabeledButton";
@@ -8,22 +8,24 @@ import { useActionData } from "@/hooks/useActionData";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
 import { useModelsData } from "@/hooks/queryHooks/useModelsData";
-import { ModelsQuery } from "@/constants/QuerySrc";
-import { useMutation } from "@tanstack/react-query";
-import { Statuses } from "@/constants/UtilEnums";
+import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
+import { Places, Statuses } from "@/constants/UtilEnums";
+import { ModelRecordData } from "@/constants/Types";
+import { axiosPrivate } from "@/api/axios";
 
 export default function Add() {
-  const { userLocationKey, statusKey, resetActionData } = useActionData();
-  const { placeData, placeFindByKey } = usePlacesData();
+  const { userLocationKey, statusKey, initializeValues } = useActionData();
   const router = useRouter();
-
   const [code, setCode] = useState<string>("");
-  const [bike, setBike] = useState<string>("");
-  //Without this - either bike label duplicates itself or it doesn't refresh
-  const [bikeKey, setBikeKey] = useState<string>("bikeKey");
-  const { statusData, statusFindByKey } = useStatusesData([Statuses.sold]);
+  const [model, setModel] = useState<ModelRecordData | undefined>(undefined);
+  const { placeData, placeIsPending, placeIsError, placeFindByKey } = usePlacesData();
+  const { statusData, statusIsPending, statusIsError, statusFindByKey } = useStatusesData([Statuses.sold]);
   const { modelFindByEan } = useModelsData(ModelsQuery.all);
   const updateable = useRef<boolean>(true);
+
+  useEffect(() => {
+    initializeValues(Statuses.unAssembled, Places.storage1);
+  }, []);
 
   //Blocks next scan for some time and sets values
   const handleScan = (data: string) => {
@@ -32,14 +34,27 @@ export default function Add() {
       setTimeout(() => {
         updateable.current = true;
       }, 800);
-      //Set scan barcode
+
       setCode(data);
-      //Find model - if it exists update bike name and key
-      const model = modelFindByEan(data);
-      if (model !== undefined) {
-        setBike(model.modelName);
-        setBikeKey(model.modelId.toString());
+      setModel(modelFindByEan(data));
+    }
+  };
+
+  const handleAdd = async () => {
+    if (model !== undefined && userLocationKey !== undefined && statusKey !== undefined) {
+      const result = await axiosPrivate.post(
+        QuerySrc.Bikes,
+        JSON.stringify({
+          modelId: model?.modelId,
+          placeId: userLocationKey,
+          statusId: statusKey,
+        })
+      );
+      if (result.status === 200) {
+        router.back();
       }
+    } else {
+      console.log(model?.modelId + " " + userLocationKey + " " + statusKey);
     }
   };
 
@@ -54,7 +69,6 @@ export default function Add() {
             <Button
               title='Wróć'
               onPress={() => {
-                resetActionData();
                 router.back();
               }}
             />
@@ -67,8 +81,8 @@ export default function Add() {
           style={styles.button}
           text='Rower:'
           hasContent
-          content={bike}
-          key={bikeKey}
+          content={model?.modelName}
+          key={"ModelKey-" + model?.modelId}
           type='header'
           disabled
         />
@@ -85,7 +99,7 @@ export default function Add() {
             text='Miejsce:'
             hasContent
             content={placeFindByKey(userLocationKey)}
-            key={userLocationKey?.toString()}
+            key={`Place-${userLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
             hasChevron
           />
         </Link>
@@ -101,11 +115,11 @@ export default function Add() {
             text='Status:'
             hasContent
             content={statusFindByKey(statusKey)}
-            key={statusKey?.toString()}
+            key={`Status-${statusKey?.toString()}-${statusIsPending}-${statusIsError}`}
             hasChevron
           />
         </Link>
-        <ForwardedButton style={styles.button} type='footer' text='Dodaj' />
+        <ForwardedButton style={styles.button} type='footer' text='Dodaj' onPress={() => handleAdd()} />
       </View>
     </GestureHandlerRootView>
   );

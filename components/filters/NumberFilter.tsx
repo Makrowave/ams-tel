@@ -23,6 +23,7 @@ export default function NumberFilter({ title, defaultValue, updateKey }: NumberF
   return (
     <ThemedView>
       <TextInput
+        keyboardType='number-pad'
         style={{ backgroundColor: "#ffffff", height: 40 }}
         value={value.toString()}
         onChangeText={(text) => setValue(ParseText(text))}

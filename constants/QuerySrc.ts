@@ -6,7 +6,8 @@ export enum QuerySrc {
   Wheels = "WheelSizes",
   Manufacturers = "Manufacturers",
   Categories = "Categories",
-  BikesByModel = "BikesByModelId",
+  BikesByModel = "Bikes/BikesByModelId",
+  Bikes = "Bikes",
 }
 
 export enum ModelsQuery {

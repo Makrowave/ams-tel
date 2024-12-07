@@ -25,7 +25,6 @@ export default function FetchSelectFilter({ url, queryKey, updateKey, colored = 
       const result = await axiosPrivate.get(url);
       //WARNING? I guess be wary of this code - works same at frontend since
       //My backend sends 2 or 3 fields
-      console.log(result.data);
       const mappedResult = result.data.map((item: any) => {
         let keys = Object.keys(item);
         let obj = {
@@ -33,7 +32,6 @@ export default function FetchSelectFilter({ url, queryKey, updateKey, colored = 
           value: item[keys[1]] ?? null,
           color: item[keys[2]] ?? null,
         };
-        console.log(obj);
         return obj;
       });
 

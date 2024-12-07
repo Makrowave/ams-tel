@@ -35,9 +35,7 @@ export function useStatusesData(excluded: Array<Number> = [Statuses.sold]): Fetc
     queryKey: [QueryKeys.Statuses, excluded],
     queryFn: async () => {
       console.log("statusQueryTest");
-      console.log(QuerySrc.Excluded + createQuery());
       const response = await axiosPrivate.get(QuerySrc.Excluded + createQuery());
-      console.log(response.data);
       return response.data.map((item: PlaceRecord) => ({ key: item.statusId, value: item.statusName }));
     },
     refetchInterval: 60 * 60 * 1000,

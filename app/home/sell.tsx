@@ -1,45 +1,73 @@
 import { ForwardedButton } from "@/components/LabeledButton";
 import Scanner from "@/components/Scanner";
-import { ModelsQuery } from "@/constants/QuerySrc";
+import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
+import { ModelRecordData } from "@/constants/Types";
+import { Statuses } from "@/constants/UtilEnums";
+import { useBikes } from "@/hooks/queryHooks/useBikes";
 import { useModelsData } from "@/hooks/queryHooks/useModelsData";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
 import { useActionData } from "@/hooks/useActionData";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { Link, Stack, useRouter } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, View, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Sell() {
   const router = useRouter();
+  const axiosPrivate = useAxiosPrivate();
   const [code, setCode] = useState("");
-  const [bike, setBike] = useState<string>("");
   const [price, setPrice] = useState<string>("");
-  //Without this - either bike label duplicates itself or it doesn't refresh
-  const [bikeKey, setBikeKey] = useState<string>("bikeKey");
-  const { userLocationKey, statusKey, resetActionData } = useActionData();
-  const { placeData, placeFindByKey } = usePlacesData();
-  const { statusData, statusFindByKey } = useStatusesData(); //Fetched
-  const { modelFindByEan } = useModelsData(ModelsQuery.all);
+  const [model, setModel] = useState<ModelRecordData | undefined>(undefined);
+  const { userLocationKey, statusKey, initializeValues } = useActionData();
+  const { placeData, placeIsPending, placeIsError, placeFindByKey } = usePlacesData();
+  const { statusData, statusIsPending, statusIsError, statusFindByKey } = useStatusesData();
+  const { modelFindByEan, modelRefetch } = useModelsData(ModelsQuery.all);
+  const { selectFirstMatch, bikeRefetch } = useBikes(model?.modelId ?? 0);
   const updateable = useRef<boolean>(true);
 
+  useEffect(() => {
+    initializeValues(Statuses.assembled, undefined, undefined);
+  }, []);
+
   //Blocks next scan for some time and sets values
-  const handleScan = (data: string) => {
+  const handleScan = async (data: string) => {
     if (updateable.current) {
       updateable.current = false;
       setTimeout(() => {
         updateable.current = true;
       }, 800);
-      //Set scan barcode
+      await modelRefetch();
       setCode(data);
-      //Find model - if it exists update bike name and key
-      const model = modelFindByEan(data);
-      if (model !== undefined) {
-        setBike(model.modelName);
-        setBikeKey(model.modelId.toString());
-      }
+      const foundModel = modelFindByEan(data);
+      setModel(foundModel);
+      setPrice(foundModel?.price.toString() ?? "");
     }
   };
+
+  const handleSell = async () => {
+    await bikeRefetch();
+    if (userLocationKey === undefined || statusKey === undefined) {
+      console.log("No location and status chosen");
+      return;
+    }
+    const bikeId = selectFirstMatch(userLocationKey, statusKey);
+    if (bikeId === undefined) {
+      console.log("No bike found - implement error handling");
+      return;
+    }
+    const result = await axiosPrivate.put(
+      QuerySrc.Bikes,
+      JSON.stringify({
+        statusId: statusKey,
+      })
+    );
+    if (result.status === 200) {
+      router.back();
+    }
+  };
+
   return (
     <GestureHandlerRootView>
       <Stack.Screen
@@ -51,7 +79,6 @@ export default function Sell() {
             <Button
               title='Wróć'
               onPress={() => {
-                resetActionData();
                 router.back();
               }}
             />
@@ -65,8 +92,8 @@ export default function Sell() {
           type='header'
           text='Rower:'
           hasContent
-          content={bike}
-          key={bikeKey}
+          content={model?.modelName}
+          key={"Model-" + model?.modelId}
           disabled
         />
         <ForwardedButton style={styles.button} text='Kod:' hasContent content={code} key={code} disabled />
@@ -82,7 +109,7 @@ export default function Sell() {
             text='Miejsce:'
             hasContent
             content={placeFindByKey(userLocationKey)}
-            key={userLocationKey?.toString()}
+            key={`Place-${userLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
           />
         </Link>
         <Link
@@ -97,7 +124,7 @@ export default function Sell() {
             text='Status:'
             hasContent
             content={statusFindByKey(statusKey)}
-            key={statusKey?.toString()}
+            key={`Status-${statusKey?.toString()}-${statusIsPending}-${statusIsError}`}
           />
         </Link>
         <ForwardedButton
@@ -105,10 +132,10 @@ export default function Sell() {
           text='Cena:'
           hasContent
           content={price}
-          key={"price" + price}
+          key={"Price-" + price}
           hasChevron
         />
-        <ForwardedButton style={styles.button} type='footer' text='Sprzedaj' />
+        <ForwardedButton style={styles.button} type='footer' text='Sprzedaj' onPress={() => handleSell()} />
       </View>
     </GestureHandlerRootView>
   );

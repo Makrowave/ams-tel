@@ -30,6 +30,7 @@ export default function RangeFilter({ title, minValue, maxValue, minKey, maxKey 
   return (
     <ThemedView>
       <TextInput
+        keyboardType='number-pad'
         style={{ backgroundColor: "#ffffff", height: 40 }}
         value={minVal.toString()}
         onChangeText={(text) => setMinVal(ParseText(text))}
@@ -38,6 +39,7 @@ export default function RangeFilter({ title, minValue, maxValue, minKey, maxKey 
         }}
       />
       <TextInput
+        keyboardType='number-pad'
         style={{ backgroundColor: "#ffffff", height: 40 }}
         value={maxVal.toString()}
         onChangeText={(text) => setMaxVal(ParseText(text))}
