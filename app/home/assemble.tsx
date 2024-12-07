@@ -1,3 +1,4 @@
+import ButtonWithInputAlert from "@/components/ButtonWithInputAlert";
 import { ForwardedButton } from "@/components/LabeledButton";
 import Scanner from "@/components/Scanner";
 import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
@@ -45,9 +46,13 @@ export default function Assemble() {
         updateable.current = true;
       }, 800);
 
-      setCode(data);
-      setModel(modelFindByEan(data));
+      changeCodeAndModel(data);
     }
+  };
+
+  const changeCodeAndModel = (data: string) => {
+    setCode(data);
+    setModel(modelFindByEan(data));
   };
 
   const handleAssemble = async () => {
@@ -79,7 +84,7 @@ export default function Assemble() {
         options={{
           title: "Złóż rower",
           headerBackTitle: "Wróć",
-          headerRight: () => <Button title='Wpisz kod' />,
+          headerRight: () => <ButtonWithInputAlert onFinishTyping={changeCodeAndModel} title='Kod' />,
           headerLeft: () => (
             <Button
               title='Wróć'

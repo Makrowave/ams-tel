@@ -12,6 +12,7 @@ import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
 import { Places, Statuses } from "@/constants/UtilEnums";
 import { ModelRecordData } from "@/constants/Types";
 import { axiosPrivate } from "@/api/axios";
+import ButtonWithInputAlert from "@/components/ButtonWithInputAlert";
 
 export default function Add() {
   const { userLocationKey, statusKey, initializeValues } = useActionData();
@@ -35,11 +36,14 @@ export default function Add() {
         updateable.current = true;
       }, 800);
 
-      setCode(data);
-      setModel(modelFindByEan(data));
+      changeCodeAndModel(data);
     }
   };
 
+  const changeCodeAndModel = (data: string) => {
+    setCode(data);
+    setModel(modelFindByEan(data));
+  };
   const handleAdd = async () => {
     if (model !== undefined && userLocationKey !== undefined && statusKey !== undefined) {
       const result = await axiosPrivate.post(
@@ -64,7 +68,7 @@ export default function Add() {
         options={{
           title: "Dodaj rower",
           headerBackTitle: "Wróć",
-          headerRight: () => <Button title='Wpisz kod' />,
+          headerRight: () => <ButtonWithInputAlert onFinishTyping={changeCodeAndModel} title='Kod' />,
           headerLeft: () => (
             <Button
               title='Wróć'

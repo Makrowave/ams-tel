@@ -1,3 +1,4 @@
+import ButtonWithInputAlert from "@/components/ButtonWithInputAlert";
 import { ForwardedButton } from "@/components/LabeledButton";
 import Scanner from "@/components/Scanner";
 import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
@@ -11,7 +12,7 @@ import { useActionData } from "@/hooks/useActionData";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { Link, Stack, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Button, View, StyleSheet } from "react-native";
+import { Button, View, StyleSheet, Alert } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Sell() {
@@ -38,12 +39,16 @@ export default function Sell() {
       setTimeout(() => {
         updateable.current = true;
       }, 800);
-      await modelRefetch();
-      setCode(data);
-      const foundModel = modelFindByEan(data);
-      setModel(foundModel);
-      setPrice(foundModel?.price.toString() ?? "");
+      await changeCodeAndModel(data);
     }
+  };
+
+  const changeCodeAndModel = async (data: string) => {
+    await modelRefetch();
+    setCode(data);
+    const foundModel = modelFindByEan(data);
+    setModel(foundModel);
+    setPrice(foundModel?.price.toString() ?? "");
   };
 
   const handleSell = async () => {
@@ -58,9 +63,10 @@ export default function Sell() {
       return;
     }
     const result = await axiosPrivate.put(
-      QuerySrc.Bikes,
+      `${QuerySrc.Bikes}/${bikeId}`,
       JSON.stringify({
-        statusId: statusKey,
+        statusId: Statuses.sold,
+        salePrice: price,
       })
     );
     if (result.status === 200) {
@@ -74,7 +80,7 @@ export default function Sell() {
         options={{
           title: "Sprzedaj rower",
           headerBackTitle: "Wróć",
-          headerRight: () => <Button title='Wpisz kod' />,
+          headerRight: () => <ButtonWithInputAlert onFinishTyping={changeCodeAndModel} title='Kod' />,
           headerLeft: () => (
             <Button
               title='Wróć'
@@ -133,6 +139,12 @@ export default function Sell() {
           hasContent
           content={price}
           key={"Price-" + price}
+          onPress={() =>
+            Alert.prompt("Cena", "", [
+              { text: "Anuluj" },
+              { text: "Zatwierdź", onPress: (value) => setPrice(value ?? "") },
+            ])
+          }
           hasChevron
         />
         <ForwardedButton style={styles.button} type='footer' text='Sprzedaj' onPress={() => handleSell()} />
