@@ -5,7 +5,7 @@ import { ThemedView } from "./ThemedView";
 import { ThemedText } from "./ThemedText";
 import { ThemedImage } from "./ThemedImage";
 
-type LabelProps = TouchableOpacityProps & {
+export type LabelProps = TouchableOpacityProps & {
   text?: string;
   content?: string;
   source?: any;

@@ -4,6 +4,7 @@ interface FilterContext {
   filters: Filters;
   updateFilters: <K extends keyof Filters>(key: K, value: Filters[K]) => void;
   getQueryString: () => string;
+  resetFilters: () => void;
 }
 
 export interface Filters {
@@ -32,7 +33,7 @@ type FilterContextProviderProps = {
 };
 
 export function FilterContextProvider({ children }: FilterContextProviderProps) {
-  const [filters, setFilters] = useState<Filters>({
+  const defaultFilter = {
     name: "",
     manufacturer: "",
     size: "",
@@ -46,7 +47,8 @@ export function FilterContextProvider({ children }: FilterContextProviderProps) 
     status: "",
     isKids: false,
     isWoman: "",
-  });
+  };
+  const [filters, setFilters] = useState<Filters>(defaultFilter as Filters);
   const getQueryString = () => {
     return `?placeId=0
 &avaible=${filters.avaible}
@@ -70,5 +72,12 @@ export function FilterContextProvider({ children }: FilterContextProviderProps) 
       [key]: value,
     }));
   };
-  return <FilterContext.Provider value={{ filters, updateFilters, getQueryString }}>{children}</FilterContext.Provider>;
+  const resetFilters = () => {
+    setFilters(defaultFilter as Filters);
+  };
+  return (
+    <FilterContext.Provider value={{ filters, updateFilters, getQueryString, resetFilters }}>
+      {children}
+    </FilterContext.Provider>
+  );
 }

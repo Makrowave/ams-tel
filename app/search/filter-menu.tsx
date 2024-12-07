@@ -1,102 +1,161 @@
 import { ForwardedButton } from "@/components/LabeledButton";
-import { Link } from "expo-router";
-import { Button } from "react-native";
+import LinkButton from "@/components/LinkButton";
+import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
+import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
+import { useFilter } from "@/hooks/useFilter";
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 
 export default function FilterMenu() {
+  const { filters, resetFilters } = useFilter();
+  // const {} = useManucturers();
+  // const {} = useColors();
+  const { placeFindByKey } = usePlacesData();
+  const { statusFindByKey } = useStatusesData();
   return (
     <GestureHandlerRootView>
       <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 15 }}>
-        <Link
+        <LinkButton
           href={{
             pathname: "/search/filter-page",
             params: { criterion: "name" },
           }}
           asChild
-        >
-          <ForwardedButton text={"Nazwa"} hasChevron size='small' type='header' />
-        </Link>
-        <Link
+          text={"Nazwa"}
+          hasChevron
+          size='small'
+          type='header'
+          hasContent
+          content={filters.name}
+          key={`Name-${filters.name}`}
+        />
+        <LinkButton
           href={{
             pathname: "/search/filter-page",
             params: { criterion: "manufacturer" },
           }}
           asChild
-        >
-          <ForwardedButton text={"Producent"} hasChevron size='small' type='body' />
-        </Link>
-        <Link
+          text={"Producent"}
+          hasChevron
+          size='small'
+          type='body'
+          hasContent
+          content={filters.manufacturer.toString()}
+          key={`Manufacturer-${filters.manufacturer}`}
+        />
+        <LinkButton
           href={{
             pathname: "/search/filter-page",
             params: { criterion: "category" },
           }}
           asChild
-        >
-          <ForwardedButton text={"Kategoria"} hasChevron size='small' type='body' />
-        </Link>
-        <Link
+          text={"Kategoria"}
+          hasChevron
+          size='small'
+          type='body'
+          hasContent
+          content={filters.category.toString()}
+          key={`Category-${filters.category}`}
+        />
+        <LinkButton
           href={{
             pathname: "/search/filter-page",
             params: { criterion: "color" },
           }}
           asChild
-        >
-          <ForwardedButton text={"Kolor"} hasChevron size='small' type='body' />
-        </Link>
-        <Link
+          text={"Kolor"}
+          hasChevron
+          size='small'
+          type='body'
+          hasContent
+          content={filters.color.toString()}
+          key={`Color-${filters.color}`}
+        />
+        <LinkButton
           href={{
             pathname: "/search/filter-page",
             params: { criterion: "size" },
           }}
           asChild
-        >
-          <ForwardedButton text={"Rama"} hasChevron size='small' type='body' />
-        </Link>
-        <Link
+          text={"Rama"}
+          hasChevron
+          size='small'
+          type='body'
+          hasContent
+          content={filters.size.toString()}
+          key={`Frame-${filters.size}`}
+        />
+        <LinkButton
           href={{
             pathname: "/search/filter-page",
             params: { criterion: "wheelSize" },
           }}
           asChild
-        >
-          <ForwardedButton text={"Koło"} hasChevron size='small' type='body' />
-        </Link>
-        <Link
+          text={"Koło"}
+          hasChevron
+          size='small'
+          type='body'
+          hasContent
+          content={filters.wheelSize.toString()}
+          key={`Wheel-${filters.wheelSize}`}
+        />
+        <LinkButton
           href={{
             pathname: "/search/filter-page",
             params: { criterion: "price" },
           }}
           asChild
-        >
-          <ForwardedButton text={"Cena"} hasChevron size='small' type='body' />
-        </Link>
-        <Link
+          text={"Cena"}
+          hasChevron
+          size='small'
+          type='body'
+          hasContent
+          content={`${filters.minPrice}-${filters.maxPrice}`}
+          key={`Price-${filters.minPrice}-${filters.maxPrice}`}
+        />
+
+        <LinkButton
           href={{
             pathname: "/search/filter-page",
             params: { criterion: "isElectric" },
           }}
           asChild
-        >
-          <ForwardedButton text={"Elektryczny"} hasChevron size='small' type='body' />
-        </Link>
-        <Link
+          text={"Elektryczny"}
+          hasChevron
+          size='small'
+          type='body'
+          hasContent
+          content={filters.isElectric.toString()}
+          key={`Electric-${filters.isElectric}`}
+        />
+        <LinkButton
           href={{
             pathname: "/search/filter-page",
             params: { criterion: "avaible" },
           }}
           asChild
-        >
-          <ForwardedButton text={"Dostępny"} hasChevron size='small' type='body' />
-        </Link>
-        <Link
+          text={"Dostępny"}
+          hasChevron
+          size='small'
+          type='body'
+          hasContent
+          content={filters.avaible.toString()}
+          key={`Avaible-${filters.avaible}`}
+        />
+        <LinkButton
           href={{
             pathname: "/search/filter-page",
             params: { criterion: "isKids" },
           }}
           asChild
-        >
-          <ForwardedButton text={"Dziecięcy"} hasChevron size='small' type='footer' />
-        </Link>
+          text={"Dziecięcy"}
+          hasChevron
+          size='small'
+          type='body'
+          hasContent
+          content={filters.isKids.toString()}
+          key={`Kids-${filters.isKids}`}
+        />
+        <ForwardedButton key='Reset-button' text='Reset' type='footer' size='small' onPress={() => resetFilters()} />
       </ScrollView>
     </GestureHandlerRootView>
   );
