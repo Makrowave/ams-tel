@@ -96,13 +96,13 @@ export default function Sell() {
         <ForwardedButton
           style={styles.button}
           type='header'
-          text='Rower:'
+          title='Rower:'
           hasContent
           content={model?.modelName}
           key={"Model-" + model?.modelId}
           disabled
         />
-        <ForwardedButton style={styles.button} text='Kod:' hasContent content={code} key={code} disabled />
+        <ForwardedButton style={styles.button} title='Kod:' hasContent content={code} key={code} disabled />
         <Link
           href={{
             pathname: "/home/select-screen",
@@ -112,7 +112,7 @@ export default function Sell() {
         >
           <ForwardedButton
             style={styles.button}
-            text='Miejsce:'
+            title='Miejsce:'
             hasContent
             content={placeFindByKey(userLocationKey)}
             key={`Place-${userLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
@@ -127,7 +127,7 @@ export default function Sell() {
         >
           <ForwardedButton
             style={styles.button}
-            text='Status:'
+            title='Status:'
             hasContent
             content={statusFindByKey(statusKey)}
             key={`Status-${statusKey?.toString()}-${statusIsPending}-${statusIsError}`}
@@ -135,7 +135,7 @@ export default function Sell() {
         </Link>
         <ForwardedButton
           style={styles.button}
-          text='Cena:'
+          title='Cena:'
           hasContent
           content={price}
           key={"Price-" + price}
@@ -147,7 +147,7 @@ export default function Sell() {
           }
           hasChevron
         />
-        <ForwardedButton style={styles.button} type='footer' text='Sprzedaj' onPress={() => handleSell()} />
+        <ForwardedButton style={styles.button} type='footer' title='Sprzedaj' onPress={() => handleSell()} />
       </View>
     </GestureHandlerRootView>
   );

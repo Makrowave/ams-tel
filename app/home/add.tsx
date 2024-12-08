@@ -83,14 +83,14 @@ export default function Add() {
       <View style={styles.wrapper}>
         <ForwardedButton
           style={styles.button}
-          text='Rower:'
+          title='Rower:'
           hasContent
           content={model?.modelName}
           key={"ModelKey-" + model?.modelId}
           type='header'
           disabled
         />
-        <ForwardedButton style={styles.button} text='Kod:' hasContent content={code} key={code} disabled />
+        <ForwardedButton style={styles.button} title='Kod:' hasContent content={code} key={code} disabled />
         <Link
           href={{
             pathname: "/home/select-screen",
@@ -100,7 +100,7 @@ export default function Add() {
         >
           <ForwardedButton
             style={styles.button}
-            text='Miejsce:'
+            title='Miejsce:'
             hasContent
             content={placeFindByKey(userLocationKey)}
             key={`Place-${userLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
@@ -116,14 +116,14 @@ export default function Add() {
         >
           <ForwardedButton
             style={styles.button}
-            text='Status:'
+            title='Status:'
             hasContent
             content={statusFindByKey(statusKey)}
             key={`Status-${statusKey?.toString()}-${statusIsPending}-${statusIsError}`}
             hasChevron
           />
         </Link>
-        <ForwardedButton style={styles.button} type='footer' text='Dodaj' onPress={() => handleAdd()} />
+        <ForwardedButton style={styles.button} type='footer' title='Dodaj' onPress={() => handleAdd()} />
       </View>
     </GestureHandlerRootView>
   );

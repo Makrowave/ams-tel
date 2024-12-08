@@ -26,7 +26,7 @@ export default function SearchScreen() {
           <View style={styles.container}>
             <Link href='/search/filter-menu' asChild>
               <ForwardedButton
-                text='Wyszukaj'
+                title='Wyszukaj'
                 type='single'
                 hasChevron
                 iconColor='#00ccdc'

@@ -92,7 +92,7 @@ export default function Login() {
         <ForwardedButton
           style={{ borderWidth: 0.2, borderBottomWidth: 0.2 }}
           type='single'
-          text={"Zaloguj się"}
+          title={"Zaloguj się"}
           onPress={() => handleLogin()}
         />
       </View>

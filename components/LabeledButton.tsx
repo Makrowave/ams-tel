@@ -6,7 +6,7 @@ import { ThemedText } from "./ThemedText";
 import { ThemedImage } from "./ThemedImage";
 
 export type LabelProps = TouchableOpacityProps & {
-  text?: string;
+  title?: string;
   content?: string;
   source?: any;
   type?: "header" | "body" | "footer" | "single";
@@ -20,7 +20,7 @@ export type LabelProps = TouchableOpacityProps & {
   size?: "small" | "big";
 };
 const LabeledButton = ({
-  text,
+  title,
   content,
   source,
   type = "body",
@@ -43,7 +43,7 @@ const LabeledButton = ({
     <TouchableOpacity onPress={onPress} disabled={disabled}>
       <ThemedView
         style={[
-          styles.button,
+          styles.outsideWrapper,
           size === "big" ? styles.big : styles.small,
           type === "header" || type === "single" ? styles.header : undefined,
           type === "footer" || type === "single" ? styles.footer : undefined,
@@ -51,7 +51,12 @@ const LabeledButton = ({
           style,
         ]}
       >
-        <View style={styles.labelContainer}>
+        <View
+          style={[
+            styles.insideWrapper,
+            hasIcon !== true && hasChevron !== true && hasContent !== true ? undefined : { paddingRight: 15 },
+          ]}
+        >
           {hasIcon === true ? (
             <View style={{ flex: 1, flexBasis: 50, alignItems: "center" }}>
               <View style={[styles.iconWrapper, { backgroundColor: iconColor }]}>
@@ -59,16 +64,17 @@ const LabeledButton = ({
               </View>
             </View>
           ) : undefined}
-          {/*Label - centering*/}
+          {/*Title*/}
           <ThemedText
             type='subtitle'
             style={[
-              styles.label,
+              styles.title,
+              //Centers text if no icon, chevron or text
               hasIcon !== true && hasChevron !== true && hasContent !== true ? styles.centeredText : undefined,
               textColor !== undefined ? { color: textColor } : undefined,
             ]}
           >
-            {text}
+            {title}
           </ThemedText>
           {/*Content*/}
           {hasContent === true ? (
@@ -78,7 +84,7 @@ const LabeledButton = ({
           ) : undefined}
           {/*Chevron*/}
           {hasChevron === true ? (
-            <ThemedImage style={[styles.iconSmall]} source={require("@/assets/images/chevron.png")} />
+            <ThemedImage style={styles.iconSmall} source={require("@/assets/images/chevron.png")} />
           ) : undefined}
         </View>
       </ThemedView>
@@ -87,17 +93,16 @@ const LabeledButton = ({
 };
 
 const styles = StyleSheet.create({
-  label: {
-    flex: 1,
-    flexGrow: 3,
+  title: {
+    flexGrow: 5,
     paddingLeft: 20,
     flexBasis: 10,
   },
   contentText: {
-    width: "60%",
+    flex: 7,
+    flexGrow: 7,
     textAlign: "right",
-    paddingRight: 20,
-    fontSize: 20,
+    fontSize: 18,
   },
   icon: {
     resizeMode: "contain",
@@ -115,14 +120,15 @@ const styles = StyleSheet.create({
     height: 25,
     flex: 1,
     flexBasis: 1,
+    marginLeft: 20,
   },
-  labelContainer: {
+  insideWrapper: {
     textAlignVertical: "center",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
-  button: {
+  outsideWrapper: {
     textAlignVertical: "center",
     flexDirection: "row",
     justifyContent: "center",

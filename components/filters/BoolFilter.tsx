@@ -15,7 +15,7 @@ export default function BoolFilter({ title, value, updateKey }: BoolFilterProps)
       <ForwardedButton
         type='single'
         onPress={() => updateFilters(updateKey, !value)}
-        text={title}
+        title={title}
         content={value ? "On" : "Off"}
         hasContent={true}
       />

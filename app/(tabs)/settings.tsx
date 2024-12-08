@@ -29,7 +29,7 @@ export default function Settings() {
           }}
         >
           <ForwardedButton
-            text='Sklep:'
+            title='Sklep:'
             hasContent={true}
             content={placeData ? placeData.find((item) => item.key === defaultUserLocation)?.value.toString() : ""}
             key={defaultUserLocation?.toString()}
@@ -39,7 +39,7 @@ export default function Settings() {
           />
         </Link>
         <ForwardedButton
-          text='Wyloguj'
+          title='Wyloguj'
           textColor='#FF0000'
           source={require("@/assets/images/move.png")}
           onPress={() => {

@@ -34,7 +34,7 @@ export default function HomeScreen() {
           </ThemedView>
           <Link push href='/home/move' asChild>
             <ForwardedButton
-              text='Przenieś rower'
+              title='Przenieś rower'
               source={require("@/assets/images/move.png")}
               hasIcon={true}
               iconColor={colors.get("move")}
@@ -43,7 +43,7 @@ export default function HomeScreen() {
           </Link>
           <Link push href='/home/assemble' asChild>
             <ForwardedButton
-              text='Złóż rower'
+              title='Złóż rower'
               source={require("@/assets/images/unpack.png")}
               hasIcon={true}
               iconColor={colors.get("assemble")}
@@ -52,7 +52,7 @@ export default function HomeScreen() {
           </Link>
           <Link push href='/home/sell' asChild>
             <ForwardedButton
-              text='Sprzedaj rower'
+              title='Sprzedaj rower'
               source={require("@/assets/images/sell.png")}
               hasIcon={true}
               iconColor={colors.get("sell")}
@@ -61,7 +61,7 @@ export default function HomeScreen() {
           </Link>
           <Link push href='/home/add' asChild>
             <ForwardedButton
-              text='Dodaj rower'
+              title='Dodaj rower'
               source={require("@/assets/images/plus.png")}
               hasIcon={true}
               iconColor={colors.get("add")}
@@ -70,7 +70,7 @@ export default function HomeScreen() {
           </Link>
           <Link push href='/home/delivery' asChild>
             <ForwardedButton
-              text='Dostawa'
+              title='Dostawa'
               source={require("@/assets/images/delivery.png")}
               hasIcon={true}
               iconColor={colors.get("delivery")}

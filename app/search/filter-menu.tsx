@@ -20,7 +20,7 @@ export default function FilterMenu() {
             params: { criterion: "name" },
           }}
           asChild
-          text={"Nazwa"}
+          title={"Nazwa"}
           hasChevron
           size='small'
           type='header'
@@ -34,7 +34,7 @@ export default function FilterMenu() {
             params: { criterion: "manufacturer" },
           }}
           asChild
-          text={"Producent"}
+          title={"Producent"}
           hasChevron
           size='small'
           type='body'
@@ -48,7 +48,7 @@ export default function FilterMenu() {
             params: { criterion: "category" },
           }}
           asChild
-          text={"Kategoria"}
+          title={"Kategoria"}
           hasChevron
           size='small'
           type='body'
@@ -62,7 +62,7 @@ export default function FilterMenu() {
             params: { criterion: "color" },
           }}
           asChild
-          text={"Kolor"}
+          title={"Kolor"}
           hasChevron
           size='small'
           type='body'
@@ -76,7 +76,7 @@ export default function FilterMenu() {
             params: { criterion: "size" },
           }}
           asChild
-          text={"Rama"}
+          title={"Rama"}
           hasChevron
           size='small'
           type='body'
@@ -90,7 +90,7 @@ export default function FilterMenu() {
             params: { criterion: "wheelSize" },
           }}
           asChild
-          text={"Koło"}
+          title={"Koło"}
           hasChevron
           size='small'
           type='body'
@@ -104,7 +104,7 @@ export default function FilterMenu() {
             params: { criterion: "price" },
           }}
           asChild
-          text={"Cena"}
+          title={"Cena"}
           hasChevron
           size='small'
           type='body'
@@ -119,7 +119,7 @@ export default function FilterMenu() {
             params: { criterion: "isElectric" },
           }}
           asChild
-          text={"Elektryczny"}
+          title={"Elektryczny"}
           hasChevron
           size='small'
           type='body'
@@ -133,7 +133,7 @@ export default function FilterMenu() {
             params: { criterion: "avaible" },
           }}
           asChild
-          text={"Dostępny"}
+          title={"Dostępny"}
           hasChevron
           size='small'
           type='body'
@@ -147,7 +147,7 @@ export default function FilterMenu() {
             params: { criterion: "isKids" },
           }}
           asChild
-          text={"Dziecięcy"}
+          title={"Dziecięcy"}
           hasChevron
           size='small'
           type='body'
@@ -155,7 +155,7 @@ export default function FilterMenu() {
           content={filters.isKids.toString()}
           key={`Kids-${filters.isKids}`}
         />
-        <ForwardedButton key='Reset-button' text='Reset' type='footer' size='small' onPress={() => resetFilters()} />
+        <ForwardedButton key='Reset-button' title='Reset' type='footer' size='big' onPress={() => resetFilters()} />
       </ScrollView>
     </GestureHandlerRootView>
   );

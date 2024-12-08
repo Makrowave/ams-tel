@@ -90,13 +90,13 @@ export default function Move() {
         <ForwardedButton
           style={styles.button}
           type='header'
-          text='Rower:'
+          title='Rower:'
           hasContent
           content={model?.modelName}
           key={"Model-" + model?.modelId}
           disabled
         />
-        <ForwardedButton style={styles.button} text='Kod:' hasContent content={code} key={code} disabled />
+        <ForwardedButton style={styles.button} title='Kod:' hasContent content={code} key={code} disabled />
         <Link
           href={{
             pathname: "/home/select-screen",
@@ -106,7 +106,7 @@ export default function Move() {
         >
           <ForwardedButton
             style={styles.button}
-            text='Z:'
+            title='Z:'
             hasContent
             content={placeFindByKey(actionLocationKey)}
             key={`Place-${actionLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
@@ -121,7 +121,7 @@ export default function Move() {
         >
           <ForwardedButton
             style={styles.button}
-            text='Do:'
+            title='Do:'
             hasContent
             content={placeFindByKey(userLocationKey)}
             key={`Place-${userLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
@@ -136,13 +136,13 @@ export default function Move() {
         >
           <ForwardedButton
             style={styles.button}
-            text='Status:'
+            title='Status:'
             hasContent
             content={statusFindByKey(statusKey)}
             key={`Status-${statusKey?.toString()}-${statusIsPending}-${statusIsError}`}
           />
         </Link>
-        <ForwardedButton style={styles.button} type='footer' text='Przenieś' onPress={() => handleMove()} />
+        <ForwardedButton style={styles.button} type='footer' title='Przenieś' onPress={() => handleMove()} />
       </View>
     </GestureHandlerRootView>
   );
