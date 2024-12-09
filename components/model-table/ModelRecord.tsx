@@ -5,6 +5,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import { ThemedImage } from "../ThemedImage";
 
 interface ModelRecordProps {
   model: ModelRecordData;
@@ -38,6 +39,7 @@ export default function ModelRecord({ model }: ModelRecordProps) {
           <ThemedText style={{ alignSelf: "center", width: 80, textAlign: "center" }}>
             {model.frameSize.toString()}x{model.wheelSize.toString()}
           </ThemedText>
+          <ThemedImage style={styles.chevron} source={require("@/assets/images/chevron.png")} />
         </TouchableOpacity>
       </Link>
     </ThemedView>
@@ -61,5 +63,13 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignContent: "center",
+  },
+  chevron: {
+    resizeMode: "contain",
+    height: 25,
+    flex: 1,
+    flexBasis: 1,
+    marginLeft: 20,
+    alignSelf: "center",
   },
 });

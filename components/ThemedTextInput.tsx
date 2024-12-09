@@ -10,5 +10,5 @@ type ThemedImageProps = TextInputProps &
 
 export function ThemedTextInput({ lightColor, darkColor, style, ...rest }: ThemedImageProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
-  return <TextInput style={[style, { color: color, borderColor: color }]} {...rest} />;
+  return <TextInput style={[style, { color: color, borderColor: color, fontSize: 16 }]} {...rest} />;
 }

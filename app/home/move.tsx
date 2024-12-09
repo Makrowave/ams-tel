@@ -22,7 +22,7 @@ export default function Move() {
   const [model, setModel] = useState<ModelRecordData | undefined>(undefined);
   const { userLocationKey, actionLocationKey, statusKey, initializeValues } = useActionData();
   const { placeData, placeIsPending, placeIsError, placeFindByKey } = usePlacesData();
-  const { statusData, statusIsPending, statusIsError, statusFindByKey } = useStatusesData();
+  const { statusData, statusIsPending, statusIsError, statusFindNameByKey: statusFindByKey } = useStatusesData();
   const { modelFindByEan } = useModelsData(ModelsQuery.all);
   const { selectFirstMatch, bikeRefetch } = useBikes(model?.modelId ?? 0);
   const updateable = useRef<boolean>(true);

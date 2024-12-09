@@ -1,7 +1,13 @@
 export type Data = Array<Record> | undefined;
+export type ColorData = Array<ColorRecord> | undefined;
 export interface Record {
   key: Number;
   value: string;
+}
+export interface ColorRecord {
+  key: Number;
+  value: string;
+  color: string;
 }
 export type ModelData = Array<ModelRecordData> | undefined;
 export interface ModelRecordData {
@@ -20,5 +26,5 @@ export interface ModelRecordData {
   categoryId: Number;
   colorId?: Number;
   bikeCount: Number;
-  placeBikeCount: Array<{ placeID: Number; count: Number }>;
+  placeBikeCount: Array<{ placeId: Number; count: Number }>;
 }

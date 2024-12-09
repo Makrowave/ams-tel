@@ -6,7 +6,7 @@ import useAuth from "../useAuth";
 
 export interface Bike {
   id: Number;
-  place: string;
+  place: Number;
   statusId: Number;
   status: string;
   assembledBy: string;

@@ -10,7 +10,7 @@ export default function FilterMenu() {
   // const {} = useManucturers();
   // const {} = useColors();
   const { placeFindByKey } = usePlacesData();
-  const { statusFindByKey } = useStatusesData();
+  const { statusFindNameByKey: statusFindByKey } = useStatusesData();
   return (
     <GestureHandlerRootView>
       <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 15 }}>

@@ -1,9 +1,11 @@
 import { useFilter } from "@/hooks/useFilter";
 import { useNavigation } from "expo-router";
 import { useState } from "react";
-import { TextInput } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import { ThemedView } from "../ThemedView";
 import { Filters } from "../contexts/FilterContext";
+import { ThemedTextInput } from "../ThemedTextInput";
+import { ThemedText } from "../ThemedText";
 
 interface TextFilterProps {
   title: string;
@@ -17,10 +19,12 @@ export default function TextFilter({ defaultValue, updateKey }: TextFilterProps)
   const navigation = useNavigation();
 
   return (
-    <ThemedView>
-      <TextInput
-        style={{ backgroundColor: "#ffffff", height: 40 }}
+    <ThemedView style={styles.wrapper}>
+      <ThemedText>Nazwa:</ThemedText>
+      <ThemedTextInput
+        style={{ height: 48, marginLeft: 10, flexGrow: 2 }}
         value={value.toString()}
+        autoFocus
         onChangeText={(text) => setValue(text)}
         onEndEditing={() => {
           updateFilters(updateKey, value);
@@ -30,3 +34,14 @@ export default function TextFilter({ defaultValue, updateKey }: TextFilterProps)
     </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  wrapper: {
+    marginTop: 20,
+    borderRadius: 20,
+    marginHorizontal: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+});

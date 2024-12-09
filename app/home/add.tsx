@@ -20,7 +20,12 @@ export default function Add() {
   const [code, setCode] = useState<string>("");
   const [model, setModel] = useState<ModelRecordData | undefined>(undefined);
   const { placeData, placeIsPending, placeIsError, placeFindByKey } = usePlacesData();
-  const { statusData, statusIsPending, statusIsError, statusFindByKey } = useStatusesData([Statuses.sold]);
+  const {
+    statusData,
+    statusIsPending,
+    statusIsError,
+    statusFindNameByKey: statusFindByKey,
+  } = useStatusesData([Statuses.sold]);
   const { modelFindByEan } = useModelsData(ModelsQuery.all);
   const updateable = useRef<boolean>(true);
 

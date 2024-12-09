@@ -24,12 +24,12 @@ export default function Assemble() {
   const [model, setModel] = useState<ModelRecordData | undefined>(undefined);
   const { userLocationKey, statusKey, initializeValues } = useActionData();
   const { placeData, placeIsPending, placeIsError, placeFindByKey } = usePlacesData();
-  const { statusData, statusIsPending, statusIsError, statusFindByKey } = useStatusesData([
-    Statuses.assembled,
-    Statuses.sold,
-    Statuses.delivery,
-    Statuses.prepaid,
-  ]);
+  const {
+    statusData,
+    statusIsPending,
+    statusIsError,
+    statusFindNameByKey: statusFindByKey,
+  } = useStatusesData([Statuses.assembled, Statuses.sold, Statuses.delivery, Statuses.prepaid]);
   const { modelFindByEan } = useModelsData(ModelsQuery.all);
   const { selectFirstMatch, bikeRefetch } = useBikes(model?.modelId ?? 0);
   const updateable = useRef<boolean>(true);

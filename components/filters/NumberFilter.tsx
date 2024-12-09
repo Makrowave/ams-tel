@@ -5,6 +5,9 @@ import { useFilter } from "@/hooks/useFilter";
 import { useEffect, useState } from "react";
 import { TextInput } from "react-native-gesture-handler";
 import { useNavigation } from "expo-router";
+import { ThemedTextInput } from "../ThemedTextInput";
+import { StyleSheet } from "react-native";
+import { ThemedText } from "../ThemedText";
 
 interface NumberFilterProps {
   title: string;
@@ -21,10 +24,12 @@ export default function NumberFilter({ title, defaultValue, updateKey }: NumberF
   };
 
   return (
-    <ThemedView>
-      <TextInput
+    <ThemedView style={styles.wrapper}>
+      <ThemedText>Rama:</ThemedText>
+      <ThemedTextInput
         keyboardType='number-pad'
-        style={{ backgroundColor: "#ffffff", height: 40 }}
+        autoFocus
+        style={{ height: 48, marginLeft: 10, flexGrow: 2 }}
         value={value.toString()}
         onChangeText={(text) => setValue(ParseText(text))}
         onEndEditing={() => {
@@ -35,3 +40,14 @@ export default function NumberFilter({ title, defaultValue, updateKey }: NumberF
     </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  wrapper: {
+    marginTop: 20,
+    borderRadius: 20,
+    marginHorizontal: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+});
