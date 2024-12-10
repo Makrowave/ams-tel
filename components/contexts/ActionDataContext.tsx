@@ -14,6 +14,9 @@ interface ActionDataContextProps {
   setStatusKey: (value: Number) => void;
   initializeValues: (statusKey: Number, actionLocationKey?: Number, price?: Number) => void;
   setDefaultUserLocation: (value: Number | undefined) => void;
+
+  code: string;
+  setCode: (value: string) => void;
 }
 
 export const ActionDataContext = createContext<ActionDataContextProps | undefined>(undefined);
@@ -28,6 +31,10 @@ export function ActionDataProvider({ children }: ActionDataProviderProps) {
   const [actionLocationKey, setActionLocationKey] = useState<Number>(4);
   const [price, setPrice] = useState<Number>(3000);
   const [statusKey, setStatusKey] = useState<Number>(2);
+
+  //code for binding to model if not present
+  const [code, setCode] = useState<string>("");
+
   useEffect(() => {
     getDefaultUserLocation();
     setUserLocationKey(defaultUserLocation);
@@ -79,6 +86,9 @@ export function ActionDataProvider({ children }: ActionDataProviderProps) {
         setDefaultUserLocation,
         defaultUserLocation,
         initializeValues,
+
+        code,
+        setCode,
       }}
     >
       {children}

@@ -1,5 +1,6 @@
-import ButtonWithInputAlert from "@/components/ButtonWithInputAlert";
+import showKeyboardAlert from "@/components/alert/KeyboardAlert";
 import { ForwardedButton } from "@/components/LabeledButton";
+import LinkButton from "@/components/LinkButton";
 import Scanner from "@/components/Scanner";
 import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
 import { ModelRecordData } from "@/constants/Types";
@@ -28,6 +29,8 @@ export default function Sell() {
   const { selectFirstMatch, bikeRefetch } = useBikes(model?.modelId ?? 0);
   const updateable = useRef<boolean>(true);
 
+  const [isCodeBound, setIsCodeBound] = useState<boolean>(true);
+
   useEffect(() => {
     initializeValues(Statuses.assembled, undefined, undefined);
   }, []);
@@ -48,6 +51,8 @@ export default function Sell() {
     await modelRefetch();
     setCode(data);
     const foundModel = modelFindByEan(data);
+    if (foundModel === undefined) setIsCodeBound(false);
+    else setIsCodeBound(true);
     setModel(foundModel);
     setPrice(foundModel?.price.toString() ?? "");
   };
@@ -81,7 +86,7 @@ export default function Sell() {
         options={{
           title: "Sprzedaj rower",
           headerBackTitle: "Wróć",
-          headerRight: () => <ButtonWithInputAlert onFinishTyping={changeCodeAndModel} title='Kod' />,
+          headerRight: () => <Button title='Przypisz' disabled={!isCodeBound} />,
           headerLeft: () => (
             <Button
               title='Wróć'
@@ -103,49 +108,46 @@ export default function Sell() {
           key={"Model-" + model?.modelId}
           disabled
         />
-        <ForwardedButton style={styles.button} title='Kod:' hasContent content={code} key={code} disabled />
-        <Link
+        <ForwardedButton
+          style={styles.button}
+          title='Kod:'
+          hasContent
+          content={code}
+          key={code}
+          hasChevron
+          onPress={() => showKeyboardAlert("Kod", setCode)}
+        />
+        <LinkButton
           href={{
             pathname: "/home/select-screen",
             params: { datastring: JSON.stringify(placeData), selection: "userLocation" },
           }}
-          asChild
-        >
-          <ForwardedButton
-            style={styles.button}
-            title='Miejsce:'
-            hasContent
-            content={placeFindByKey(userLocationKey)}
-            key={`Place-${userLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
-          />
-        </Link>
-        <Link
+          style={styles.button}
+          title='Miejsce:'
+          hasContent
+          content={placeFindByKey(userLocationKey)}
+          key={`Place-${userLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
+          hasChevron
+        />
+        <LinkButton
           href={{
             pathname: "/home/select-screen",
             params: { datastring: JSON.stringify(statusData), selection: "status" },
           }}
-          asChild
-        >
-          <ForwardedButton
-            style={styles.button}
-            title='Status:'
-            hasContent
-            content={statusFindByKey(statusKey)}
-            key={`Status-${statusKey?.toString()}-${statusIsPending}-${statusIsError}`}
-          />
-        </Link>
+          style={styles.button}
+          title='Status:'
+          hasContent
+          content={statusFindByKey(statusKey)}
+          key={`Status-${statusKey?.toString()}-${statusIsPending}-${statusIsError}`}
+          hasChevron
+        />
         <ForwardedButton
           style={styles.button}
           title='Cena:'
           hasContent
           content={price}
           key={"Price-" + price}
-          onPress={() =>
-            Alert.prompt("Cena", "", [
-              { text: "Anuluj" },
-              { text: "Zatwierdź", onPress: (value) => setPrice(value ?? "") },
-            ])
-          }
+          onPress={() => showKeyboardAlert("Cena", setPrice, "numeric")}
           hasChevron
         />
         <ForwardedButton style={styles.button} type='footer' title='Sprzedaj' onPress={() => handleSell()} />

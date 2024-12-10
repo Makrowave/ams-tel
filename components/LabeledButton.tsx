@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   iconSmall: {
     resizeMode: "contain",
-    height: 25,
+    height: 20,
     flex: 1,
     flexBasis: 1,
     marginLeft: 20,

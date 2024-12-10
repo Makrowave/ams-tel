@@ -12,8 +12,9 @@ import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
 import { Places, Statuses } from "@/constants/UtilEnums";
 import { ModelRecordData } from "@/constants/Types";
 import { axiosPrivate } from "@/api/axios";
-import ButtonWithInputAlert from "@/components/ButtonWithInputAlert";
 import { Vibration } from "react-native";
+import showKeyboardAlert from "@/components/alert/KeyboardAlert";
+import LinkButton from "@/components/LinkButton";
 
 export default function Add() {
   const { userLocationKey, statusKey, initializeValues } = useActionData();
@@ -29,6 +30,8 @@ export default function Add() {
   } = useStatusesData([Statuses.sold]);
   const { modelFindByEan } = useModelsData(ModelsQuery.all);
   const updateable = useRef<boolean>(true);
+
+  const [isCodeBound, setIsCodeBound] = useState<boolean>(true);
 
   useEffect(() => {
     initializeValues(Statuses.unAssembled, Places.storage1);
@@ -48,8 +51,12 @@ export default function Add() {
   };
 
   const changeCodeAndModel = (data: string) => {
+    const foundModel = modelFindByEan(data);
+    if (foundModel === undefined) setIsCodeBound(false);
+    else setIsCodeBound(true);
+
+    setModel(foundModel);
     setCode(data);
-    setModel(modelFindByEan(data));
   };
   const handleAdd = async () => {
     if (model !== undefined && userLocationKey !== undefined && statusKey !== undefined) {
@@ -75,7 +82,7 @@ export default function Add() {
         options={{
           title: "Dodaj rower",
           headerBackTitle: "Wróć",
-          headerRight: () => <ButtonWithInputAlert onFinishTyping={changeCodeAndModel} title='Kod' />,
+          headerRight: () => <Button title='Przypisz' disabled={!isCodeBound} />,
           headerLeft: () => (
             <Button
               title='Wróć'
@@ -95,41 +102,42 @@ export default function Add() {
           content={model?.modelName}
           key={"ModelKey-" + model?.modelId}
           type='header'
-          disabled
+          onPress={() => showKeyboardAlert("Kod", setCode)}
+          hasChevron
         />
-        <ForwardedButton style={styles.button} title='Kod:' hasContent content={code} key={code} disabled />
-        <Link
+        <ForwardedButton
+          style={styles.button}
+          title='Kod:'
+          hasContent
+          content={code}
+          key={code}
+          hasChevron
+          onPress={() => showKeyboardAlert("Kod", setCode)}
+        />
+        <LinkButton
           href={{
             pathname: "/home/select-screen",
             params: { datastring: JSON.stringify(placeData), selection: "userLocation" },
           }}
-          asChild
-        >
-          <ForwardedButton
-            style={styles.button}
-            title='Miejsce:'
-            hasContent
-            content={placeFindByKey(userLocationKey)}
-            key={`Place-${userLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
-            hasChevron
-          />
-        </Link>
-        <Link
+          style={styles.button}
+          title='Miejsce:'
+          hasContent
+          content={placeFindByKey(userLocationKey)}
+          key={`Place-${userLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
+          hasChevron
+        />
+        <LinkButton
           href={{
             pathname: "/home/select-screen",
             params: { datastring: JSON.stringify(statusData), selection: "status" },
           }}
-          asChild
-        >
-          <ForwardedButton
-            style={styles.button}
-            title='Status:'
-            hasContent
-            content={statusFindByKey(statusKey)}
-            key={`Status-${statusKey?.toString()}-${statusIsPending}-${statusIsError}`}
-            hasChevron
-          />
-        </Link>
+          style={styles.button}
+          title='Status:'
+          hasContent
+          content={statusFindByKey(statusKey)}
+          key={`Status-${statusKey?.toString()}-${statusIsPending}-${statusIsError}`}
+          hasChevron
+        />
         <ForwardedButton style={styles.button} type='footer' title='Dodaj' onPress={() => handleAdd()} />
       </View>
     </GestureHandlerRootView>
