@@ -13,6 +13,7 @@ import { Places, Statuses } from "@/constants/UtilEnums";
 import { ModelRecordData } from "@/constants/Types";
 import { axiosPrivate } from "@/api/axios";
 import ButtonWithInputAlert from "@/components/ButtonWithInputAlert";
+import { Vibration } from "react-native";
 
 export default function Add() {
   const { userLocationKey, statusKey, initializeValues } = useActionData();
@@ -42,6 +43,7 @@ export default function Add() {
       }, 800);
 
       changeCodeAndModel(data);
+      Vibration.vibrate();
     }
   };
 

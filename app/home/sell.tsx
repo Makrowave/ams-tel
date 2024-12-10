@@ -12,7 +12,7 @@ import { useActionData } from "@/hooks/useActionData";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { Link, Stack, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Button, View, StyleSheet, Alert } from "react-native";
+import { Button, View, StyleSheet, Alert, Vibration } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Sell() {
@@ -40,6 +40,7 @@ export default function Sell() {
         updateable.current = true;
       }, 800);
       await changeCodeAndModel(data);
+      Vibration.vibrate();
     }
   };
 

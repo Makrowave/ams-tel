@@ -17,7 +17,7 @@ export default function HomeScreen() {
   return (
     <GestureHandlerRootView>
       <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.wrapper}>
+        <View>
           <ThemedView style={styles.header}>
             <View style={styles.textContainer}>
               <ThemedText type='subtitle' style={styles.text}>
@@ -85,9 +85,6 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    padding: "2%",
-  },
   header: {
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,

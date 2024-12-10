@@ -2,10 +2,11 @@ import { Alert, Button } from "react-native";
 
 interface ButtonWithInputAlertProps {
   onFinishTyping: (value: string) => void;
+  disabled?: boolean;
   title: string;
 }
 
-export default function ButtonWithInputAlert({ onFinishTyping, title }: ButtonWithInputAlertProps) {
+export default function ButtonWithInputAlert({ onFinishTyping, title, disabled = false }: ButtonWithInputAlertProps) {
   const showAlert = () => {
     Alert.prompt(
       title,
@@ -25,5 +26,5 @@ export default function ButtonWithInputAlert({ onFinishTyping, title }: ButtonWi
     );
   };
 
-  return <Button title='Wpisz kod' onPress={() => showAlert()} />;
+  return <Button title='Wpisz kod' disabled={disabled} onPress={() => showAlert()} />;
 }

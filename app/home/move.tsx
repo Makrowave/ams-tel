@@ -12,7 +12,7 @@ import { useActionData } from "@/hooks/useActionData";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { Link, Stack, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Button, View, StyleSheet } from "react-native";
+import { Button, View, StyleSheet, Vibration } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Move() {
@@ -40,6 +40,7 @@ export default function Move() {
       }, 800);
     }
     changeCodeAndModel(data);
+    Vibration.vibrate();
   };
 
   const changeCodeAndModel = (data: string) => {

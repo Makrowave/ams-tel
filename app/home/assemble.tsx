@@ -13,7 +13,7 @@ import useAuth from "@/hooks/useAuth";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { Link, Stack, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Button, View, StyleSheet } from "react-native";
+import { Button, View, StyleSheet, Vibration } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Assemble() {
@@ -47,6 +47,7 @@ export default function Assemble() {
       }, 800);
 
       changeCodeAndModel(data);
+      Vibration.vibrate();
     }
   };
 
