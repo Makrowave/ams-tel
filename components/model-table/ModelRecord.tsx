@@ -6,19 +6,20 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { ThemedImage } from "../ThemedImage";
+import { ModelTableBindProps } from "../ModelSearchPage";
 
 interface ModelRecordProps {
   model: ModelRecordData;
 }
 
-export default function ModelRecord({ model }: ModelRecordProps) {
+export default function ModelRecord({ model, bindMode }: ModelRecordProps & ModelTableBindProps) {
   return (
     <ThemedView style={styles.record}>
       <Link
         asChild
         href={{
           pathname: "/search/model",
-          params: { modelString: JSON.stringify(model) },
+          params: { modelString: JSON.stringify(model), bindMode: bindMode?.toString() ?? "false" },
         }}
       >
         <TouchableOpacity style={styles.opacity}>

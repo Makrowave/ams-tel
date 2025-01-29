@@ -4,7 +4,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedTextInput } from "@/components/ThemedTextInput";
 import { ThemedView } from "@/components/ThemedView";
 import { useEnableQueries } from "@/hooks/queryHooks/useEnableQueries";
-import useAuth from "@/hooks/useAuth";
+import useAuth from "@/hooks/contexts/useAuth";
 import useRefreshUser from "@/hooks/useRefreshUser";
 import { AxiosError, isAxiosError } from "axios";
 import { Redirect } from "expo-router";

@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useState } from "react";
+import { ProviderNodeProps } from "@/constants/Types";
+import { createContext, ProviderProps, ReactNode, useState } from "react";
 
 interface FilterContext {
   filters: Filters;
@@ -28,11 +29,7 @@ export type NumberKeys = {
 
 export const FilterContext = createContext<FilterContext | undefined>(undefined);
 
-type FilterContextProviderProps = {
-  children: ReactNode;
-};
-
-export function FilterContextProvider({ children }: FilterContextProviderProps) {
+export function FilterContextProvider({ children }: ProviderNodeProps) {
   const defaultFilter = {
     name: "",
     manufacturer: "",

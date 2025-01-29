@@ -2,7 +2,7 @@ import { ForwardedButton } from "@/components/LabeledButton";
 import LinkButton from "@/components/LinkButton";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
-import { useFilter } from "@/hooks/useFilter";
+import { useFilter } from "@/hooks/contexts/useFilter";
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 
 export default function FilterMenu() {

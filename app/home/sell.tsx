@@ -5,11 +5,12 @@ import Scanner from "@/components/Scanner";
 import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
 import { ModelRecordData } from "@/constants/Types";
 import { Statuses } from "@/constants/UtilEnums";
+import { useActionData } from "@/hooks/contexts/useActionData";
+import { useRefreshModel } from "@/hooks/contexts/useRefreshModel";
 import { useBikes } from "@/hooks/queryHooks/useBikes";
 import { useModelsData } from "@/hooks/queryHooks/useModelsData";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
-import { useActionData } from "@/hooks/useActionData";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { Link, Stack, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
@@ -22,14 +23,14 @@ export default function Sell() {
   const [code, setCode] = useState("");
   const [price, setPrice] = useState<string>("");
   const [model, setModel] = useState<ModelRecordData | undefined>(undefined);
-  const { userLocationKey, statusKey, initializeValues } = useActionData();
+  const { setContextCode, userLocationKey, statusKey, initializeValues } = useActionData();
   const { placeData, placeIsPending, placeIsError, placeFindByKey } = usePlacesData();
   const { statusData, statusIsPending, statusIsError, statusFindNameByKey: statusFindByKey } = useStatusesData();
   const { modelFindByEan, modelRefetch } = useModelsData(ModelsQuery.all);
   const { selectFirstMatch, bikeRefetch } = useBikes(model?.modelId ?? 0);
   const updateable = useRef<boolean>(true);
 
-  const [isCodeBound, setIsCodeBound] = useState<boolean>(true);
+  const [isCodeBound, setIsCodeBound] = useState<boolean | undefined>();
 
   useEffect(() => {
     initializeValues(Statuses.assembled, undefined, undefined);
@@ -51,11 +52,29 @@ export default function Sell() {
     await modelRefetch();
     setCode(data);
     const foundModel = modelFindByEan(data);
-    if (foundModel === undefined) setIsCodeBound(false);
-    else setIsCodeBound(true);
+    if (foundModel === undefined) {
+      setIsCodeBound(false);
+    } else {
+      setIsCodeBound(true);
+    }
     setModel(foundModel);
     setPrice(foundModel?.price.toString() ?? "");
   };
+
+  const { refreshModel, setRefreshModel } = useRefreshModel();
+
+  const refreshOnBind = () => {
+    if (refreshModel) {
+      const foundModel = modelFindByEan(code);
+      if (foundModel === undefined) setIsCodeBound(false);
+      else setIsCodeBound(true);
+      setModel(foundModel);
+      setRefreshModel(false);
+    }
+  };
+  useEffect(() => {
+    refreshOnBind();
+  }, [refreshModel]);
 
   const handleSell = async () => {
     await bikeRefetch();
@@ -86,7 +105,22 @@ export default function Sell() {
         options={{
           title: "Sprzedaj rower",
           headerBackTitle: "Wróć",
-          headerRight: () => <Button title='Przypisz' disabled={!isCodeBound} />,
+          headerRight: () => (
+            //Forward ref error, although it works
+            <Link
+              href={{
+                pathname: "/home/search",
+                params: { ean: code },
+              }}
+              asChild
+            >
+              <Button
+                title='Przypisz'
+                disabled={isCodeBound === undefined ? true : isCodeBound}
+                onPress={() => setContextCode(code)}
+              />
+            </Link>
+          ),
           headerLeft: () => (
             <Button
               title='Wróć'
@@ -115,7 +149,7 @@ export default function Sell() {
           content={code}
           key={code}
           hasChevron
-          onPress={() => showKeyboardAlert("Kod", setCode)}
+          onPress={() => showKeyboardAlert("Kod", changeCodeAndModel)}
         />
         <LinkButton
           href={{

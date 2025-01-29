@@ -1,7 +1,7 @@
 import { ThemedView } from "../ThemedView";
 import { ForwardedButton } from "../LabeledButton";
 import { Filters } from "../contexts/FilterContext";
-import { useFilter } from "@/hooks/useFilter";
+import { useFilter } from "@/hooks/contexts/useFilter";
 
 interface BoolFilterProps {
   title: string;

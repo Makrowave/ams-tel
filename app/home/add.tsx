@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import Scanner from "@/components/Scanner";
 import { Link, Stack, useRouter } from "expo-router";
 import { ForwardedButton } from "@/components/LabeledButton";
-import { useActionData } from "@/hooks/useActionData";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
 import { useModelsData } from "@/hooks/queryHooks/useModelsData";
@@ -15,9 +14,11 @@ import { axiosPrivate } from "@/api/axios";
 import { Vibration } from "react-native";
 import showKeyboardAlert from "@/components/alert/KeyboardAlert";
 import LinkButton from "@/components/LinkButton";
+import { useRefreshModel } from "@/hooks/contexts/useRefreshModel";
+import { useActionData } from "@/hooks/contexts/useActionData";
 
 export default function Add() {
-  const { userLocationKey, statusKey, initializeValues } = useActionData();
+  const { setContextCode, userLocationKey, statusKey, initializeValues } = useActionData();
   const router = useRouter();
   const [code, setCode] = useState<string>("");
   const [model, setModel] = useState<ModelRecordData | undefined>(undefined);
@@ -28,14 +29,29 @@ export default function Add() {
     statusIsError,
     statusFindNameByKey: statusFindByKey,
   } = useStatusesData([Statuses.sold]);
-  const { modelFindByEan } = useModelsData(ModelsQuery.all);
+  const { modelFindByEan, modelRefetch } = useModelsData(ModelsQuery.all);
   const updateable = useRef<boolean>(true);
 
-  const [isCodeBound, setIsCodeBound] = useState<boolean>(true);
+  const [isCodeBound, setIsCodeBound] = useState<boolean>(false);
 
   useEffect(() => {
     initializeValues(Statuses.unAssembled, Places.storage1);
   }, []);
+
+  const { refreshModel, setRefreshModel } = useRefreshModel();
+
+  const refreshOnBind = () => {
+    if (refreshModel) {
+      const foundModel = modelFindByEan(code);
+      if (foundModel === undefined) setIsCodeBound(false);
+      else setIsCodeBound(true);
+      setModel(foundModel);
+      setRefreshModel(false);
+    }
+  };
+  useEffect(() => {
+    refreshOnBind();
+  }, [refreshModel]);
 
   //Blocks next scan for some time and sets values
   const handleScan = (data: string) => {
@@ -82,7 +98,21 @@ export default function Add() {
         options={{
           title: "Dodaj rower",
           headerBackTitle: "Wróć",
-          headerRight: () => <Button title='Przypisz' disabled={!isCodeBound} />,
+          headerRight: () => (
+            <Link
+              href={{
+                pathname: "/home/search",
+                params: { ean: code },
+              }}
+              asChild
+            >
+              <Button
+                title='Przypisz'
+                disabled={isCodeBound === undefined ? true : isCodeBound}
+                onPress={() => setContextCode(code)}
+              />
+            </Link>
+          ),
           headerLeft: () => (
             <Button
               title='Wróć'
@@ -102,8 +132,7 @@ export default function Add() {
           content={model?.modelName}
           key={"ModelKey-" + model?.modelId}
           type='header'
-          onPress={() => showKeyboardAlert("Kod", setCode)}
-          hasChevron
+          disabled
         />
         <ForwardedButton
           style={styles.button}
@@ -112,7 +141,7 @@ export default function Add() {
           content={code}
           key={code}
           hasChevron
-          onPress={() => showKeyboardAlert("Kod", setCode)}
+          onPress={() => showKeyboardAlert("Kod", changeCodeAndModel)}
         />
         <LinkButton
           href={{

@@ -1,5 +1,6 @@
 import axios, { axiosPrivate } from "@/api/axios";
-import { createContext, ReactNode, useState } from "react";
+import { ProviderNodeProps } from "@/constants/Types";
+import { createContext, ProviderProps, ReactNode, useState } from "react";
 import * as Keychain from "react-native-keychain";
 
 interface AuthContext {
@@ -15,13 +16,9 @@ interface User {
   employeeKey: string;
 }
 
-type AuthProviderProps = {
-  children: ReactNode;
-};
-
 const AuthContext = createContext<AuthContext | undefined>(undefined);
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children }: ProviderNodeProps) {
   const [user, setUser] = useState({ username: "", employeeKey: "", token: "" });
   function logout() {
     Keychain.resetGenericPassword();

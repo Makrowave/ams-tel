@@ -1,7 +1,7 @@
 import { ForwardedButton } from "@/components/LabeledButton";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
-import { useActionData } from "@/hooks/useActionData";
-import useAuth from "@/hooks/useAuth";
+import { useActionData } from "@/hooks/contexts/useActionData";
+import useAuth from "@/hooks/contexts/useAuth";
 import { Link, Stack, useRouter } from "expo-router";
 import { Alert, Button, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";

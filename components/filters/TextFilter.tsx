@@ -1,4 +1,4 @@
-import { useFilter } from "@/hooks/useFilter";
+import { useFilter } from "@/hooks/contexts/useFilter";
 import { useNavigation } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, TextInput } from "react-native";

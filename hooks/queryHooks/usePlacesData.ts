@@ -3,7 +3,7 @@ import { QueryObserverResult, RefetchOptions, useQuery } from "@tanstack/react-q
 import useAxiosPrivate from "../useAxiosPrivate";
 import { QuerySrc } from "@/constants/QuerySrc";
 import { Data, Record } from "@/constants/Types";
-import useAuth from "../useAuth";
+import useAuth from "../contexts/useAuth";
 
 interface PlaceRecord {
   placeId: Number;

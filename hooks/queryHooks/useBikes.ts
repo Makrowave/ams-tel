@@ -2,7 +2,7 @@ import { QueryKeys } from "@/constants/QueryKeys";
 import { QueryObserverResult, RefetchOptions, useQuery } from "@tanstack/react-query";
 import useAxiosPrivate from "../useAxiosPrivate";
 import { QuerySrc } from "@/constants/QuerySrc";
-import useAuth from "../useAuth";
+import useAuth from "../contexts/useAuth";
 
 export interface Bike {
   id: Number;

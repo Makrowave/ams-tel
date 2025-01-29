@@ -1,8 +1,9 @@
+import { ModelRecordData, ProviderNodeProps } from "@/constants/Types";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ProviderProps, ReactNode, useEffect, useState } from "react";
 
-interface ActionDataContextProps {
+interface ActionDataContext {
   userLocationKey?: Number;
   actionLocationKey?: Number;
   price?: Number;
@@ -15,25 +16,21 @@ interface ActionDataContextProps {
   initializeValues: (statusKey: Number, actionLocationKey?: Number, price?: Number) => void;
   setDefaultUserLocation: (value: Number | undefined) => void;
 
-  code: string;
-  setCode: (value: string) => void;
+  contextCode: string;
+  setContextCode: (value: string) => void;
 }
 
-export const ActionDataContext = createContext<ActionDataContextProps | undefined>(undefined);
+export const ActionDataContext = createContext<ActionDataContext | undefined>(undefined);
 
-type ActionDataProviderProps = {
-  children: ReactNode;
-};
-
-export function ActionDataProvider({ children }: ActionDataProviderProps) {
+export function ActionDataProvider({ children }: ProviderNodeProps) {
   const [defaultUserLocation, setDefaultUserLocation] = useState<Number>();
   const [userLocationKey, setUserLocationKey] = useState<Number>();
   const [actionLocationKey, setActionLocationKey] = useState<Number>(4);
   const [price, setPrice] = useState<Number>(3000);
   const [statusKey, setStatusKey] = useState<Number>(2);
-
+  // const [updateModel, setUpdateModel] = useState<ModelRecordData>()
   //code for binding to model if not present
-  const [code, setCode] = useState<string>("");
+  const [contextCode, setContextCode] = useState<string>("");
 
   useEffect(() => {
     getDefaultUserLocation();
@@ -87,8 +84,8 @@ export function ActionDataProvider({ children }: ActionDataProviderProps) {
         defaultUserLocation,
         initializeValues,
 
-        code,
-        setCode,
+        contextCode,
+        setContextCode,
       }}
     >
       {children}

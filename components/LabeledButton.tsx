@@ -45,8 +45,9 @@ const LabeledButton = ({
         style={[
           styles.outsideWrapper,
           size === "big" ? styles.big : styles.small,
-          type === "header" || type === "single" ? styles.header : undefined,
-          type === "footer" || type === "single" ? styles.footer : undefined,
+          type === "header" ? styles.header : undefined,
+          type === "footer" ? styles.footer : undefined,
+          type === "single" ? styles.single : undefined,
           type === "body" ? styles.body : {},
           style,
         ]}
@@ -142,6 +143,10 @@ const styles = StyleSheet.create({
   footer: {
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
+  },
+  single: {
+    borderRadius: 20,
+    borderWidth: 1,
   },
   body: {
     borderBottomWidth: 1,

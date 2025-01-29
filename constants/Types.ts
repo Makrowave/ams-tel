@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export type Data = Array<Record> | undefined;
 export type ColorData = Array<ColorRecord> | undefined;
 export interface Record {
@@ -27,4 +29,8 @@ export interface ModelRecordData {
   colorId?: Number;
   bikeCount: Number;
   placeBikeCount: Array<{ placeId: Number; count: Number }>;
+}
+
+export interface ProviderNodeProps {
+  children: ReactNode;
 }

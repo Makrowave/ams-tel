@@ -5,7 +5,7 @@ import RangeFilter from "@/components/filters/RangeFilter";
 import TextFilter from "@/components/filters/TextFilter";
 import { QueryKeys } from "@/constants/QueryKeys";
 import { QuerySrc } from "@/constants/QuerySrc";
-import { useFilter } from "@/hooks/useFilter";
+import { useFilter } from "@/hooks/contexts/useFilter";
 import { Link, useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -25,7 +25,7 @@ type Critertion =
   | "isWoman";
 
 export default function FilterPage() {
-  const { filters, updateFilters } = useFilter();
+  const { filters } = useFilter();
   const { criterion } = useLocalSearchParams<{ criterion: Critertion }>();
   const navigation = useNavigation();
 

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Filters } from "../contexts/FilterContext";
-import { useFilter } from "@/hooks/useFilter";
+import { useFilter } from "@/hooks/contexts/useFilter";
 import { ThemedView } from "../ThemedView";
 import { ThemedTextInput } from "../ThemedTextInput";
 import { StyleSheet, View } from "react-native";

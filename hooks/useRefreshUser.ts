@@ -1,6 +1,6 @@
 import { decodeToken } from "react-jwt";
 import { AxiosError, isAxiosError } from "axios";
-import useAuth from "./useAuth";
+import useAuth from "./contexts/useAuth";
 import axios from "@/api/axios";
 
 interface Token {
