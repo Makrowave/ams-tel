@@ -6,12 +6,14 @@ import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
 import { ModelRecordData } from "@/constants/Types";
 import { Statuses } from "@/constants/UtilEnums";
 import { useActionData } from "@/hooks/contexts/useActionData";
+import { useActionResult } from "@/hooks/contexts/useActionResult";
 import { useRefreshModel } from "@/hooks/contexts/useRefreshModel";
 import { useBikes } from "@/hooks/queryHooks/useBikes";
 import { useModelsData } from "@/hooks/queryHooks/useModelsData";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { AxiosError } from "axios";
 import { Link, Stack, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Button, View, StyleSheet, Alert, Vibration } from "react-native";
@@ -29,7 +31,7 @@ export default function Sell() {
   const { modelFindByEan, modelRefetch } = useModelsData(ModelsQuery.all);
   const { selectFirstMatch, bikeRefetch } = useBikes(model?.modelId ?? 0);
   const updateable = useRef<boolean>(true);
-
+  const { setFailure, setSuccess } = useActionResult();
   const [isCodeBound, setIsCodeBound] = useState<boolean | undefined>();
 
   useEffect(() => {
@@ -77,25 +79,35 @@ export default function Sell() {
   }, [refreshModel]);
 
   const handleSell = async () => {
-    await bikeRefetch();
-    if (userLocationKey === undefined || statusKey === undefined) {
-      console.log("No location and status chosen");
+    if (code === "") {
+      setFailure("Nie zeskanowano roweru");
       return;
     }
+    if (userLocationKey === undefined || statusKey === undefined) {
+      setFailure("Nie wybrano statusu lub miejsca");
+      return;
+    }
+    await bikeRefetch();
     const bikeId = selectFirstMatch(userLocationKey, statusKey);
     if (bikeId === undefined) {
-      console.log("No bike found - implement error handling");
+      setFailure("Nie znaleziono roweru");
       return;
     }
-    const result = await axiosPrivate.put(
-      `${QuerySrc.Bikes}/${bikeId}`,
-      JSON.stringify({
-        statusId: Statuses.sold,
-        salePrice: price,
-      })
-    );
-    if (result.status === 200) {
-      router.back();
+    try {
+      const result = await axiosPrivate.put(
+        `${QuerySrc.Bikes}/${bikeId}`,
+        JSON.stringify({
+          statusId: Statuses.sold,
+          salePrice: price,
+        })
+      );
+      if (result.status === 200) {
+        setSuccess("Sprzedano rower");
+        router.back();
+      }
+    } catch (err) {
+      const error = err as AxiosError;
+      setFailure(error.message);
     }
   };
 

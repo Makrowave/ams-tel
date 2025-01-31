@@ -6,12 +6,14 @@ import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
 import { ModelRecordData } from "@/constants/Types";
 import { Places, Statuses } from "@/constants/UtilEnums";
 import { useActionData } from "@/hooks/contexts/useActionData";
+import { useActionResult } from "@/hooks/contexts/useActionResult";
 import { useRefreshModel } from "@/hooks/contexts/useRefreshModel";
 import { useBikes } from "@/hooks/queryHooks/useBikes";
 import { useModelsData } from "@/hooks/queryHooks/useModelsData";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { AxiosError } from "axios";
 import { Link, Stack, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Button, View, StyleSheet, Vibration } from "react-native";
@@ -28,8 +30,9 @@ export default function Move() {
   const { modelFindByEan } = useModelsData(ModelsQuery.all);
   const { selectFirstMatch, bikeRefetch } = useBikes(model?.modelId ?? 0);
   const updateable = useRef<boolean>(true);
+  const { setFailure, setSuccess } = useActionResult();
 
-  const [isCodeBound, setIsCodeBound] = useState<boolean>(false);
+  const [isCodeBound, setIsCodeBound] = useState<boolean>();
 
   useEffect(() => {
     initializeValues(Statuses.unAssembled, Places.storage1);
@@ -71,24 +74,35 @@ export default function Move() {
   }, [refreshModel]);
 
   const handleMove = async () => {
-    await bikeRefetch();
+    if (code === "") {
+      setFailure("Nie zeskanowano roweru");
+      return;
+    }
     if (userLocationKey === undefined || actionLocationKey === undefined || statusKey === undefined) {
-      console.log("No locations and status chosen");
+      setFailure("Nie wybrano statusu lub miejsca");
       return;
     }
+    await bikeRefetch();
+
     const bikeId = selectFirstMatch(actionLocationKey, statusKey);
-    if (bikeId === undefined) {
-      console.log("No bike found - implement error handling");
-      return;
-    }
-    const result = await axiosPrivate.put(
-      `${QuerySrc.Bikes}/${bikeId}`,
-      JSON.stringify({
-        placeId: userLocationKey,
-      })
-    );
-    if (result.status === 200) {
-      router.back();
+    try {
+      if (bikeId === undefined) {
+        console.log("No bike found - implement error handling");
+        return;
+      }
+      const result = await axiosPrivate.put(
+        `${QuerySrc.Bikes}/${bikeId}`,
+        JSON.stringify({
+          placeId: userLocationKey,
+        })
+      );
+      if (result.status === 200) {
+        setSuccess("Przeniesiono rower");
+        router.back();
+      }
+    } catch (err) {
+      const error = err as AxiosError;
+      setFailure(error.message);
     }
   };
   return (

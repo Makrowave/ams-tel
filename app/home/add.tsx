@@ -16,6 +16,8 @@ import showKeyboardAlert from "@/components/alert/KeyboardAlert";
 import LinkButton from "@/components/LinkButton";
 import { useRefreshModel } from "@/hooks/contexts/useRefreshModel";
 import { useActionData } from "@/hooks/contexts/useActionData";
+import { useActionResult } from "@/hooks/contexts/useActionResult";
+import { AxiosError } from "axios";
 
 export default function Add() {
   const { setContextCode, userLocationKey, statusKey, initializeValues } = useActionData();
@@ -23,6 +25,7 @@ export default function Add() {
   const [code, setCode] = useState<string>("");
   const [model, setModel] = useState<ModelRecordData | undefined>(undefined);
   const { placeData, placeIsPending, placeIsError, placeFindByKey } = usePlacesData();
+  const { setFailure, setSuccess } = useActionResult();
   const {
     statusData,
     statusIsPending,
@@ -32,7 +35,7 @@ export default function Add() {
   const { modelFindByEan, modelRefetch } = useModelsData(ModelsQuery.all);
   const updateable = useRef<boolean>(true);
 
-  const [isCodeBound, setIsCodeBound] = useState<boolean>(false);
+  const [isCodeBound, setIsCodeBound] = useState<boolean>();
 
   useEffect(() => {
     initializeValues(Statuses.unAssembled, Places.storage1);
@@ -75,7 +78,15 @@ export default function Add() {
     setCode(data);
   };
   const handleAdd = async () => {
-    if (model !== undefined && userLocationKey !== undefined && statusKey !== undefined) {
+    if (userLocationKey === undefined || statusKey === undefined) {
+      setFailure("Nie wybrano statusu lub miejsca");
+      return;
+    }
+    if (model === undefined) {
+      setFailure("Nie znaleziono modelu");
+      return;
+    }
+    try {
       const result = await axiosPrivate.post(
         QuerySrc.Bikes,
         JSON.stringify({
@@ -85,10 +96,12 @@ export default function Add() {
         })
       );
       if (result.status === 200) {
+        setSuccess("Dodano rower");
         router.back();
       }
-    } else {
-      console.log(model?.modelId + " " + userLocationKey + " " + statusKey);
+    } catch (err) {
+      const error = err as AxiosError;
+      setFailure(error.message);
     }
   };
 

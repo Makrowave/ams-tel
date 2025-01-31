@@ -17,6 +17,8 @@ import { Button, View, StyleSheet, Vibration } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useActionData } from "@/hooks/contexts/useActionData";
 import { useRefreshModel } from "@/hooks/contexts/useRefreshModel";
+import { useActionResult } from "@/hooks/contexts/useActionResult";
+import { AxiosError } from "axios";
 
 export default function Assemble() {
   const router = useRouter();
@@ -35,8 +37,8 @@ export default function Assemble() {
   const { modelFindByEan } = useModelsData(ModelsQuery.all);
   const { selectFirstMatch, bikeRefetch } = useBikes(model?.modelId ?? 0);
   const updateable = useRef<boolean>(true);
-
-  const [isCodeBound, setIsCodeBound] = useState<boolean>(false);
+  const [isCodeBound, setIsCodeBound] = useState<boolean>();
+  const { setFailure, setSuccess } = useActionResult();
 
   useEffect(() => {
     initializeValues(Statuses.unAssembled);
@@ -80,25 +82,35 @@ export default function Assemble() {
   };
 
   const handleAssemble = async () => {
-    await bikeRefetch();
-    if (userLocationKey === undefined || statusKey === undefined) {
-      console.log("No location and status chosen");
+    if (code === "") {
+      setFailure("Nie zeskanowano roweru");
       return;
     }
+    if (userLocationKey === undefined || statusKey === undefined) {
+      setFailure("Nie wybrano statusu lub miejsca");
+      return;
+    }
+    await bikeRefetch();
     const bikeId = selectFirstMatch(userLocationKey, statusKey);
     if (bikeId === undefined) {
-      console.log("No bike found - implement error handling");
+      setFailure("Nie znaleziono roweru");
       return;
     }
-    const result = await axiosPrivate.put(
-      `${QuerySrc.Bikes}/${bikeId}`,
-      JSON.stringify({
-        statusId: Statuses.assembled,
-        assembledBy: user.employeeKey,
-      })
-    );
-    if (result.status === 200) {
-      router.back();
+    try {
+      const result = await axiosPrivate.put(
+        `${QuerySrc.Bikes}/${bikeId}`,
+        JSON.stringify({
+          statusId: Statuses.assembled,
+          assembledBy: user.employeeKey,
+        })
+      );
+      if (result.status === 200) {
+        setSuccess("Złożono rower");
+        router.back();
+      }
+    } catch (err) {
+      const error = err as AxiosError;
+      setFailure(error.message);
     }
   };
 
