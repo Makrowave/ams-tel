@@ -17,13 +17,11 @@ export default function Scanner(props: ScannerProps) {
     setUseFlashlight(!useFlashlight);
   }
 
-  if (!permission) {
-    return <View />;
-  }
-
-  if (!permission.granted) {
-    return <Button onPress={requestPermission} title='Grant permission' />;
-  }
+  useEffect(() => {
+    if (!permission?.granted) {
+      requestPermission();
+    }
+  });
 
   return (
     <View style={styles.wrapper}>

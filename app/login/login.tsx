@@ -77,6 +77,8 @@ export default function Login() {
             value={username}
             onChangeText={(text) => setUsername(text)}
             textContentType='username'
+            autoComplete='username'
+            importantForAutofill='yes'
           />
         </ThemedView>
         <ThemedView style={styles.inputWrapper}>
@@ -87,6 +89,8 @@ export default function Login() {
             value={password}
             onChangeText={(text) => setPassword(text)}
             textContentType='password'
+            autoComplete='password'
+            importantForAutofill='yes'
           />
         </ThemedView>
         <ForwardedButton
