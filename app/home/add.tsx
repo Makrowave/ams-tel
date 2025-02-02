@@ -1,4 +1,3 @@
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Button, StyleSheet, View } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import Scanner from "@/components/Scanner";
@@ -18,6 +17,7 @@ import { useRefreshModel } from "@/hooks/contexts/useRefreshModel";
 import { useActionData } from "@/hooks/contexts/useActionData";
 import { useActionResult } from "@/hooks/contexts/useActionResult";
 import { AxiosError } from "axios";
+import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
 
 export default function Add() {
   const { setContextCode, userLocationKey, statusKey, initializeValues } = useActionData();
@@ -106,7 +106,7 @@ export default function Add() {
   };
 
   return (
-    <GestureHandlerRootView>
+    <ThemedGestureHandlerRootView>
       <Stack.Screen
         options={{
           title: "Dodaj rower",
@@ -182,7 +182,7 @@ export default function Add() {
         />
         <ForwardedButton style={styles.button} type='footer' title='Dodaj' onPress={() => handleAdd()} />
       </View>
-    </GestureHandlerRootView>
+    </ThemedGestureHandlerRootView>
   );
 }
 const styles = StyleSheet.create({

@@ -1,6 +1,6 @@
 import { useModelsData } from "@/hooks/queryHooks/useModelsData";
 import { useFilter } from "@/hooks/contexts/useFilter";
-import { ThemedView } from "../ThemedView";
+import { ThemedView } from "../themed/ThemedView";
 import ModelRecord from "./ModelRecord";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { View, ViewProps } from "react-native";

@@ -14,11 +14,11 @@ import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { Link, Stack, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Button, View, StyleSheet, Vibration } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useActionData } from "@/hooks/contexts/useActionData";
 import { useRefreshModel } from "@/hooks/contexts/useRefreshModel";
 import { useActionResult } from "@/hooks/contexts/useActionResult";
 import { AxiosError } from "axios";
+import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
 
 export default function Assemble() {
   const router = useRouter();
@@ -115,7 +115,7 @@ export default function Assemble() {
   };
 
   return (
-    <GestureHandlerRootView>
+    <ThemedGestureHandlerRootView>
       <Stack.Screen
         options={{
           title: "Złóż rower",
@@ -191,7 +191,7 @@ export default function Assemble() {
         />
         <ForwardedButton style={styles.button} type='footer' title='Złóż' onPress={() => handleAssemble()} />
       </View>
-    </GestureHandlerRootView>
+    </ThemedGestureHandlerRootView>
   );
 }
 

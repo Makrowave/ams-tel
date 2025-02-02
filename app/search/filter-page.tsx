@@ -3,12 +3,12 @@ import FetchSelectFilter from "@/components/filters/FetchSelectFilter";
 import NumberFilter from "@/components/filters/NumberFilter";
 import RangeFilter from "@/components/filters/RangeFilter";
 import TextFilter from "@/components/filters/TextFilter";
+import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
 import { QueryKeys } from "@/constants/QueryKeys";
 import { QuerySrc } from "@/constants/QuerySrc";
 import { useFilter } from "@/hooks/contexts/useFilter";
 import { Link, useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect } from "react";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 type Critertion =
   | "name"
@@ -97,8 +97,8 @@ export default function FilterPage() {
   }
 
   return (
-    <GestureHandlerRootView>
+    <ThemedGestureHandlerRootView>
       <FilterComponent />
-    </GestureHandlerRootView>
+    </ThemedGestureHandlerRootView>
   );
 }

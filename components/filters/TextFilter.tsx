@@ -2,10 +2,10 @@ import { useFilter } from "@/hooks/contexts/useFilter";
 import { useNavigation } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, TextInput } from "react-native";
-import { ThemedView } from "../ThemedView";
+import { ThemedView } from "../themed/ThemedView";
 import { Filters } from "../contexts/FilterContext";
-import { ThemedTextInput } from "../ThemedTextInput";
-import { ThemedText } from "../ThemedText";
+import { ThemedTextInput } from "../themed/ThemedTextInput";
+import { ThemedText } from "../themed/ThemedText";
 
 interface TextFilterProps {
   title: string;

@@ -1,9 +1,8 @@
 import { CameraView, CameraNativeProps, useCameraPermissions } from "expo-camera";
 import { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View, Image, Button } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { ThemedImage } from "./ThemedImage";
-import { ThemedView } from "./ThemedView";
+import { ThemedImage } from "./themed/ThemedImage";
+import { ThemedView } from "./themed/ThemedView";
 
 type ScannerProps = {
   onBarcodeScanned: (data: string) => void;

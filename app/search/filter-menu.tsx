@@ -1,18 +1,13 @@
 import { ForwardedButton } from "@/components/LabeledButton";
 import LinkButton from "@/components/LinkButton";
-import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
-import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
 import { useFilter } from "@/hooks/contexts/useFilter";
-import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
+import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
 
 export default function FilterMenu() {
   const { filters, resetFilters } = useFilter();
-  // const {} = useManucturers();
-  // const {} = useColors();
-  const { placeFindByKey } = usePlacesData();
-  const { statusFindNameByKey: statusFindByKey } = useStatusesData();
   return (
-    <GestureHandlerRootView>
+    <ThemedGestureHandlerRootView>
       <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 15 }}>
         <LinkButton
           href={{
@@ -157,6 +152,6 @@ export default function FilterMenu() {
         />
         <ForwardedButton key='Reset-button' title='Reset' type='footer' size='big' onPress={() => resetFilters()} />
       </ScrollView>
-    </GestureHandlerRootView>
+    </ThemedGestureHandlerRootView>
   );
 }

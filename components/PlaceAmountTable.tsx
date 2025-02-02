@@ -1,7 +1,7 @@
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import { ThemedView } from "./ThemedView";
-import { ThemedText } from "./ThemedText";
+import { ThemedView } from "./themed/ThemedView";
+import { ThemedText } from "./themed/ThemedText";
 import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
 import { useBikes } from "@/hooks/queryHooks/useBikes";
 import { ColorRecord } from "@/constants/Types";

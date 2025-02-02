@@ -1,13 +1,13 @@
 import { ForwardedButton } from "@/components/LabeledButton";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import { ThemedText } from "@/components/themed/ThemedText";
+import { ThemedView } from "@/components/themed/ThemedView";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { useActionData } from "@/hooks/contexts/useActionData";
 import useAuth from "@/hooks/contexts/useAuth";
 import { Link } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
 
 export default function HomeScreen() {
   const { user } = useAuth();
@@ -15,7 +15,7 @@ export default function HomeScreen() {
   const { placeFindByKey } = usePlacesData();
 
   return (
-    <GestureHandlerRootView>
+    <ThemedGestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={{ flex: 1 }}>
         <View>
           <ThemedView style={styles.header}>
@@ -80,7 +80,7 @@ export default function HomeScreen() {
           </Link>
         </View>
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </ThemedGestureHandlerRootView>
   );
 }
 

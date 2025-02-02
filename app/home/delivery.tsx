@@ -1,5 +1,5 @@
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
 
 export default function Delivery() {
-  return <GestureHandlerRootView></GestureHandlerRootView>;
+  return <ThemedGestureHandlerRootView></ThemedGestureHandlerRootView>;
 }

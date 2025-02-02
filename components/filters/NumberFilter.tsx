@@ -1,13 +1,13 @@
-import { ThemedView } from "../ThemedView";
+import { ThemedView } from "../themed/ThemedView";
 import { ForwardedButton } from "../LabeledButton";
 import { Filters } from "../contexts/FilterContext";
 import { useFilter } from "@/hooks/contexts/useFilter";
 import { useEffect, useState } from "react";
 import { TextInput } from "react-native-gesture-handler";
 import { useNavigation } from "expo-router";
-import { ThemedTextInput } from "../ThemedTextInput";
+import { ThemedTextInput } from "../themed/ThemedTextInput";
 import { StyleSheet } from "react-native";
-import { ThemedText } from "../ThemedText";
+import { ThemedText } from "../themed/ThemedText";
 
 interface NumberFilterProps {
   title: string;

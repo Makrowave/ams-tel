@@ -2,6 +2,7 @@ import showKeyboardAlert from "@/components/alert/KeyboardAlert";
 import { ForwardedButton } from "@/components/LabeledButton";
 import LinkButton from "@/components/LinkButton";
 import Scanner from "@/components/Scanner";
+import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
 import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
 import { ModelRecordData } from "@/constants/Types";
 import { Statuses } from "@/constants/UtilEnums";
@@ -17,7 +18,6 @@ import { AxiosError } from "axios";
 import { Link, Stack, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Button, View, StyleSheet, Alert, Vibration } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Sell() {
   const router = useRouter();
@@ -112,7 +112,7 @@ export default function Sell() {
   };
 
   return (
-    <GestureHandlerRootView>
+    <ThemedGestureHandlerRootView>
       <Stack.Screen
         options={{
           title: "Sprzedaj rower",
@@ -198,7 +198,7 @@ export default function Sell() {
         />
         <ForwardedButton style={styles.button} type='footer' title='Sprzedaj' onPress={() => handleSell()} />
       </View>
-    </GestureHandlerRootView>
+    </ThemedGestureHandlerRootView>
   );
 }
 

@@ -1,13 +1,13 @@
 import { ForwardedButton } from "@/components/LabeledButton";
 import ModelTable from "@/components/model-table/ModelTable";
-import { ThemedImage } from "@/components/ThemedImage";
-import ThemedIonicons from "@/components/ThemedIonicons";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import { ThemedImage } from "@/components/themed/ThemedImage";
+import ThemedIonicons from "@/components/themed/ThemedIonicons";
+import { ThemedText } from "@/components/themed/ThemedText";
+import { ThemedView } from "@/components/themed/ThemedView";
 import { Link } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ThemedGestureHandlerRootView } from "./themed/ThemedGestureHandlerRootView";
 
 export interface ModelTableBindProps {
   bindMode?: boolean;
@@ -15,7 +15,7 @@ export interface ModelTableBindProps {
 
 export default function ModelSearchPage({ bindMode }: ModelTableBindProps) {
   return (
-    <GestureHandlerRootView>
+    <ThemedGestureHandlerRootView>
       <SafeAreaView>
         <ThemedView style={styles.pageWrapper}>
           <ThemedView style={styles.header}>
@@ -46,7 +46,7 @@ export default function ModelSearchPage({ bindMode }: ModelTableBindProps) {
           </View>
         </ThemedView>
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </ThemedGestureHandlerRootView>
   );
 }
 

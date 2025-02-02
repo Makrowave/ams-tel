@@ -1,7 +1,9 @@
 import SelectableForwardedButton from "@/components/RadioGroup";
+import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
 import { useActionData } from "@/hooks/contexts/useActionData";
+import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useColorScheme } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SelectScreen() {
@@ -17,6 +19,14 @@ export default function SelectScreen() {
     setStatusKey,
     setDefaultUserLocation,
   } = useActionData();
+
+  const colorScheme = useColorScheme();
+  const headerColor = () => {
+    return colorScheme === "dark" ? DarkTheme.colors.card : DefaultTheme.colors.card;
+  };
+  const headerTextColor = () => {
+    return colorScheme === "dark" ? DarkTheme.colors.text : DefaultTheme.colors.text;
+  };
 
   const onSelect = () => {
     switch (selection) {
@@ -74,16 +84,18 @@ export default function SelectScreen() {
 
   const optionsList = datastring ? JSON.parse(datastring) : [];
   return (
-    <GestureHandlerRootView>
+    <ThemedGestureHandlerRootView>
       <SafeAreaView>
         <Stack.Screen
           options={{
             title: header(),
             headerBackTitle: "Wróć",
+            headerStyle: { backgroundColor: headerColor() },
+            headerTitleStyle: { color: headerTextColor() },
           }}
         />
         <SelectableForwardedButton data={optionsList} onSelect={onSelect()} selection={defaultSelection()} />
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </ThemedGestureHandlerRootView>
   );
 }

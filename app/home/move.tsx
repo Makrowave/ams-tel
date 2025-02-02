@@ -2,6 +2,7 @@ import showKeyboardAlert from "@/components/alert/KeyboardAlert";
 import { ForwardedButton } from "@/components/LabeledButton";
 import LinkButton from "@/components/LinkButton";
 import Scanner from "@/components/Scanner";
+import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
 import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
 import { ModelRecordData } from "@/constants/Types";
 import { Places, Statuses } from "@/constants/UtilEnums";
@@ -17,7 +18,6 @@ import { AxiosError } from "axios";
 import { Link, Stack, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Button, View, StyleSheet, Vibration } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Move() {
   const router = useRouter();
@@ -106,7 +106,7 @@ export default function Move() {
     }
   };
   return (
-    <GestureHandlerRootView>
+    <ThemedGestureHandlerRootView>
       <Stack.Screen
         options={{
           title: "Przenieś rower",
@@ -192,7 +192,7 @@ export default function Move() {
         />
         <ForwardedButton style={styles.button} type='footer' title='Przenieś' onPress={() => handleMove()} />
       </View>
-    </GestureHandlerRootView>
+    </ThemedGestureHandlerRootView>
   );
 }
 

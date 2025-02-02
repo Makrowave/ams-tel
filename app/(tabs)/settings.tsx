@@ -4,8 +4,8 @@ import { useActionData } from "@/hooks/contexts/useActionData";
 import useAuth from "@/hooks/contexts/useAuth";
 import { Link, Stack, useRouter } from "expo-router";
 import { Alert, Button, StyleSheet } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
 
 export default function Settings() {
   const { defaultUserLocation } = useActionData();
@@ -13,7 +13,7 @@ export default function Settings() {
   const { placeData } = usePlacesData();
   const router = useRouter();
   return (
-    <GestureHandlerRootView>
+    <ThemedGestureHandlerRootView>
       <SafeAreaView>
         <Stack.Screen
           name=''
@@ -44,12 +44,12 @@ export default function Settings() {
           source={require("@/assets/images/move.png")}
           onPress={() => {
             logout();
-            router.replace("/login/login");
+            router.replace("/");
           }}
           type='footer'
         />
       </SafeAreaView>
-    </GestureHandlerRootView>
+    </ThemedGestureHandlerRootView>
   );
 }
 

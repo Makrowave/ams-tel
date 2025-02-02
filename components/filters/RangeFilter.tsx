@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import { Filters } from "../contexts/FilterContext";
 import { useFilter } from "@/hooks/contexts/useFilter";
-import { ThemedView } from "../ThemedView";
-import { ThemedTextInput } from "../ThemedTextInput";
+import { ThemedView } from "../themed/ThemedView";
+import { ThemedTextInput } from "../themed/ThemedTextInput";
 import { StyleSheet, View } from "react-native";
-import { ThemedText } from "../ThemedText";
+import { ThemedText } from "../themed/ThemedText";
 
 interface NumberFilterProps {
   title: string;

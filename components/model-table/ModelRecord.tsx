@@ -1,11 +1,11 @@
 import { ModelRecordData } from "@/constants/Types";
-import { ThemedView } from "../ThemedView";
-import { ThemedText } from "../ThemedText";
+import { ThemedView } from "../themed/ThemedView";
+import { ThemedText } from "../themed/ThemedText";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { ThemedImage } from "../ThemedImage";
+import { ThemedImage } from "../themed/ThemedImage";
 import { ModelTableBindProps } from "../ModelSearchPage";
 
 interface ModelRecordProps {

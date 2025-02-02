@@ -1,8 +1,8 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import { DarkTheme, DefaultTheme, NavigationContainer, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
 import "react-native-reanimated";
+import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { ActionDataProvider } from "@/components/contexts/ActionDataContext";
 import { FilterContextProvider } from "@/components/contexts/FilterContext";
@@ -13,23 +13,28 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RefreshModelProvider } from "@/components/contexts/RefreshModelContext";
 import { ActionResultProvider } from "@/components/contexts/ActionResultContext";
 import InteractionResult from "@/components/InteractionResult";
+import { StatusBar } from "expo-status-bar";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+SplashScreen.setOptions({
+  fade: true,
+  duration: 1000,
+});
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-  if (!loaded) {
-    return null;
-  }
+
+  const headerColor = () => {
+    return colorScheme === "dark" ? DarkTheme.colors.card : DefaultTheme.colors.card;
+  };
+  const headerTextColor = () => {
+    return colorScheme === "dark" ? DarkTheme.colors.text : DefaultTheme.colors.text;
+  };
+
   const queryClient = new QueryClient();
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
@@ -41,10 +46,6 @@ export default function RootLayout() {
                 <RefreshModelProvider>
                   <InteractionResult />
                   <Stack>
-                    <Stack.Screen
-                      name='login/login'
-                      options={{ headerTitle: "Logowanie", animation: "fade", headerBackVisible: false }}
-                    />
                     <Stack.Screen name='index' options={{ headerShown: false, animation: "fade" }} />
                     <Stack.Screen
                       name='(tabs)'
@@ -60,6 +61,8 @@ export default function RootLayout() {
                         title: "Przenieś rower",
                         headerBackTitle: "Wróć",
                         headerRight: () => <Button title='Wpisz kod' />,
+                        headerStyle: { backgroundColor: headerColor() },
+                        headerTitleStyle: { color: headerTextColor() },
                       }}
                     />
                     <Stack.Screen
@@ -68,6 +71,8 @@ export default function RootLayout() {
                         title: "Złóż rower",
                         headerBackTitle: "Wróć",
                         headerRight: () => <Button title='Wpisz kod' />,
+                        headerStyle: { backgroundColor: headerColor() },
+                        headerTitleStyle: { color: headerTextColor() },
                       }}
                     />
                     <Stack.Screen
@@ -76,6 +81,8 @@ export default function RootLayout() {
                         title: "Sprzedaj rower",
                         headerBackTitle: "Wróć",
                         headerRight: () => <Button title='Wpisz kod' />,
+                        headerStyle: { backgroundColor: headerColor() },
+                        headerTitleStyle: { color: headerTextColor() },
                       }}
                     />
                     <Stack.Screen
@@ -84,6 +91,8 @@ export default function RootLayout() {
                         title: "Dodaj rower",
                         headerBackTitle: "Wróć",
                         headerRight: () => <Button title='Wpisz kod' />,
+                        headerStyle: { backgroundColor: headerColor() },
+                        headerTitleStyle: { color: headerTextColor() },
                       }}
                     />
                     <Stack.Screen
@@ -92,6 +101,8 @@ export default function RootLayout() {
                         title: "Dostawa",
                         headerBackTitle: "Wróć",
                         headerRight: () => <Button title='Wpisz kod' />,
+                        headerStyle: { backgroundColor: headerColor() },
+                        headerTitleStyle: { color: headerTextColor() },
                       }}
                     />
                     <Stack.Screen
@@ -99,6 +110,8 @@ export default function RootLayout() {
                       options={{
                         title: "Wyszukaj",
                         headerBackTitle: "Wróć",
+                        headerStyle: { backgroundColor: headerColor() },
+                        headerTitleStyle: { color: headerTextColor() },
                       }}
                     />
                     <Stack.Screen
@@ -106,6 +119,8 @@ export default function RootLayout() {
                       options={{
                         title: "",
                         headerBackTitle: "Wróć",
+                        headerStyle: { backgroundColor: headerColor() },
+                        headerTitleStyle: { color: headerTextColor() },
                       }}
                     />
                     <Stack.Screen
@@ -113,6 +128,8 @@ export default function RootLayout() {
                       options={{
                         title: "Model",
                         headerBackTitle: "Wróć",
+                        headerStyle: { backgroundColor: headerColor() },
+                        headerTitleStyle: { color: headerTextColor() },
                       }}
                     />
                     <Stack.Screen
@@ -120,6 +137,8 @@ export default function RootLayout() {
                       options={{
                         title: "Przypisz model",
                         headerBackTitle: "Wróć",
+                        headerStyle: { backgroundColor: headerColor() },
+                        headerTitleStyle: { color: headerTextColor() },
                       }}
                     />
                   </Stack>

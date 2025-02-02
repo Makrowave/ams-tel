@@ -1,6 +1,7 @@
 import { ForwardedButton } from "@/components/LabeledButton";
 import Listing from "@/components/Listing";
 import PlaceAmountTable from "@/components/PlaceAmountTable";
+import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
 import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
 import { ModelRecordData } from "@/constants/Types";
 import { useActionData } from "@/hooks/contexts/useActionData";
@@ -10,7 +11,7 @@ import { useModelsData } from "@/hooks/queryHooks/useModelsData";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { router, useLocalSearchParams } from "expo-router";
 import { StyleSheet } from "react-native";
-import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function ModelPage() {
   const { modelString, bindMode } = useLocalSearchParams<{
@@ -33,7 +34,7 @@ export default function ModelPage() {
   };
   const { categoryFindByKey } = useCategoriesData();
   return (
-    <GestureHandlerRootView style={styles.wrapper}>
+    <ThemedGestureHandlerRootView style={styles.wrapper}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {bindMode === "true" && (
           <ForwardedButton
@@ -58,12 +59,12 @@ export default function ModelPage() {
         <Listing title='Kategoria' text={categoryFindByKey(model.categoryId)} />
         <PlaceAmountTable id={model.modelId} />
       </ScrollView>
-    </GestureHandlerRootView>
+    </ThemedGestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    margin: 20,
+    padding: 20,
   },
 });

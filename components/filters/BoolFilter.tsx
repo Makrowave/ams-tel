@@ -1,4 +1,4 @@
-import { ThemedView } from "../ThemedView";
+import { ThemedView } from "../themed/ThemedView";
 import { ForwardedButton } from "../LabeledButton";
 import { Filters } from "../contexts/FilterContext";
 import { useFilter } from "@/hooks/contexts/useFilter";

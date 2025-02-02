@@ -1,9 +1,9 @@
 import { forwardRef, useState } from "react";
 import { StyleSheet, View, Image } from "react-native";
 import { TouchableOpacityProps, TouchableOpacity } from "react-native-gesture-handler";
-import { ThemedView } from "./ThemedView";
-import { ThemedText } from "./ThemedText";
-import { ThemedImage } from "./ThemedImage";
+import { ThemedView } from "./themed/ThemedView";
+import { ThemedText } from "./themed/ThemedText";
+import { ThemedImage } from "./themed/ThemedImage";
 
 export type LabelProps = TouchableOpacityProps & {
   title?: string;

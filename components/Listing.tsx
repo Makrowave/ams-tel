@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { ThemedText } from "./ThemedText";
-import { ThemedView } from "./ThemedView";
+import { ThemedText } from "./themed/ThemedText";
+import { ThemedView } from "./themed/ThemedView";
 
 interface ListingProps {
   title: string;

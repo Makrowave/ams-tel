@@ -1,8 +1,9 @@
 import { useActionResult } from "@/hooks/contexts/useActionResult";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { GestureHandlerRootView, TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ThemedGestureHandlerRootView } from "./themed/ThemedGestureHandlerRootView";
 
 export default function InteractionResult() {
   const { message, status, visible, clearInteractionResult } = useActionResult();
@@ -10,7 +11,7 @@ export default function InteractionResult() {
 
   return (
     visible && (
-      <GestureHandlerRootView style={[styles.wrapper, { top: insets.top }]}>
+      <ThemedGestureHandlerRootView style={[styles.wrapper, { top: insets.top }]}>
         <TouchableOpacity
           onPressIn={() => {
             console.log("seima");
@@ -21,7 +22,7 @@ export default function InteractionResult() {
           <Text style={styles.text}>{message}</Text>
           <Text style={styles.closeText}>Naciśnij aby zamknąć</Text>
         </TouchableOpacity>
-      </GestureHandlerRootView>
+      </ThemedGestureHandlerRootView>
     )
   );
 }
