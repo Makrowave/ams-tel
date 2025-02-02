@@ -4,7 +4,7 @@ import LinkButton from "@/components/LinkButton";
 import Scanner from "@/components/Scanner";
 import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
 import { ModelRecordData } from "@/constants/Types";
-import { Places, Statuses } from "@/constants/UtilEnums";
+import { Statuses } from "@/constants/UtilEnums";
 import { useBikes } from "@/hooks/queryHooks/useBikes";
 import { useModelsData } from "@/hooks/queryHooks/useModelsData";
 import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
