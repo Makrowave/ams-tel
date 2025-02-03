@@ -13,6 +13,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+        lazy: false,
         tabBarBackground: () => <ThemedView style={{ flex: 1 }} />,
         tabBarInactiveBackgroundColor: Colors[colorScheme ?? "light"].background,
         tabBarInactiveTintColor: Colors[colorScheme ?? "light"].tabIconDefault,
@@ -24,6 +25,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='menu'
         options={{
+          lazy: false,
           title: "Home",
           tabBarIcon: ({ color, focused }) => <TabBarIcon name={focused ? "home" : "home-outline"} color={color} />,
         }}
@@ -31,6 +33,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='search'
         options={{
+          lazy: false,
           title: "Rowery",
           tabBarIcon: ({ color, focused }) => <TabBarIcon name={focused ? "search" : "search-outline"} color={color} />,
         }}
@@ -38,6 +41,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='settings'
         options={{
+          lazy: true,
           title: "Ustawienia",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? "settings" : "settings-outline"} color={color} />

@@ -2,7 +2,6 @@ import { DarkTheme, DefaultTheme, NavigationContainer, ThemeProvider } from "@re
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import "react-native-reanimated";
-import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { ActionDataProvider } from "@/components/contexts/ActionDataContext";
 import { FilterContextProvider } from "@/components/contexts/FilterContext";
@@ -13,13 +12,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RefreshModelProvider } from "@/components/contexts/RefreshModelContext";
 import { ActionResultProvider } from "@/components/contexts/ActionResultContext";
 import InteractionResult from "@/components/InteractionResult";
-import { StatusBar } from "expo-status-bar";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 SplashScreen.setOptions({
   fade: true,
-  duration: 1000,
+  duration: 1500,
 });
 
 export default function RootLayout() {

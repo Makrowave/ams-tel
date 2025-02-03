@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SplashScreen } from "expo-router";
 import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
+import { SafeAreaView } from "react-native-safe-area-context";
 export default function Login() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -54,6 +55,7 @@ export default function Login() {
           .then(() => refreshUser())
           .then((response) => setIsTokenValid(!(response.data === "")))
           .then(() => enableQueries());
+        router.replace("/(tabs)/menu");
       })
       .catch((error) => {
         if (isAxiosError(error)) {
@@ -78,44 +80,46 @@ export default function Login() {
 
   return (
     <ThemedGestureHandlerRootView>
-      <ThemedView style={{ height: "100%" }}>
-        <View style={{ marginTop: "20%", marginHorizontal: "auto", paddingHorizontal: 20 }}>
-          {!(error === "") && (
-            <View style={styles.errorContainer}>
-              <Text style={styles.errorText}>{error}</Text>
-            </View>
-          )}
-          <ThemedView style={styles.inputWrapper}>
-            <ThemedText>Login</ThemedText>
-            <ThemedTextInput
-              style={styles.input}
-              value={username}
-              onChangeText={(text) => setUsername(text)}
-              textContentType='username'
-              autoComplete='username'
-              importantForAutofill='yes'
+      <SafeAreaView>
+        <ThemedView style={{ height: "100%", borderRadius: 20 }}>
+          <View style={{ marginTop: "20%", marginHorizontal: "auto", paddingHorizontal: 20 }}>
+            {!(error === "") && (
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{error}</Text>
+              </View>
+            )}
+            <ThemedView style={styles.inputWrapper}>
+              <ThemedText>Login</ThemedText>
+              <ThemedTextInput
+                style={styles.input}
+                value={username}
+                onChangeText={(text) => setUsername(text)}
+                textContentType='username'
+                autoComplete='username'
+                importantForAutofill='yes'
+              />
+            </ThemedView>
+            <ThemedView style={styles.inputWrapper}>
+              <ThemedText>Hasło</ThemedText>
+              <ThemedTextInput
+                secureTextEntry={true}
+                style={styles.input}
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+                textContentType='password'
+                autoComplete='password'
+                importantForAutofill='yes'
+              />
+            </ThemedView>
+            <ForwardedButton
+              style={{ borderWidth: 0.2, borderBottomWidth: 0.2 }}
+              type='single'
+              title={"Zaloguj się"}
+              onPress={() => handleLogin()}
             />
-          </ThemedView>
-          <ThemedView style={styles.inputWrapper}>
-            <ThemedText>Hasło</ThemedText>
-            <ThemedTextInput
-              secureTextEntry={true}
-              style={styles.input}
-              value={password}
-              onChangeText={(text) => setPassword(text)}
-              textContentType='password'
-              autoComplete='password'
-              importantForAutofill='yes'
-            />
-          </ThemedView>
-          <ForwardedButton
-            style={{ borderWidth: 0.2, borderBottomWidth: 0.2 }}
-            type='single'
-            title={"Zaloguj się"}
-            onPress={() => handleLogin()}
-          />
-        </View>
-      </ThemedView>
+          </View>
+        </ThemedView>
+      </SafeAreaView>
     </ThemedGestureHandlerRootView>
   );
 }
