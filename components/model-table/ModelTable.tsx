@@ -17,6 +17,7 @@ export default function ModelTable({ style, bindMode }: ViewProps & ModelTableBi
           data={modelData}
           renderItem={({ item }) => <ModelRecord model={item} bindMode={bindMode} />}
           keyExtractor={(model) => model.modelId.toString()}
+          showsVerticalScrollIndicator={false}
         />
       )}
     </ThemedView>
