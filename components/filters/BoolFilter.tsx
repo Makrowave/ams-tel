@@ -16,7 +16,7 @@ export default function BoolFilter({ title, value, updateKey }: BoolFilterProps)
         type='single'
         onPress={() => updateFilters(updateKey, !value)}
         title={title}
-        content={value ? "On" : "Off"}
+        content={value ? "Tak" : "Nie"}
         hasContent={true}
       />
     </ThemedView>

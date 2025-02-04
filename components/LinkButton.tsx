@@ -1,7 +1,7 @@
 import { Link, LinkProps } from "expo-router";
 import { ForwardedButton, LabelProps } from "./LabeledButton";
 
-export default function LinkButton({ href, replace, push, asChild, ...rest }: LabelProps & LinkProps<object | string>) {
+export default function LinkButton({ href, replace, push, asChild, ...rest }: LabelProps & LinkProps) {
   return (
     <Link href={href} push={push} asChild replace={replace}>
       <ForwardedButton {...rest}></ForwardedButton>

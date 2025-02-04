@@ -8,14 +8,25 @@ interface FilterContext {
   resetFilters: () => void;
 }
 
+export interface ColorFilter {
+  id: Number | "";
+  name: string;
+  color: string;
+}
+
+export interface StringFilter {
+  id: Number | "";
+  name: string;
+}
+
 export interface Filters {
   name: string;
-  manufacturer: Number | "";
+  manufacturer: StringFilter;
   size: Number | "";
   wheelSize: Number | "";
-  category: Number | "";
-  color: Number | "";
-  status: Number | "";
+  category: StringFilter;
+  color: ColorFilter;
+  status: StringFilter;
   minPrice: Number;
   maxPrice: Number;
   avaible: boolean;
@@ -24,7 +35,7 @@ export interface Filters {
   isWoman: boolean | "";
 }
 export type NumberKeys = {
-  [K in keyof Filters]: Filters[K] extends Number | "" ? K : never;
+  [K in keyof Filters]: Filters[K] extends boolean | (boolean | "") ? never : K;
 }[keyof Filters];
 
 export const FilterContext = createContext<FilterContext | undefined>(undefined);
@@ -32,16 +43,16 @@ export const FilterContext = createContext<FilterContext | undefined>(undefined)
 export function FilterContextProvider({ children }: ProviderNodeProps) {
   const defaultFilter = {
     name: "",
-    manufacturer: "",
+    manufacturer: { id: "", name: "Dowolny" },
     size: "",
     wheelSize: "",
-    category: "",
-    color: "",
+    category: { id: "", name: "Dowolny" },
+    color: { id: "", name: "Dowolny", color: "#ffffff" },
     minPrice: 0,
     maxPrice: 100000,
     avaible: true,
     isElectric: false,
-    status: "",
+    status: { id: "", name: "" },
     isKids: false,
     isWoman: "",
   };
@@ -49,18 +60,18 @@ export function FilterContextProvider({ children }: ProviderNodeProps) {
   const getQueryString = () => {
     return `?placeId=0
 &avaible=${filters.avaible}
-&manufacturerId=${filters.manufacturer}
+&manufacturerId=${filters.manufacturer.id}
 &wheelSize=${filters.wheelSize}
 &frameSize=${filters.size}
 &name=${filters.name.trim().toLowerCase()}
 &electric=${filters.isElectric}
-&statusId=${filters.status}
+&statusId=${filters.status.id}
 &isWoman=${filters.isWoman}
 &isKids=${filters.isKids}
 &minPrice=${filters.minPrice}
 &maxPrice=${filters.maxPrice}
-&colorId=${filters.color}
-&categoryId=${filters.category}`.replaceAll("\n", "");
+&colorId=${filters.color.id}
+&categoryId=${filters.category.id}`.replaceAll("\n", "");
   };
 
   const updateFilters = (key: keyof Filters, value: Filters[keyof Filters]) => {

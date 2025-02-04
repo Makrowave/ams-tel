@@ -1,6 +1,6 @@
 import { useFilter } from "@/hooks/contexts/useFilter";
 import SelectableForwardedButton, { Option } from "../RadioGroup";
-import { Filters, NumberKeys } from "../contexts/FilterContext";
+import { ColorFilter, NumberKeys, StringFilter } from "../contexts/FilterContext";
 import { ScrollView } from "react-native";
 
 interface SelectFilterProps {
@@ -12,7 +12,14 @@ interface SelectFilterProps {
 export default function SelectFilter({ updateKey, data, colored }: SelectFilterProps) {
   const { updateFilters, filters } = useFilter();
   const handleChange = (value: Number) => {
-    updateFilters(updateKey, value);
+    const record = data.find((option) => option.key === value)!;
+    let result;
+    if (colored) {
+      result = { id: record.key, name: record.value, color: record.color! };
+    } else {
+      result = { id: record.key, name: record.value };
+    }
+    updateFilters(updateKey, result);
   };
 
   return (
@@ -20,7 +27,7 @@ export default function SelectFilter({ updateKey, data, colored }: SelectFilterP
       <SelectableForwardedButton
         data={data}
         onSelect={handleChange}
-        selection={filters[updateKey]}
+        selection={(filters[updateKey] as StringFilter | ColorFilter).id}
         colored={colored}
         size='small'
       />

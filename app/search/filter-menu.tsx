@@ -34,8 +34,8 @@ export default function FilterMenu() {
           size='small'
           type='body'
           hasContent
-          content={filters.manufacturer.toString()}
-          key={`Manufacturer-${filters.manufacturer}`}
+          content={filters.manufacturer.name}
+          key={`Manufacturer-${filters.manufacturer.id}`}
         />
         <LinkButton
           href={{
@@ -48,8 +48,8 @@ export default function FilterMenu() {
           size='small'
           type='body'
           hasContent
-          content={filters.category.toString()}
-          key={`Category-${filters.category}`}
+          content={filters.category.name}
+          key={`Category-${filters.category.id}`}
         />
         <LinkButton
           href={{
@@ -62,8 +62,8 @@ export default function FilterMenu() {
           size='small'
           type='body'
           hasContent
-          content={filters.color.toString()}
-          key={`Color-${filters.color}`}
+          content={filters.color.name}
+          key={`Color-${filters.color.id}`}
         />
         <LinkButton
           href={{
@@ -119,7 +119,7 @@ export default function FilterMenu() {
           size='small'
           type='body'
           hasContent
-          content={filters.isElectric.toString()}
+          content={filters.isElectric ? "Tak" : "Nie"}
           key={`Electric-${filters.isElectric}`}
         />
         <LinkButton
@@ -133,7 +133,7 @@ export default function FilterMenu() {
           size='small'
           type='body'
           hasContent
-          content={filters.avaible.toString()}
+          content={filters.avaible ? "Tak" : "Nie"}
           key={`Avaible-${filters.avaible}`}
         />
         <LinkButton
@@ -147,7 +147,7 @@ export default function FilterMenu() {
           size='small'
           type='body'
           hasContent
-          content={filters.isKids.toString()}
+          content={filters.isKids ? "Tak" : "Nie"}
           key={`Kids-${filters.isKids}`}
         />
         <ForwardedButton key='Reset-button' title='Reset' type='footer' size='big' onPress={() => resetFilters()} />
