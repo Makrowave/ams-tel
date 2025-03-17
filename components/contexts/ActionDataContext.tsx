@@ -1,7 +1,6 @@
-import { ModelRecordData, ProviderNodeProps } from "@/constants/Types";
-import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
+import { ProviderNodeProps } from "@/constants/Types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createContext, ProviderProps, ReactNode, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 interface ActionDataContext {
   userLocationKey?: Number;
@@ -33,13 +32,15 @@ export function ActionDataProvider({ children }: ProviderNodeProps) {
   const [contextCode, setContextCode] = useState<string>("");
 
   useEffect(() => {
-    getDefaultUserLocation();
-    setUserLocationKey(defaultUserLocation);
+    getDefaultUserLocation().then(() => setUserLocationKey(defaultUserLocation));
+
   }, []);
 
   useEffect(() => {
-    setDefaultUserLocationInStorage(defaultUserLocation);
-    setUserLocationKey(defaultUserLocation);
+    setDefaultUserLocationInStorage(defaultUserLocation).then(
+      () => setUserLocationKey(defaultUserLocation)
+    )
+
   }, [defaultUserLocation]);
 
   async function getDefaultUserLocation() {
@@ -47,7 +48,7 @@ export function ActionDataProvider({ children }: ProviderNodeProps) {
       const value = await AsyncStorage.getItem("userLocation");
       let parsedValue = Number(value);
       if (value === null) {
-        setDefaultUserLocationInStorage(1);
+        await setDefaultUserLocationInStorage(1);
         parsedValue = 1;
       }
       setDefaultUserLocation(parsedValue);
@@ -58,7 +59,7 @@ export function ActionDataProvider({ children }: ProviderNodeProps) {
 
   async function setDefaultUserLocationInStorage(value: Number | undefined) {
     try {
-      AsyncStorage.setItem("userLocation", value!.toString());
+      await AsyncStorage.setItem("userLocation", value!.toString());
     } catch (e) {}
   }
 

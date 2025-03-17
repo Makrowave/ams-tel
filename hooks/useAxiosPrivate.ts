@@ -2,6 +2,7 @@ import { axiosPrivate } from "@/api/axios";
 import { useEffect } from "react";
 import useAuth from "./contexts/useAuth";
 import useRefreshUser from "./useRefreshUser";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //Code for including Authorization header in request
 //And resending requests when Access Token expires
@@ -10,7 +11,9 @@ export default function useAxiosPrivate() {
   const refresh = useRefreshUser();
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
-      (config) => {
+      async (config) => {
+        const apiUrl = await AsyncStorage.getItem("apiUrl") ?? ""
+        config.baseURL = apiUrl + "/api"
         if (!config.headers["Authorization"]) {
           config.headers["Authorization"] = `Bearer ${user.token}`;
         }

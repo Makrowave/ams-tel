@@ -3,7 +3,7 @@ import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
 import { useActionData } from "@/hooks/contexts/useActionData";
 import useAuth from "@/hooks/contexts/useAuth";
 import { Link, Stack, useRouter } from "expo-router";
-import { Alert, Button, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
 
@@ -38,6 +38,17 @@ export default function Settings() {
             type='header'
           />
         </Link>
+        <Link
+          asChild
+          href={"/server-url"}
+        >
+          <ForwardedButton
+            title='Adres aplikacji'
+            key={"server-url"}
+            hasChevron={true}
+            type='header'
+          />
+        </Link>
         <ForwardedButton
           title='Wyloguj'
           textColor='#FF0000'
@@ -52,7 +63,3 @@ export default function Settings() {
     </ThemedGestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  header: {},
-});

@@ -1,6 +1,5 @@
-import axios, { axiosPrivate } from "@/api/axios";
 import { ProviderNodeProps } from "@/constants/Types";
-import { createContext, ProviderProps, ReactNode, useState } from "react";
+import { createContext, useState } from "react";
 import * as Keychain from "react-native-keychain";
 
 interface AuthContext {

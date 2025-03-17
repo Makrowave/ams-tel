@@ -1,9 +1,7 @@
 import { ThemedView } from "../themed/ThemedView";
-import { ForwardedButton } from "../LabeledButton";
 import { Filters } from "../contexts/FilterContext";
 import { useFilter } from "@/hooks/contexts/useFilter";
-import { useEffect, useState } from "react";
-import { TextInput } from "react-native-gesture-handler";
+import { useState } from "react";
 import { useNavigation } from "expo-router";
 import { ThemedTextInput } from "../themed/ThemedTextInput";
 import { StyleSheet } from "react-native";
@@ -14,7 +12,7 @@ interface NumberFilterProps {
   defaultValue: Number | "";
   updateKey: keyof Filters;
 }
-export default function NumberFilter({ title, defaultValue, updateKey }: NumberFilterProps) {
+export default function NumberFilter({defaultValue, updateKey }: NumberFilterProps) {
   const [value, setValue] = useState<Number | "">(defaultValue);
   const { updateFilters } = useFilter();
   const navigation = useNavigation();

@@ -8,6 +8,7 @@ import { Link } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
+import ChevronLabeledButton from "@/components/buttons/ChevronSelectButton";
 
 export default function HomeScreen() {
   const { user } = useAuth();
@@ -78,6 +79,9 @@ export default function HomeScreen() {
               type='footer'
             />
           </Link>
+        </View>
+        <View>
+          <ChevronLabeledButton></ChevronLabeledButton>
         </View>
       </SafeAreaView>
     </ThemedGestureHandlerRootView>

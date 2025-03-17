@@ -1,4 +1,3 @@
-import axios from "@/api/axios";
 import { ForwardedButton } from "@/components/LabeledButton";
 import { ThemedText } from "@/components/themed/ThemedText";
 import { ThemedTextInput } from "@/components/themed/ThemedTextInput";
@@ -7,25 +6,29 @@ import { useEnableQueries } from "@/hooks/queryHooks/useEnableQueries";
 import useAuth from "@/hooks/contexts/useAuth";
 import useRefreshUser from "@/hooks/useRefreshUser";
 import { AxiosError, isAxiosError } from "axios";
-import { Redirect, useRouter } from "expo-router";
+import {Link, Redirect, useRouter} from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import { SplashScreen } from "expo-router";
 import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
 import { SafeAreaView } from "react-native-safe-area-context";
+import {Ionicons} from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import useAxios from "@/hooks/useAxios";
 export default function Login() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [isTokenValid, setIsTokenValid] = useState<boolean>(false);
   const refreshUser = useRefreshUser();
-  const { saveRefreshToken, user } = useAuth();
+  const { saveRefreshToken } = useAuth();
   const _loginUrl = "/MobileAuth/Login";
   const enableQueries = useEnableQueries();
 
   const router = useRouter();
-  // const shadowColor = useThemeColor({ light: lightColor, dark: darkColor }, "text");
+  const axios = useAxios();
   useEffect(() => {
+
     const refresh = async () => {
       const response = await refreshUser();
       if (response) {
@@ -34,7 +37,11 @@ export default function Login() {
       }
       SplashScreen.hideAsync();
     };
-    refresh();
+    const getUrl = async () => {
+      const url = AsyncStorage.getItem("apiUrl");
+      if(url === null) router.push("/server-url");
+    }
+    getUrl().then(refresh);
   }, []);
 
   const handleLogin = () => {
@@ -74,7 +81,7 @@ export default function Login() {
       });
   };
 
-  if (isTokenValid === true) {
+  if (isTokenValid) {
     return <Redirect href='/(tabs)/menu' />;
   }
 
@@ -82,7 +89,15 @@ export default function Login() {
     <ThemedGestureHandlerRootView>
       <SafeAreaView>
         <ThemedView style={{ height: "100%", borderRadius: 20 }}>
-          <View style={{ marginTop: "20%", marginHorizontal: "auto", paddingHorizontal: 20 }}>
+          <View style={{marginTop: 15, display: "flex", alignItems: "center", position: "relative"}}>
+            <ThemedText type="subtitle">Logowanie</ThemedText>
+            <Link href={"/server-url"} asChild>
+              <TouchableOpacity style={{position: "absolute", alignSelf: "flex-end", right: 20}}>
+                <Ionicons name="settings-sharp" size={30} color="#fff" />
+              </TouchableOpacity>
+            </Link>
+          </View>
+          <View style={{marginTop: 20, marginHorizontal: "auto", paddingHorizontal: 20 }}>
             {!(error === "") && (
               <View style={styles.errorContainer}>
                 <Text style={styles.errorText}>{error}</Text>

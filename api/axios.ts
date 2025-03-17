@@ -1,14 +1,10 @@
-import axios from "axios";
-import Constants from "expo-constants";
+import {default as AXIOS} from "axios";
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+export const axios = AXIOS.create({});
 
-export default axios.create({
-  baseURL: API_URL,
-});
-
-export const axiosPrivate = axios.create({
-  baseURL: API_URL,
+export const axiosPrivate = AXIOS.create({
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
+  timeout: 5000,
+  timeoutErrorMessage: "Nie udało się połączyć z serwerem"
 });

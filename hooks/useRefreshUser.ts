@@ -1,7 +1,8 @@
 import { decodeToken } from "react-jwt";
 import { AxiosError, isAxiosError } from "axios";
 import useAuth from "./contexts/useAuth";
-import axios from "@/api/axios";
+import useAxios from "@/hooks/useAxios";
+
 
 interface Token {
   name: string;
@@ -11,6 +12,7 @@ interface Token {
 export default function useRefreshUser() {
   const { setUser, getRefreshToken } = useAuth();
   const _refreshUrl = "/MobileAuth/Refresh";
+  const axios = useAxios()
   async function refreshUser() {
     try {
       const response = await axios.get(_refreshUrl, {
@@ -18,6 +20,8 @@ export default function useRefreshUser() {
           Authorization: `Bearer ${await getRefreshToken()}`,
         },
         withCredentials: true,
+        timeout: 5000,
+        timeoutErrorMessage: "Nie udało się połączyć z serwerem"
       });
       const decodedToken = decodeToken<Token>(response.data);
       //Token should always be in response
