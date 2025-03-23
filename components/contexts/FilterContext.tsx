@@ -1,7 +1,7 @@
-import { ProviderNodeProps } from "@/constants/Types";
-import { createContext, ProviderProps, ReactNode, useState } from "react";
+import {ProviderNodeProps} from "@/constants/Types";
+import {createContext, ProviderProps, ReactNode, useState} from "react";
 
-interface FilterContext {
+export interface FilterContext {
   filters: Filters;
   updateFilters: <K extends keyof Filters>(key: K, value: Filters[K]) => void;
   getQueryString: () => string;
@@ -23,45 +23,46 @@ export interface Filters {
   name: string;
   manufacturer: StringFilter;
   size: Number | "";
-  wheelSize: Number | "";
+  wheelSize: StringFilter;
   category: StringFilter;
   color: ColorFilter;
   status: StringFilter;
   minPrice: Number;
   maxPrice: Number;
-  avaible: boolean;
+  available: boolean;
   isElectric: boolean;
   isKids: boolean;
   isWoman: boolean | "";
 }
+
 export type NumberKeys = {
   [K in keyof Filters]: Filters[K] extends boolean | (boolean | "") ? never : K;
 }[keyof Filters];
 
 export const FilterContext = createContext<FilterContext | undefined>(undefined);
 
-export function FilterContextProvider({ children }: ProviderNodeProps) {
+export function FilterContextProvider({children}: ProviderNodeProps) {
   const defaultFilter = {
     name: "",
-    manufacturer: { id: "", name: "Dowolny" },
+    manufacturer: {id: "", name: "Dowolny"},
     size: "",
-    wheelSize: "",
-    category: { id: "", name: "Dowolny" },
-    color: { id: "", name: "Dowolny", color: "#ffffff" },
+    wheelSize: {id: "", name: ""},
+    category: {id: "", name: "Dowolny"},
+    color: {id: "", name: "Dowolny", color: "#ffffff"},
     minPrice: 0,
     maxPrice: 100000,
-    avaible: true,
+    available: true,
     isElectric: false,
-    status: { id: "", name: "" },
+    status: {id: "", name: ""},
     isKids: false,
     isWoman: "",
   };
   const [filters, setFilters] = useState<Filters>(defaultFilter as Filters);
   const getQueryString = () => {
     return `?placeId=0
-&avaible=${filters.avaible}
+&avaible=${filters.available}
 &manufacturerId=${filters.manufacturer.id}
-&wheelSize=${filters.wheelSize}
+&wheelSize=${filters.wheelSize.id}
 &frameSize=${filters.size}
 &name=${filters.name.trim().toLowerCase()}
 &electric=${filters.isElectric}
@@ -84,7 +85,7 @@ export function FilterContextProvider({ children }: ProviderNodeProps) {
     setFilters(defaultFilter as Filters);
   };
   return (
-    <FilterContext.Provider value={{ filters, updateFilters, getQueryString, resetFilters }}>
+    <FilterContext.Provider value={{filters, updateFilters, getQueryString, resetFilters}}>
       {children}
     </FilterContext.Provider>
   );

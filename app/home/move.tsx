@@ -1,36 +1,38 @@
 import showKeyboardAlert from "@/components/alert/KeyboardAlert";
-import { ForwardedButton } from "@/components/LabeledButton";
-import LinkButton from "@/components/LinkButton";
 import Scanner from "@/components/Scanner";
-import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
-import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
-import { ModelRecordData } from "@/constants/Types";
-import { Places, Statuses } from "@/constants/UtilEnums";
-import { useActionData } from "@/hooks/contexts/useActionData";
-import { useActionResult } from "@/hooks/contexts/useActionResult";
-import { useRefreshModel } from "@/hooks/contexts/useRefreshModel";
-import { useBikes } from "@/hooks/queryHooks/useBikes";
-import { useModelsData } from "@/hooks/queryHooks/useModelsData";
-import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
-import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
+import {ThemedGestureHandlerRootView} from "@/components/themed/ThemedGestureHandlerRootView";
+import {ModelsQuery, QuerySrc} from "@/constants/QuerySrc";
+import {ModelRecordData} from "@/constants/Types";
+import {Places, Statuses} from "@/constants/UtilEnums";
+import {useActionData} from "@/hooks/contexts/useActionData";
+import {useActionResult} from "@/hooks/contexts/useActionResult";
+import {useRefreshModel} from "@/hooks/contexts/useRefreshModel";
+import {useBikes} from "@/hooks/queryHooks/useBikes";
+import {useModelsData} from "@/hooks/queryHooks/useModelsData";
+import {usePlacesData} from "@/hooks/queryHooks/usePlacesData";
+import {useStatusesData} from "@/hooks/queryHooks/useStatusesData";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
-import { AxiosError } from "axios";
-import { Link, Stack, useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
-import { Button, View, StyleSheet, Vibration } from "react-native";
+import {AxiosError} from "axios";
+import {Link, Stack, useRouter} from "expo-router";
+import {useEffect, useRef, useState} from "react";
+import {Button, View, StyleSheet, Vibration, TouchableOpacity, ScrollView} from "react-native";
+import ActionHeader from "@/components/navigation/ActionsHeader";
+import {ThemedView} from "@/components/themed/ThemedView";
+import {ThemedText} from "@/components/themed/ThemedText";
+import {ContentHolderButton, ContentNavButton} from "@/components/buttons/ContentHolderButton";
 
 export default function Move() {
   const router = useRouter();
   const axiosPrivate = useAxiosPrivate();
   const [code, setCode] = useState("");
   const [model, setModel] = useState<ModelRecordData | undefined>(undefined);
-  const { setContextCode, userLocationKey, actionLocationKey, statusKey, initializeValues } = useActionData();
-  const { placeData, placeIsPending, placeIsError, placeFindByKey } = usePlacesData();
-  const { statusData, statusIsPending, statusIsError, statusFindNameByKey: statusFindByKey } = useStatusesData();
-  const { modelFindByEan } = useModelsData(ModelsQuery.all);
-  const { selectFirstMatch, bikeRefetch } = useBikes(model?.modelId ?? 0);
+  const {setContextCode, userLocationKey, actionLocationKey, statusKey, initializeValues} = useActionData();
+  const {placeData, placeIsPending, placeIsError, placeFindByKey} = usePlacesData();
+  const {statusData, statusIsPending, statusIsError, statusFindNameByKey: statusFindByKey} = useStatusesData();
+  const {modelFindByEan} = useModelsData(ModelsQuery.all);
+  const {selectFirstMatch, bikeRefetch} = useBikes(model?.modelId ?? 0);
   const updateable = useRef<boolean>(true);
-  const { setFailure, setSuccess } = useActionResult();
+  const {setFailure, setSuccess} = useActionResult();
 
   const [isCodeBound, setIsCodeBound] = useState<boolean>();
 
@@ -58,7 +60,7 @@ export default function Move() {
     else setIsCodeBound(true);
   };
 
-  const { refreshModel, setRefreshModel } = useRefreshModel();
+  const {refreshModel, setRefreshModel} = useRefreshModel();
 
   const refreshOnBind = () => {
     if (refreshModel) {
@@ -87,7 +89,7 @@ export default function Move() {
     const bikeId = selectFirstMatch(actionLocationKey, statusKey);
     try {
       if (bikeId === undefined) {
-        console.log("No bike found - implement error handling");
+        setFailure("Nie znaleziono roweru");
         return;
       }
       const result = await axiosPrivate.put(
@@ -107,90 +109,69 @@ export default function Move() {
   };
   return (
     <ThemedGestureHandlerRootView>
-      <Stack.Screen
-        options={{
-          title: "Przenieś rower",
-          headerBackTitle: "Wróć",
-          headerRight: () => (
-            <Link
-              href={{
-                pathname: "/home/search",
-              }}
-              asChild
-            >
-              <Button
-                title='Przypisz'
-                disabled={isCodeBound === undefined ? true : isCodeBound}
-                onPress={() => setContextCode(code)}
-              />
-            </Link>
-          ),
-          headerLeft: () => (
-            <Button
-              title='Wróć'
-              onPress={() => {
-                router.back();
-              }}
-            />
-          ),
-        }}
-      />
-      <Scanner onBarcodeScanned={handleScan} />
+      <ActionHeader title="Przenieś rower" code={code} isCodeBound={isCodeBound}/>
+      <Scanner onBarcodeScanned={handleScan}/>
       <View style={styles.wrapper}>
-        <ForwardedButton
-          style={styles.button}
-          type='header'
-          title='Rower:'
-          hasContent
-          content={model?.modelName}
-          key={"Model-" + model?.modelId}
-          disabled
-        />
-        <ForwardedButton
-          style={styles.button}
-          title='Kod:'
-          hasContent
-          content={code}
-          key={code}
-          onPress={() => showKeyboardAlert("Kod", changeCodeAndModel)}
-        />
-        <LinkButton
-          href={{
-            pathname: "/home/select-screen",
-            params: { datastring: JSON.stringify(placeData), selection: "actionLocation" },
-          }}
-          style={styles.button}
-          title='Z:'
-          hasContent
-          content={placeFindByKey(actionLocationKey)}
-          key={`Place-${actionLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
-          hasChevron
-        />
-        <LinkButton
-          href={{
-            pathname: "/home/select-screen",
-            params: { datastring: JSON.stringify(placeData), selection: "userLocation" },
-          }}
-          style={styles.button}
-          title='Do:'
-          hasContent
-          content={placeFindByKey(userLocationKey)}
-          key={`Place-${userLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
-          hasChevron
-        />
-        <LinkButton
-          href={{
-            pathname: "/home/select-screen",
-            params: { datastring: JSON.stringify(statusData), selection: "status" },
-          }}
-          style={styles.button}
-          title='Status:'
-          hasContent
-          content={statusFindByKey(statusKey)}
-          key={`Status-${statusKey?.toString()}-${statusIsPending}-${statusIsError}`}
-          hasChevron
-        />
-        <ForwardedButton style={styles.button} type='footer' title='Przenieś' onPress={() => handleMove()} />
+        <ThemedView style={{borderBottomRightRadius: 20, borderBottomLeftRadius: 20}}>
+          <ScrollView>
+            <ContentHolderButton
+              icon='bicycle'
+              title='Rower'
+              content={model?.modelName ?? ""}
+              placeholder={"Tu pojawi się rower"}
+              disabled
+            />
+            <ContentHolderButton
+              icon='barcode'
+              style={styles.button}
+              title='Kod'
+              content={code}
+              onPress={() => showKeyboardAlert("Kod", changeCodeAndModel)}
+              placeholder={"Kod"}
+              hasChevron
+            />
+            <ContentNavButton
+              href={{
+                pathname: "/home/select-screen",
+                params: {datastring: JSON.stringify(placeData), selection: "actionLocation"},
+              }}
+              icon='right-from-bracket'
+              style={styles.button}
+              title='Z'
+              content={placeFindByKey(actionLocationKey)}
+              hasChevron
+            />
+            <ContentNavButton
+              href={{
+                pathname: "/home/select-screen",
+                params: {datastring: JSON.stringify(placeData), selection: "userLocation"},
+              }}
+              icon='right-to-bracket'
+              style={styles.button}
+              title='Do'
+              content={placeFindByKey(userLocationKey)}
+              hasChevron
+            />
+            <ContentNavButton
+              href={{
+                pathname: "/home/select-screen",
+                params: {datastring: JSON.stringify(statusData), selection: "status"},
+              }}
+              icon='circle-info'
+              style={styles.button}
+              title='Status'
+              content={statusFindByKey(statusKey)}
+              hasChevron
+            />
+            <TouchableOpacity onPress={() => handleMove()}>
+              <ThemedView style={[styles.button, styles.confirmButton]}>
+                <ThemedText style={{fontSize: 18}}>
+                  Przenieś
+                </ThemedText>
+              </ThemedView>
+            </TouchableOpacity>
+          </ScrollView>
+        </ThemedView>
       </View>
     </ThemedGestureHandlerRootView>
   );
@@ -198,11 +179,16 @@ export default function Move() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
-    marginHorizontal: "2%",
-    marginTop: 10,
+    flex: 2,
   },
   button: {
-    height: 60,
+    borderTopWidth: 1,
   },
+  confirmButton: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 70,
+    backgroundColor: "transparent",
+  }
 });

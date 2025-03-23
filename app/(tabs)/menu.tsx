@@ -1,88 +1,50 @@
-import { ForwardedButton } from "@/components/LabeledButton";
-import { ThemedText } from "@/components/themed/ThemedText";
-import { ThemedView } from "@/components/themed/ThemedView";
-import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
-import { useActionData } from "@/hooks/contexts/useActionData";
+import {ThemedText} from "@/components/themed/ThemedText";
+import {ThemedView} from "@/components/themed/ThemedView";
+import {usePlacesData} from "@/hooks/queryHooks/usePlacesData";
+import {useActionData} from "@/hooks/contexts/useActionData";
 import useAuth from "@/hooks/contexts/useAuth";
-import { Link } from "expo-router";
-import { StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
-import ChevronLabeledButton from "@/components/buttons/ChevronSelectButton";
+import {Href, Link} from "expo-router";
+import {StyleSheet, View} from "react-native";
+import {SafeAreaView} from "react-native-safe-area-context";
+import {ThemedGestureHandlerRootView} from "@/components/themed/ThemedGestureHandlerRootView";
+import BigIconNavigationButton, {BigIconNavigationButtonProps} from "@/components/buttons/BigIconNavigationButton";
+import {ThemedFontAwesome6} from "@/components/themed/ThemedIonicons";
 
 export default function HomeScreen() {
-  const { user } = useAuth();
-  const { defaultUserLocation } = useActionData();
-  const { placeFindByKey } = usePlacesData();
+  const {user} = useAuth();
+  const {defaultUserLocation} = useActionData();
+  const {placeFindByKey} = usePlacesData();
 
   return (
-    <ThemedGestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaView style={{ flex: 1 }}>
-        <View>
-          <ThemedView style={styles.header}>
-            <View style={styles.textContainer}>
-              <ThemedText type='subtitle' style={styles.text}>
-                Zalogowano:
-              </ThemedText>
-              <ThemedText type='subtitle'>{user.username}</ThemedText>
-            </View>
-            <View style={styles.textContainer}>
-              <ThemedText type='subtitle' style={styles.text}>
-                Sklep
-              </ThemedText>
-              <ThemedText type='subtitle'>{placeFindByKey(defaultUserLocation)}</ThemedText>
-            </View>
-          </ThemedView>
-          <Link push href='/home/move' asChild>
-            <ForwardedButton
-              title='Przenieś rower'
-              source={require("@/assets/images/move.png")}
-              hasIcon={true}
-              iconColor={colors.get("move")}
-              hasChevron={true}
-            />
-          </Link>
-          <Link push href='/home/assemble' asChild>
-            <ForwardedButton
-              title='Złóż rower'
-              source={require("@/assets/images/unpack.png")}
-              hasIcon={true}
-              iconColor={colors.get("assemble")}
-              hasChevron={true}
-            />
-          </Link>
-          <Link push href='/home/sell' asChild>
-            <ForwardedButton
-              title='Sprzedaj rower'
-              source={require("@/assets/images/sell.png")}
-              hasIcon={true}
-              iconColor={colors.get("sell")}
-              hasChevron={true}
-            />
-          </Link>
-          <Link push href='/home/add' asChild>
-            <ForwardedButton
-              title='Dodaj rower'
-              source={require("@/assets/images/plus.png")}
-              hasIcon={true}
-              iconColor={colors.get("add")}
-              hasChevron={true}
-            />
-          </Link>
-          <Link push href='/home/delivery' asChild>
-            <ForwardedButton
-              title='Dostawa'
-              source={require("@/assets/images/delivery.png")}
-              hasIcon={true}
-              iconColor={colors.get("delivery")}
-              hasChevron={true}
-              type='footer'
-            />
-          </Link>
-        </View>
-        <View>
-          <ChevronLabeledButton></ChevronLabeledButton>
-        </View>
+    <ThemedGestureHandlerRootView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1}}>
+        <ThemedView style={{borderRadius: 15, paddingHorizontal: 10, paddingTop: 20, paddingBottom: 10}}>
+          <ThemedText type={'title'}>
+            Strona główna
+          </ThemedText>
+          <View style={styles.textContainer}>
+            <ThemedFontAwesome6 name="circle-user" size={30} style={{marginRight: 10}}/>
+            <ThemedText type='subtitle'>
+              {user.username}
+            </ThemedText>
+          </View>
+          <View style={styles.textContainer}>
+            <ThemedFontAwesome6 name="shop" size={25} style={{marginRight: 10}}/>
+            <ThemedText type='subtitle'>
+              {placeFindByKey(defaultUserLocation)}
+            </ThemedText>
+          </View>
+          {
+            navItems.map((item) => (
+              <Link push href={item.href} asChild>
+                <BigIconNavigationButton
+                  style={{borderTopWidth: 1, backgroundColor: "transparent"}}
+                  {...item.buttonProps}
+                />
+              </Link>
+            ))
+          }
+        </ThemedView>
       </SafeAreaView>
     </ThemedGestureHandlerRootView>
   );
@@ -101,10 +63,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   textContainer: {
-    paddingHorizontal: "4%",
+    marginVertical: 10,
     height: "auto",
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "center",
   },
 });
 
@@ -115,3 +77,44 @@ const colors = new Map<string, string>([
   ["sell", "#32cd32"],
   ["move", "#ff5c00"],
 ]);
+
+interface NavItem {
+  buttonProps: BigIconNavigationButtonProps,
+  href: Href
+}
+
+const navItems: NavItem[] = [
+  {
+    buttonProps: {
+      icon: "bicycle", // Assuming this exists in FontAwesome6.glyphMap
+      text: "Przenieś rower",
+      color: colors.get("move")!,
+    },
+    href: "/home/move",
+  },
+  {
+    buttonProps: {
+      icon: "box-open", // Replace with the correct icon name
+      text: "Złóż rower",
+      color: colors.get("assemble")!,
+    },
+    href: "/home/assemble",
+  },
+  {
+    buttonProps: {
+      icon: "dollar-sign", // Replace with the correct icon name
+      text: "Sprzedaj rower",
+      color: colors.get("sell")!,
+    },
+    href: "/home/sell",
+  },
+  {
+    buttonProps: {
+      icon: "plus", // Assuming "plus" exists in FontAwesome6.glyphMap
+      text: "Dodaj rower",
+      color: colors.get("add")!,
+    },
+    href: "/home/add",
+  },
+
+];

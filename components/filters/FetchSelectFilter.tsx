@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { Filters, NumberKeys } from "../contexts/FilterContext";
+import {useQuery} from "@tanstack/react-query";
+import {Filters, NumberKeys} from "../contexts/FilterContext";
 import SelectFilter from "./SelectFilter";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
-import { ActivityIndicator, Text, View } from "react-native";
-import { Option } from "../RadioGroup";
+import {ActivityIndicator, Text, View} from "react-native";
+import {Option} from "../RadioGroup";
 
 interface FetchSelectFilterProps {
   url: string;
@@ -12,14 +12,9 @@ interface FetchSelectFilterProps {
   colored?: boolean;
 }
 
-export default function FetchSelectFilter({ url, queryKey, updateKey, colored = false }: FetchSelectFilterProps) {
-  const data1 = [
-    { key: 1, value: "Gaming", color: "#ff0000" },
-    { key: 2, value: "Gaming2", color: "#00ff00" },
-    { key: 3, value: "Gaming3", color: "#0000ff" },
-  ];
+export default function FetchSelectFilter({url, queryKey, updateKey, colored = false}: FetchSelectFilterProps) {
   const axiosPrivate = useAxiosPrivate();
-  const { data, isLoading, isError } = useQuery({
+  const {data, isLoading, isError} = useQuery({
     queryKey: [queryKey],
     queryFn: async (): Promise<Array<Option>> => {
       const result = await axiosPrivate.get(url);
@@ -34,18 +29,17 @@ export default function FetchSelectFilter({ url, queryKey, updateKey, colored = 
         };
         return obj;
       });
-
-      return [{ key: "", value: "Dowolny", color: "#ffffff" }, ...mappedResult];
+      return [{key: "", value: "Dowolny", color: "#ffffff"}, ...mappedResult];
     },
   });
   if (isError)
     return (
-      <View style={{ height: 60, backgroundColor: "#dd0000" }}>
+      <View style={{height: 60, backgroundColor: "#dd0000"}}>
         <Text>Błąd</Text>
       </View>
     );
   if (isLoading) {
-    return <ActivityIndicator />;
+    return <ActivityIndicator/>;
   }
-  return <SelectFilter data={data ?? []} colored={colored} updateKey={updateKey} />;
+  return <SelectFilter data={data ?? []} colored={colored} updateKey={updateKey}/>;
 }

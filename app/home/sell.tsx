@@ -1,23 +1,25 @@
 import showKeyboardAlert from "@/components/alert/KeyboardAlert";
-import { ForwardedButton } from "@/components/LabeledButton";
-import LinkButton from "@/components/LinkButton";
 import Scanner from "@/components/Scanner";
-import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
-import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
-import { ModelRecordData } from "@/constants/Types";
-import { Statuses } from "@/constants/UtilEnums";
-import { useActionData } from "@/hooks/contexts/useActionData";
-import { useActionResult } from "@/hooks/contexts/useActionResult";
-import { useRefreshModel } from "@/hooks/contexts/useRefreshModel";
-import { useBikes } from "@/hooks/queryHooks/useBikes";
-import { useModelsData } from "@/hooks/queryHooks/useModelsData";
-import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
-import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
+import {ThemedGestureHandlerRootView} from "@/components/themed/ThemedGestureHandlerRootView";
+import {ModelsQuery, QuerySrc} from "@/constants/QuerySrc";
+import {ModelRecordData} from "@/constants/Types";
+import {Statuses} from "@/constants/UtilEnums";
+import {useActionData} from "@/hooks/contexts/useActionData";
+import {useActionResult} from "@/hooks/contexts/useActionResult";
+import {useRefreshModel} from "@/hooks/contexts/useRefreshModel";
+import {useBikes} from "@/hooks/queryHooks/useBikes";
+import {useModelsData} from "@/hooks/queryHooks/useModelsData";
+import {usePlacesData} from "@/hooks/queryHooks/usePlacesData";
+import {useStatusesData} from "@/hooks/queryHooks/useStatusesData";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
-import { AxiosError } from "axios";
-import { Link, Stack, useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
-import { Button, View, StyleSheet, Alert, Vibration } from "react-native";
+import {AxiosError} from "axios";
+import {Link, Stack, useRouter} from "expo-router";
+import {useEffect, useRef, useState} from "react";
+import {Button, View, StyleSheet, Alert, Vibration, TouchableOpacity, ScrollView} from "react-native";
+import ActionHeader from "@/components/navigation/ActionsHeader";
+import {ThemedView} from "@/components/themed/ThemedView";
+import {ThemedText} from "@/components/themed/ThemedText";
+import {ContentHolderButton, ContentNavButton} from "@/components/buttons/ContentHolderButton";
 
 export default function Sell() {
   const router = useRouter();
@@ -25,13 +27,13 @@ export default function Sell() {
   const [code, setCode] = useState("");
   const [price, setPrice] = useState<string>("");
   const [model, setModel] = useState<ModelRecordData | undefined>(undefined);
-  const { setContextCode, userLocationKey, statusKey, initializeValues } = useActionData();
-  const { placeData, placeIsPending, placeIsError, placeFindByKey } = usePlacesData();
-  const { statusData, statusIsPending, statusIsError, statusFindNameByKey: statusFindByKey } = useStatusesData();
-  const { modelFindByEan, modelRefetch } = useModelsData(ModelsQuery.all);
-  const { selectFirstMatch, bikeRefetch } = useBikes(model?.modelId ?? 0);
+  const {setContextCode, userLocationKey, statusKey, initializeValues} = useActionData();
+  const {placeData, placeIsPending, placeIsError, placeFindByKey} = usePlacesData();
+  const {statusData, statusIsPending, statusIsError, statusFindNameByKey: statusFindByKey} = useStatusesData();
+  const {modelFindByEan, modelRefetch} = useModelsData(ModelsQuery.all);
+  const {selectFirstMatch, bikeRefetch} = useBikes(model?.modelId ?? 0);
   const updateable = useRef<boolean>(true);
-  const { setFailure, setSuccess } = useActionResult();
+  const {setFailure, setSuccess} = useActionResult();
   const [isCodeBound, setIsCodeBound] = useState<boolean | undefined>();
 
   useEffect(() => {
@@ -63,7 +65,7 @@ export default function Sell() {
     setPrice(foundModel?.price.toString() ?? "");
   };
 
-  const { refreshModel, setRefreshModel } = useRefreshModel();
+  const {refreshModel, setRefreshModel} = useRefreshModel();
 
   const refreshOnBind = () => {
     if (refreshModel) {
@@ -113,90 +115,67 @@ export default function Sell() {
 
   return (
     <ThemedGestureHandlerRootView>
-      <Stack.Screen
-        options={{
-          title: "Sprzedaj rower",
-          headerBackTitle: "Wróć",
-          headerRight: () => (
-            //Forward ref error, although it works
-            <Link
-              href={{
-                pathname: "/home/search",
-                params: { ean: code },
-              }}
-              asChild
-            >
-              <Button
-                title='Przypisz'
-                disabled={isCodeBound === undefined ? true : isCodeBound}
-                onPress={() => setContextCode(code)}
-              />
-            </Link>
-          ),
-          headerLeft: () => (
-            <Button
-              title='Wróć'
-              onPress={() => {
-                router.back();
-              }}
-            />
-          ),
-        }}
-      />
-      <Scanner onBarcodeScanned={handleScan} />
+      <ActionHeader title="Sprzedaj rower" code={code} isCodeBound={isCodeBound}/>
+      <Scanner onBarcodeScanned={handleScan}/>
       <View style={styles.wrapper}>
-        <ForwardedButton
-          style={styles.button}
-          type='header'
-          title='Rower:'
-          hasContent
-          content={model?.modelName}
-          key={"Model-" + model?.modelId}
-          disabled
-        />
-        <ForwardedButton
-          style={styles.button}
-          title='Kod:'
-          hasContent
-          content={code}
-          key={code}
-          hasChevron
-          onPress={() => showKeyboardAlert("Kod", changeCodeAndModel)}
-        />
-        <LinkButton
-          href={{
-            pathname: "/home/select-screen",
-            params: { datastring: JSON.stringify(placeData), selection: "userLocation" },
-          }}
-          style={styles.button}
-          title='Miejsce:'
-          hasContent
-          content={placeFindByKey(userLocationKey)}
-          key={`Place-${userLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
-          hasChevron
-        />
-        <LinkButton
-          href={{
-            pathname: "/home/select-screen",
-            params: { datastring: JSON.stringify(statusData), selection: "status" },
-          }}
-          style={styles.button}
-          title='Status:'
-          hasContent
-          content={statusFindByKey(statusKey)}
-          key={`Status-${statusKey?.toString()}-${statusIsPending}-${statusIsError}`}
-          hasChevron
-        />
-        <ForwardedButton
-          style={styles.button}
-          title='Cena:'
-          hasContent
-          content={price}
-          key={"Price-" + price}
-          onPress={() => showKeyboardAlert("Cena", setPrice, "numeric")}
-          hasChevron
-        />
-        <ForwardedButton style={styles.button} type='footer' title='Sprzedaj' onPress={() => handleSell()} />
+        <ThemedView style={{borderBottomRightRadius: 20, borderBottomLeftRadius: 20}}>
+          <ScrollView>
+            <ContentHolderButton
+              icon='bicycle'
+              title='Rower'
+              content={model?.modelName ?? ""}
+              placeholder={"Tu pojawi się rower"}
+              disabled
+            />
+            <ContentHolderButton
+              icon='barcode'
+              style={styles.button}
+              title='Kod'
+              content={code}
+              onPress={() => showKeyboardAlert("Kod", changeCodeAndModel)}
+              placeholder={"Kod"}
+              hasChevron
+            />
+            <ContentNavButton
+              href={{
+                pathname: "/home/select-screen",
+                params: {datastring: JSON.stringify(placeData), selection: "userLocation"},
+              }}
+              icon='shop'
+              style={styles.button}
+              title='Miejsce'
+              content={placeFindByKey(userLocationKey)}
+              hasChevron
+            />
+            <ContentNavButton
+              href={{
+                pathname: "/home/select-screen",
+                params: {datastring: JSON.stringify(statusData), selection: "status"},
+              }}
+              icon='circle-info'
+              style={styles.button}
+              title='Status'
+              content={statusFindByKey(statusKey)}
+              hasChevron
+            />
+            <ContentHolderButton
+              icon='money-bill'
+              style={styles.button}
+              title='Cena'
+              content={price}
+              onPress={() => showKeyboardAlert("Cena", setPrice, "numeric")}
+              placeholder={"Cena"}
+              hasChevron
+            />
+            <TouchableOpacity onPress={() => handleSell()}>
+              <ThemedView style={[styles.button, styles.confirmButton]}>
+                <ThemedText style={{fontSize: 18}}>
+                  Sprzedaj
+                </ThemedText>
+              </ThemedView>
+            </TouchableOpacity>
+          </ScrollView>
+        </ThemedView>
       </View>
     </ThemedGestureHandlerRootView>
   );
@@ -204,11 +183,16 @@ export default function Sell() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
-    marginHorizontal: "2%",
-    marginTop: 10,
+    flex: 2,
   },
   button: {
-    height: 60,
+    borderTopWidth: 1,
   },
+  confirmButton: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 70,
+    backgroundColor: "transparent",
+  }
 });

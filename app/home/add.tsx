@@ -1,38 +1,40 @@
-import { Button, StyleSheet, View } from "react-native";
-import { useEffect, useRef, useState } from "react";
+import {ScrollView, StyleSheet, TouchableOpacity, View} from "react-native";
+import {useEffect, useRef, useState} from "react";
 import Scanner from "@/components/Scanner";
-import { Link, Stack, useRouter } from "expo-router";
-import { ForwardedButton } from "@/components/LabeledButton";
-import { usePlacesData } from "@/hooks/queryHooks/usePlacesData";
-import { useStatusesData } from "@/hooks/queryHooks/useStatusesData";
-import { useModelsData } from "@/hooks/queryHooks/useModelsData";
-import { ModelsQuery, QuerySrc } from "@/constants/QuerySrc";
-import { Places, Statuses } from "@/constants/UtilEnums";
-import { ModelRecordData } from "@/constants/Types";
-import { axiosPrivate } from "@/api/axios";
-import { Vibration } from "react-native";
+import {useRouter} from "expo-router";
+import {usePlacesData} from "@/hooks/queryHooks/usePlacesData";
+import {useStatusesData} from "@/hooks/queryHooks/useStatusesData";
+import {useModelsData} from "@/hooks/queryHooks/useModelsData";
+import {ModelsQuery, QuerySrc} from "@/constants/QuerySrc";
+import {Places, Statuses} from "@/constants/UtilEnums";
+import {ModelRecordData} from "@/constants/Types";
+import {axiosPrivate} from "@/api/axios";
+import {Vibration} from "react-native";
 import showKeyboardAlert from "@/components/alert/KeyboardAlert";
-import LinkButton from "@/components/LinkButton";
-import { useRefreshModel } from "@/hooks/contexts/useRefreshModel";
-import { useActionData } from "@/hooks/contexts/useActionData";
-import { useActionResult } from "@/hooks/contexts/useActionResult";
-import { AxiosError } from "axios";
-import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
+import {useRefreshModel} from "@/hooks/contexts/useRefreshModel";
+import {useActionData} from "@/hooks/contexts/useActionData";
+import {useActionResult} from "@/hooks/contexts/useActionResult";
+import {AxiosError} from "axios";
+import {ThemedGestureHandlerRootView} from "@/components/themed/ThemedGestureHandlerRootView";
+import ActionHeader from "@/components/navigation/ActionsHeader";
+import {ContentHolderButton, ContentNavButton} from "@/components/buttons/ContentHolderButton";
+import {ThemedText} from "@/components/themed/ThemedText";
+import {ThemedView} from "@/components/themed/ThemedView";
 
 export default function Add() {
-  const { setContextCode, userLocationKey, statusKey, initializeValues } = useActionData();
+  const {userLocationKey, statusKey, initializeValues} = useActionData();
   const router = useRouter();
   const [code, setCode] = useState<string>("");
   const [model, setModel] = useState<ModelRecordData | undefined>(undefined);
-  const { placeData, placeIsPending, placeIsError, placeFindByKey } = usePlacesData();
-  const { setFailure, setSuccess } = useActionResult();
+  const {placeData, placeIsPending, placeIsError, placeFindByKey} = usePlacesData();
+  const {setFailure, setSuccess} = useActionResult();
   const {
     statusData,
     statusIsPending,
     statusIsError,
     statusFindNameByKey: statusFindByKey,
   } = useStatusesData([Statuses.sold]);
-  const { modelFindByEan, modelRefetch } = useModelsData(ModelsQuery.all);
+  const {modelFindByEan, modelRefetch} = useModelsData(ModelsQuery.all);
   const updateable = useRef<boolean>(true);
 
   const [isCodeBound, setIsCodeBound] = useState<boolean>();
@@ -41,7 +43,7 @@ export default function Add() {
     initializeValues(Statuses.unAssembled, Places.storage1);
   }, []);
 
-  const { refreshModel, setRefreshModel } = useRefreshModel();
+  const {refreshModel, setRefreshModel} = useRefreshModel();
 
   const refreshOnBind = () => {
     if (refreshModel) {
@@ -107,91 +109,75 @@ export default function Add() {
 
   return (
     <ThemedGestureHandlerRootView>
-      <Stack.Screen
-        options={{
-          title: "Dodaj rower",
-          headerBackTitle: "Wróć",
-          headerRight: () => (
-            <Link
-              href={{
-                pathname: "/home/search",
-                params: { ean: code },
-              }}
-              asChild
-            >
-              <Button
-                title='Przypisz'
-                disabled={isCodeBound === undefined ? true : isCodeBound}
-                onPress={() => setContextCode(code)}
-              />
-            </Link>
-          ),
-          headerLeft: () => (
-            <Button
-              title='Wróć'
-              onPress={() => {
-                router.back();
-              }}
-            />
-          ),
-        }}
-      />
-      <Scanner onBarcodeScanned={handleScan} />
+      <ActionHeader title="Dodaj rower" code={code} isCodeBound={isCodeBound}/>
+      <Scanner onBarcodeScanned={handleScan} style={{flex: 1}}/>
       <View style={styles.wrapper}>
-        <ForwardedButton
-          style={styles.button}
-          title='Rower:'
-          hasContent
-          content={model?.modelName}
-          key={"ModelKey-" + model?.modelId}
-          type='header'
-          disabled
-        />
-        <ForwardedButton
-          style={styles.button}
-          title='Kod:'
-          hasContent
-          content={code}
-          key={code}
-          hasChevron
-          onPress={() => showKeyboardAlert("Kod", changeCodeAndModel)}
-        />
-        <LinkButton
-          href={{
-            pathname: "/home/select-screen",
-            params: { datastring: JSON.stringify(placeData), selection: "userLocation" },
-          }}
-          style={styles.button}
-          title='Miejsce:'
-          hasContent
-          content={placeFindByKey(userLocationKey)}
-          key={`Place-${userLocationKey?.toString()}-${placeIsError}-${placeIsPending}`}
-          hasChevron
-        />
-        <LinkButton
-          href={{
-            pathname: "/home/select-screen",
-            params: { datastring: JSON.stringify(statusData), selection: "status" },
-          }}
-          style={styles.button}
-          title='Status:'
-          hasContent
-          content={statusFindByKey(statusKey)}
-          key={`Status-${statusKey?.toString()}-${statusIsPending}-${statusIsError}`}
-          hasChevron
-        />
-        <ForwardedButton style={styles.button} type='footer' title='Dodaj' onPress={() => handleAdd()} />
+        <ThemedView style={{borderBottomRightRadius: 20, borderBottomLeftRadius: 20}}>
+          <ScrollView>
+            <ContentHolderButton
+              icon='bicycle'
+              title='Rower'
+              content={model?.modelName ?? ""}
+              placeholder={"Tu pojawi się rower"}
+              disabled
+            />
+            <ContentHolderButton
+              icon='barcode'
+              style={styles.button}
+              title='Kod'
+              content={code}
+              onPress={() => showKeyboardAlert("Kod", changeCodeAndModel)}
+              placeholder={"Kod"}
+              hasChevron
+            />
+            <ContentNavButton
+              href={{
+                pathname: "/home/select-screen",
+                params: {datastring: JSON.stringify(placeData), selection: "userLocation"},
+              }}
+              icon='shop'
+              style={styles.button}
+              title='Miejsce'
+              content={placeFindByKey(userLocationKey)}
+              hasChevron
+            />
+            <ContentNavButton
+              href={{
+                pathname: "/home/select-screen",
+                params: {datastring: JSON.stringify(statusData), selection: "status"},
+              }}
+              icon='circle-info'
+              style={styles.button}
+              title='Status'
+              content={statusFindByKey(statusKey)}
+              hasChevron
+            />
+            <TouchableOpacity onPress={() => handleAdd()}>
+              <ThemedView style={[styles.button, styles.confirmButton]}>
+                <ThemedText style={{fontSize: 18}}>
+                  Dodaj
+                </ThemedText>
+              </ThemedView>
+            </TouchableOpacity>
+          </ScrollView>
+        </ThemedView>
       </View>
     </ThemedGestureHandlerRootView>
   );
 }
+
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
-    marginHorizontal: "2%",
-    marginTop: 10,
+    flex: 2,
   },
   button: {
-    height: 60,
+    borderTopWidth: 1,
   },
+  confirmButton: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 70,
+    backgroundColor: "transparent",
+  }
 });

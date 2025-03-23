@@ -1,157 +1,118 @@
-import { ForwardedButton } from "@/components/LabeledButton";
-import LinkButton from "@/components/LinkButton";
-import { useFilter } from "@/hooks/contexts/useFilter";
-import { ScrollView } from "react-native-gesture-handler";
-import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
+import {useFilter} from "@/hooks/contexts/useFilter";
+import {ScrollView} from "react-native-gesture-handler";
+import {ThemedGestureHandlerRootView} from "@/components/themed/ThemedGestureHandlerRootView";
+import {ContentNavButton, ContentNavButtonProps} from "@/components/buttons/ContentHolderButton";
+import {Filters} from "@/components/contexts/FilterContext";
+import {Stack} from "expo-router";
+import {Button} from "react-native";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {ThemedView} from "@/components/themed/ThemedView";
 
 export default function FilterMenu() {
-  const { filters, resetFilters } = useFilter();
+  const insets = useSafeAreaInsets()
+  const {filters, resetFilters} = useFilter();
+  const contentNavButtons = getContentNavButtons(filters);
   return (
     <ThemedGestureHandlerRootView>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 15 }}>
-        <LinkButton
-          href={{
-            pathname: "/search/filter-page",
-            params: { criterion: "name" },
-          }}
-          asChild
-          title={"Nazwa"}
-          hasChevron
-          size='small'
-          type='header'
-          hasContent
-          content={filters.name}
-          key={`Name-${filters.name}`}
-        />
-        <LinkButton
-          href={{
-            pathname: "/search/filter-page",
-            params: { criterion: "manufacturer" },
-          }}
-          asChild
-          title={"Producent"}
-          hasChevron
-          size='small'
-          type='body'
-          hasContent
-          content={filters.manufacturer.name}
-          key={`Manufacturer-${filters.manufacturer.id}`}
-        />
-        <LinkButton
-          href={{
-            pathname: "/search/filter-page",
-            params: { criterion: "category" },
-          }}
-          asChild
-          title={"Kategoria"}
-          hasChevron
-          size='small'
-          type='body'
-          hasContent
-          content={filters.category.name}
-          key={`Category-${filters.category.id}`}
-        />
-        <LinkButton
-          href={{
-            pathname: "/search/filter-page",
-            params: { criterion: "color" },
-          }}
-          asChild
-          title={"Kolor"}
-          hasChevron
-          size='small'
-          type='body'
-          hasContent
-          content={filters.color.name}
-          key={`Color-${filters.color.id}`}
-        />
-        <LinkButton
-          href={{
-            pathname: "/search/filter-page",
-            params: { criterion: "size" },
-          }}
-          asChild
-          title={"Rama"}
-          hasChevron
-          size='small'
-          type='body'
-          hasContent
-          content={filters.size.toString()}
-          key={`Frame-${filters.size}`}
-        />
-        <LinkButton
-          href={{
-            pathname: "/search/filter-page",
-            params: { criterion: "wheelSize" },
-          }}
-          asChild
-          title={"Koło"}
-          hasChevron
-          size='small'
-          type='body'
-          hasContent
-          content={filters.wheelSize.toString()}
-          key={`Wheel-${filters.wheelSize}`}
-        />
-        <LinkButton
-          href={{
-            pathname: "/search/filter-page",
-            params: { criterion: "price" },
-          }}
-          asChild
-          title={"Cena"}
-          hasChevron
-          size='small'
-          type='body'
-          hasContent
-          content={`${filters.minPrice}-${filters.maxPrice}`}
-          key={`Price-${filters.minPrice}-${filters.maxPrice}`}
-        />
-
-        <LinkButton
-          href={{
-            pathname: "/search/filter-page",
-            params: { criterion: "isElectric" },
-          }}
-          asChild
-          title={"Elektryczny"}
-          hasChevron
-          size='small'
-          type='body'
-          hasContent
-          content={filters.isElectric ? "Tak" : "Nie"}
-          key={`Electric-${filters.isElectric}`}
-        />
-        <LinkButton
-          href={{
-            pathname: "/search/filter-page",
-            params: { criterion: "avaible" },
-          }}
-          asChild
-          title={"Dostępny"}
-          hasChevron
-          size='small'
-          type='body'
-          hasContent
-          content={filters.avaible ? "Tak" : "Nie"}
-          key={`Avaible-${filters.avaible}`}
-        />
-        <LinkButton
-          href={{
-            pathname: "/search/filter-page",
-            params: { criterion: "isKids" },
-          }}
-          asChild
-          title={"Dziecięcy"}
-          hasChevron
-          size='small'
-          type='body'
-          hasContent
-          content={filters.isKids ? "Tak" : "Nie"}
-          key={`Kids-${filters.isKids}`}
-        />
-        <ForwardedButton key='Reset-button' title='Reset' type='footer' size='big' onPress={() => resetFilters()} />
-      </ScrollView>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <Button
+              title='Reset'
+              onPress={() => resetFilters()}
+            />
+          ),
+        }}
+      />
+      <ThemedView style={{marginBottom: insets.bottom, borderRadius: 20}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {
+            contentNavButtons.map((button, index) => (
+              <ContentNavButton {...button}
+                                style={index !== 0 ? {
+                                  borderTopWidth: 1,
+                                  backgroundColor: "transparent"
+                                } : {backgroundColor: "transparent"}}/>
+            ))
+          }
+        </ScrollView>
+      </ThemedView>
     </ThemedGestureHandlerRootView>
   );
 }
+
+const getContentNavButtons = (filters: Filters): ContentNavButtonProps[] => [
+  {
+    href: {pathname: "/search/filter-page", params: {criterion: "name"}},
+    title: "Nazwa",
+    content: filters.name,
+    hasChevron: true,
+    icon: "font",
+    placeholder: "Nazwa"
+  },
+  {
+    href: {pathname: "/search/filter-page", params: {criterion: "manufacturer"}},
+    title: "Producent",
+    content: filters.manufacturer.name,
+    hasChevron: true,
+    icon: "industry"
+  },
+  {
+    href: {pathname: "/search/filter-page", params: {criterion: "category"}},
+    title: "Kategoria",
+    content: filters.category.name,
+    hasChevron: true,
+    icon: "list"
+  },
+  {
+    href: {pathname: "/search/filter-page", params: {criterion: "color"}},
+    title: "Kolor",
+    content: filters.color.name,
+    hasChevron: true,
+    icon: "palette"
+  },
+  {
+    href: {pathname: "/search/filter-page", params: {criterion: "size"}},
+    title: "Rama",
+    content: filters.size.toString(),
+    hasChevron: true,
+    icon: "up-right-and-down-left-from-center",
+    placeholder: "Rozmiar ramy"
+  },
+  {
+    href: {pathname: "/search/filter-page", params: {criterion: "wheelSize"}},
+    title: "Koło",
+    content: filters.wheelSize.id.toString(),
+    hasChevron: true,
+    icon: "circle",
+    placeholder: "Rozmiar koła"
+  },
+  {
+    href: {pathname: "/search/filter-page", params: {criterion: "price"}},
+    title: "Cena",
+    content: `${filters.minPrice}-${filters.maxPrice}`,
+    hasChevron: true,
+    icon: "money-bill"
+  },
+  {
+    href: {pathname: "/search/filter-page", params: {criterion: "isElectric"}},
+    title: "Elektryczny",
+    content: filters.isElectric ? "Tak" : "Nie",
+    hasChevron: true,
+    icon: "bolt"
+  },
+  {
+    href: {pathname: "/search/filter-page", params: {criterion: "avaible"}},
+    title: "Dostępny",
+    content: filters.available ? "Tak" : "Nie",
+    hasChevron: true,
+    icon: "check"
+  },
+  {
+    href: {pathname: "/search/filter-page", params: {criterion: "isKids"}},
+    title: "Dziecięcy",
+    content: filters.isKids ? "Tak" : "Nie",
+    hasChevron: true,
+    icon: "child"
+  }
+];

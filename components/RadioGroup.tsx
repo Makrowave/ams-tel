@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { StyleSheet, View, Image, Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { ThemedView } from "./themed/ThemedView";
-import { ThemedText } from "./themed/ThemedText";
-import { useThemeColor } from "@/hooks/useThemeColor";
+import {useState} from "react";
+import {StyleSheet, View, Image, Text} from "react-native";
+import {TouchableOpacity} from "react-native-gesture-handler";
+import {ThemedView} from "./themed/ThemedView";
+import {ThemedText} from "./themed/ThemedText";
+import {useThemeColor} from "@/hooks/useThemeColor";
 
 export type Option = {
   key: Number;
@@ -21,22 +21,23 @@ type RadioProps = {
   size?: "small" | "large";
 };
 const SelectableForwardedButton = ({
-  selection = "",
-  data,
-  onSelect,
-  lightColor,
-  darkColor,
-  colored,
-  size = "large",
-  ...rest
-}: RadioProps) => {
+                                     selection = "",
+                                     data,
+                                     onSelect,
+                                     lightColor,
+                                     darkColor,
+                                     colored,
+                                     size = "large",
+                                     ...rest
+                                   }: RadioProps) => {
   const [selectedOption, setSelectedOption] = useState(selection ? selection : data[0].key);
-  const selectedColor = useThemeColor({ light: lightColor, dark: darkColor }, "selectedColor");
+  const selectedColor = useThemeColor({light: lightColor, dark: darkColor}, "selectedColor");
 
   const onPress = (key: Number) => {
     setSelectedOption(key);
     onSelect(key);
   };
+
   function createOption(data: Array<Option>, style: Array<Object>) {
     return data.map((item) => {
       return (
@@ -45,12 +46,12 @@ const SelectableForwardedButton = ({
             style={[
               style,
               size === "large" ? styles.large : styles.small,
-              item.key === selectedOption ? { backgroundColor: selectedColor } : {},
+              item.key === selectedOption ? {backgroundColor: selectedColor} : {},
             ]}
           >
             {colored && (
               <View
-                style={{ backgroundColor: item.color, height: 40, width: 40, borderRadius: 6, marginRight: 4 }}
+                style={[{backgroundColor: item.color}, styles.colorBox]}
               ></View>
             )}
             <ThemedText type='subtitle' key={item.key.toString()}>
@@ -61,6 +62,7 @@ const SelectableForwardedButton = ({
       );
     });
   }
+
   return (
     <View>
       {createOption(data.slice(0, 1), [styles.button, styles.header])}
@@ -73,6 +75,13 @@ const SelectableForwardedButton = ({
 export default SelectableForwardedButton;
 
 const styles = StyleSheet.create({
+  colorBox: {
+    height: 40,
+    width: 40,
+    borderRadius: 6,
+    position: 'absolute',
+    left: 12,
+  },
   iconSmall: {
     resizeMode: "contain",
     height: 25,

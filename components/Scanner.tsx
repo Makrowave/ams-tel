@@ -1,11 +1,12 @@
-import { CameraView, CameraNativeProps, useCameraPermissions } from "expo-camera";
-import { useEffect, useState } from "react";
-import { StyleSheet, TouchableOpacity, View, Image, Button } from "react-native";
-import { ThemedImage } from "./themed/ThemedImage";
-import { ThemedView } from "./themed/ThemedView";
+import {CameraView, useCameraPermissions} from "expo-camera";
+import {useEffect, useState} from "react";
+import {StyleSheet, TouchableOpacity, View, StyleProp, ViewStyle} from "react-native";
+import {ThemedView} from "./themed/ThemedView";
+import {ThemedIonicons} from "@/components/themed/ThemedIonicons";
 
 type ScannerProps = {
   onBarcodeScanned: (data: string) => void;
+  style?: StyleProp<ViewStyle>;
 };
 
 export default function Scanner(props: ScannerProps) {
@@ -23,7 +24,7 @@ export default function Scanner(props: ScannerProps) {
   });
 
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, props.style]}>
       <CameraView
         pointerEvents='box-none'
         style={styles.camera}
@@ -40,7 +41,7 @@ export default function Scanner(props: ScannerProps) {
       {/* The button shouldn't be in camera - somehow it isn't pressable */}
       <ThemedView style={styles.flashlightButton}>
         <TouchableOpacity onPress={handlePress}>
-          <ThemedImage source={require("@/assets/images/flashlight.png")} style={styles.icon} />
+          <ThemedIonicons name={useFlashlight ? "flashlight" : "flashlight-outline"} size={50} style={{padding: 10}}/>
         </TouchableOpacity>
       </ThemedView>
     </View>
@@ -61,11 +62,5 @@ const styles = StyleSheet.create({
     bottom: 10,
     right: 10,
     opacity: 0.7,
-  },
-  icon: {
-    resizeMode: "contain",
-    height: 60,
-    width: 60,
-    margin: 10,
   },
 });
