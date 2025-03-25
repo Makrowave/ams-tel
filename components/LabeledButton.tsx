@@ -1,9 +1,10 @@
-import { forwardRef, useState } from "react";
-import { StyleSheet, View, Image } from "react-native";
-import { TouchableOpacityProps, TouchableOpacity } from "react-native-gesture-handler";
-import { ThemedView } from "./themed/ThemedView";
-import { ThemedText } from "./themed/ThemedText";
-import { ThemedImage } from "./themed/ThemedImage";
+import {forwardRef, useState} from "react";
+import {StyleSheet, View, Image} from "react-native";
+import {TouchableOpacityProps, TouchableOpacity} from "react-native-gesture-handler";
+import {ThemedView} from "./themed/ThemedView";
+import {ThemedText} from "./themed/ThemedText";
+import {ThemedImage} from "./themed/ThemedImage";
+import {ThemedFontAwesome6} from "@/components/themed/ThemedIonicons";
 
 export type LabelProps = TouchableOpacityProps & {
   title?: string;
@@ -20,23 +21,23 @@ export type LabelProps = TouchableOpacityProps & {
   size?: "small" | "big";
 };
 const LabeledButton = ({
-  title,
-  content,
-  source,
-  type = "body",
-  hasIcon,
-  hasContent,
-  hasChevron,
-  textColor,
-  lightColor,
-  darkColor,
-  onPress,
-  style,
-  iconColor,
-  size = "big",
-  disabled,
-  ...rest
-}: LabelProps) => {
+                         title,
+                         content,
+                         source,
+                         type = "body",
+                         hasIcon,
+                         hasContent,
+                         hasChevron,
+                         textColor,
+                         lightColor,
+                         darkColor,
+                         onPress,
+                         style,
+                         iconColor,
+                         size = "big",
+                         disabled,
+                         ...rest
+                       }: LabelProps) => {
   const [label, setContent] = useState(content);
 
   return (
@@ -55,13 +56,13 @@ const LabeledButton = ({
         <View
           style={[
             styles.insideWrapper,
-            hasIcon !== true && hasChevron !== true && hasContent !== true ? undefined : { paddingRight: 15 },
+            hasIcon !== true && hasChevron !== true && hasContent !== true ? undefined : {paddingRight: 15},
           ]}
         >
           {hasIcon === true ? (
-            <View style={{ flex: 1, flexBasis: 50, alignItems: "center" }}>
-              <View style={[styles.iconWrapper, { backgroundColor: iconColor }]}>
-                <Image style={styles.icon} source={source} />
+            <View style={{flex: 1, flexBasis: 50, alignItems: "center"}}>
+              <View style={[styles.iconWrapper, {backgroundColor: iconColor}]}>
+                <Image style={styles.icon} source={source}/>
               </View>
             </View>
           ) : undefined}
@@ -72,7 +73,7 @@ const LabeledButton = ({
               styles.title,
               //Centers text if no icon, chevron or text
               hasIcon !== true && hasChevron !== true && hasContent !== true ? styles.centeredText : undefined,
-              textColor !== undefined ? { color: textColor } : undefined,
+              textColor !== undefined ? {color: textColor} : undefined,
             ]}
           >
             {title}
@@ -85,7 +86,7 @@ const LabeledButton = ({
           ) : undefined}
           {/*Chevron*/}
           {hasChevron === true ? (
-            <ThemedImage style={styles.iconSmall} source={require("@/assets/images/chevron.png")} />
+            <ThemedFontAwesome6 style={styles.iconSmall} name={"chevron-right"}/>
           ) : undefined}
         </View>
       </ThemedView>

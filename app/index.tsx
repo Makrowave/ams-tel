@@ -1,27 +1,29 @@
-import { ForwardedButton } from "@/components/LabeledButton";
-import { ThemedText } from "@/components/themed/ThemedText";
-import { ThemedTextInput } from "@/components/themed/ThemedTextInput";
-import { ThemedView } from "@/components/themed/ThemedView";
-import { useEnableQueries } from "@/hooks/queryHooks/useEnableQueries";
+import {ForwardedButton} from "@/components/LabeledButton";
+import {ThemedText} from "@/components/themed/ThemedText";
+import {ThemedTextInput} from "@/components/themed/ThemedTextInput";
+import {ThemedView} from "@/components/themed/ThemedView";
+import {useEnableQueries} from "@/hooks/queryHooks/useEnableQueries";
 import useAuth from "@/hooks/contexts/useAuth";
 import useRefreshUser from "@/hooks/useRefreshUser";
-import { AxiosError, isAxiosError } from "axios";
+import {AxiosError, isAxiosError} from "axios";
 import {Link, Redirect, useRouter} from "expo-router";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import { SplashScreen } from "expo-router";
-import { ThemedGestureHandlerRootView } from "@/components/themed/ThemedGestureHandlerRootView";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {SplashScreen} from "expo-router";
+import {ThemedGestureHandlerRootView} from "@/components/themed/ThemedGestureHandlerRootView";
+import {SafeAreaView} from "react-native-safe-area-context";
 import {Ionicons} from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useAxios from "@/hooks/useAxios";
+import {ThemedIonicons} from "@/components/themed/ThemedIonicons";
+
 export default function Login() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [isTokenValid, setIsTokenValid] = useState<boolean>(false);
   const refreshUser = useRefreshUser();
-  const { saveRefreshToken } = useAuth();
+  const {saveRefreshToken} = useAuth();
   const _loginUrl = "/MobileAuth/Login";
   const enableQueries = useEnableQueries();
 
@@ -39,7 +41,7 @@ export default function Login() {
     };
     const getUrl = async () => {
       const url = AsyncStorage.getItem("apiUrl");
-      if(url === null) router.push("/server-url");
+      if (url === null) router.push("/server-url");
     }
     getUrl().then(refresh);
   }, []);
@@ -54,8 +56,8 @@ export default function Login() {
     axios
       .post(
         _loginUrl,
-        { username, password },
-        { headers: { "Content-Type": "application/json" }, withCredentials: true }
+        {username, password},
+        {headers: {"Content-Type": "application/json"}, withCredentials: true}
       )
       .then((response) => {
         saveRefreshToken(response.data)
@@ -82,22 +84,22 @@ export default function Login() {
   };
 
   if (isTokenValid) {
-    return <Redirect href='/(tabs)/menu' />;
+    return <Redirect href='/(tabs)/menu'/>;
   }
 
   return (
     <ThemedGestureHandlerRootView>
       <SafeAreaView>
-        <ThemedView style={{ height: "100%", borderRadius: 20 }}>
+        <ThemedView style={{height: "100%", borderRadius: 20}}>
           <View style={{marginTop: 15, display: "flex", alignItems: "center", position: "relative"}}>
             <ThemedText type="subtitle">Logowanie</ThemedText>
             <Link href={"/server-url"} asChild>
               <TouchableOpacity style={{position: "absolute", alignSelf: "flex-end", right: 20}}>
-                <Ionicons name="settings-sharp" size={30} color="#fff" />
+                <ThemedIonicons name="settings-sharp" size={30}/>
               </TouchableOpacity>
             </Link>
           </View>
-          <View style={{marginTop: 20, marginHorizontal: "auto", paddingHorizontal: 20 }}>
+          <View style={{marginTop: 20, marginHorizontal: "auto", paddingHorizontal: 20}}>
             {!(error === "") && (
               <View style={styles.errorContainer}>
                 <Text style={styles.errorText}>{error}</Text>
@@ -127,7 +129,7 @@ export default function Login() {
               />
             </ThemedView>
             <ForwardedButton
-              style={{ borderWidth: 0.2, borderBottomWidth: 0.2 }}
+              style={{borderWidth: 0.2, borderBottomWidth: 0.2}}
               type='single'
               title={"Zaloguj się"}
               onPress={() => handleLogin()}

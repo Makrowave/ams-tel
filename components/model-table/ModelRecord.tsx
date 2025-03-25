@@ -1,25 +1,26 @@
-import { ModelRecordData } from "@/constants/Types";
-import { ThemedView } from "../themed/ThemedView";
-import { ThemedText } from "../themed/ThemedText";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
-import { ThemedImage } from "../themed/ThemedImage";
-import { ModelTableBindProps } from "../ModelSearchPage";
+import {ModelRecordData} from "@/constants/Types";
+import {ThemedView} from "../themed/ThemedView";
+import {ThemedText} from "../themed/ThemedText";
+import {StyleSheet, TouchableOpacity, View} from "react-native";
+import {LinearGradient} from "expo-linear-gradient";
+import {Ionicons} from "@expo/vector-icons";
+import {Link} from "expo-router";
+import {ThemedImage} from "../themed/ThemedImage";
+import {ModelTableBindProps} from "../ModelSearchPage";
+import {ThemedFontAwesome6} from "@/components/themed/ThemedIonicons";
 
 interface ModelRecordProps {
   model: ModelRecordData;
 }
 
-export default function ModelRecord({ model, bindMode }: ModelRecordProps & ModelTableBindProps) {
+export default function ModelRecord({model, bindMode}: ModelRecordProps & ModelTableBindProps) {
   return (
     <ThemedView style={styles.record}>
       <Link
         asChild
         href={{
           pathname: "/search/model",
-          params: { modelString: JSON.stringify(model), bindMode: bindMode?.toString() ?? "false" },
+          params: {modelString: JSON.stringify(model), bindMode: bindMode?.toString() ?? "false"},
         }}
       >
         <TouchableOpacity style={styles.opacity}>
@@ -27,20 +28,22 @@ export default function ModelRecord({ model, bindMode }: ModelRecordProps & Mode
             <LinearGradient
               colors={[model.primaryColor, model.secondaryColor]}
               style={styles.colorBox}
-              start={{ x: 1, y: 0 }}
-              end={{ x: 0, y: 1 }}
+              start={{x: 1, y: 0}}
+              end={{x: 0, y: 1}}
               locations={[0.5, 0.5]}
             />
           ) : (
-            <Ionicons name='alert-circle-outline' size={40} style={styles.colorBox} color='#ff4444' />
+            <Ionicons name='alert-circle-outline' size={40} style={styles.colorBox} color='#ff4444'/>
           )}
-          <ThemedText style={{ alignSelf: "center", width: "50%" }} numberOfLines={1}>
+          <ThemedText style={{alignSelf: "center", width: "50%"}} numberOfLines={1}>
             {model.modelName}
           </ThemedText>
-          <ThemedText style={{ alignSelf: "center", width: 80, textAlign: "center" }}>
+          <ThemedText style={{alignSelf: "center", width: 80, textAlign: "center"}}>
             {model.frameSize.toString()}x{model.wheelSize.toString()}
           </ThemedText>
-          <ThemedImage style={styles.chevron} source={require("@/assets/images/chevron.png")} />
+          <View style={{marginLeft: 'auto', marginRight: 10, alignItems: 'center', justifyContent: 'center'}}>
+            <ThemedFontAwesome6 size={20} name={"chevron-right"}/>
+          </View>
         </TouchableOpacity>
       </Link>
     </ThemedView>

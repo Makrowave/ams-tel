@@ -86,7 +86,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     buttonProps: {
-      icon: "bicycle", // Assuming this exists in FontAwesome6.glyphMap
+      icon: "bicycle",
       text: "Przenieś rower",
       color: colors.get("move")!,
     },
@@ -94,7 +94,7 @@ const navItems: NavItem[] = [
   },
   {
     buttonProps: {
-      icon: "box-open", // Replace with the correct icon name
+      icon: "box-open",
       text: "Złóż rower",
       color: colors.get("assemble")!,
     },
