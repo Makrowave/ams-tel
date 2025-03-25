@@ -15,8 +15,9 @@ export default function ServerUrl() {
     const routes = navigation.getState()?.routes
     if (routes !== undefined) {
       return routes[routes.length - 2].name;
+    } else {
+      return "/";
     }
-    return "/";
   }
   useEffect(() => {
     AsyncStorage.getItem("apiUrl").then((url) => setUrl(url ?? ""));

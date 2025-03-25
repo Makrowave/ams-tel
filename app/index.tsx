@@ -12,7 +12,6 @@ import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {SplashScreen} from "expo-router";
 import {ThemedGestureHandlerRootView} from "@/components/themed/ThemedGestureHandlerRootView";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {Ionicons} from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useAxios from "@/hooks/useAxios";
 import {ThemedIonicons} from "@/components/themed/ThemedIonicons";
@@ -40,8 +39,8 @@ export default function Login() {
       SplashScreen.hideAsync();
     };
     const getUrl = async () => {
-      const url = AsyncStorage.getItem("apiUrl");
-      if (url === null) router.push("/server-url");
+      const url = await AsyncStorage.getItem("apiUrl");
+      if (url === null) router.replace("/server-url");
     }
     getUrl().then(refresh);
   }, []);
@@ -52,7 +51,6 @@ export default function Login() {
 
   const login = () => {
     setError("");
-    //I guess this is my now preferred error handling
     axios
       .post(
         _loginUrl,
